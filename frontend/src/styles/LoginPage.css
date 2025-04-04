@@ -1,0 +1,132 @@
+.login-page {
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-page:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-title {
+  font-size: 2.2rem;
+  color: #1976d2;
+  font-weight: bold;
+  font-family: 'Roboto', sans-serif;
+}
+
+.login-subtitle {
+  font-size: 1rem;
+  color: #555;
+  margin-top: 5px;
+}
+
+.login-error {
+  margin-bottom: 20px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-input {
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.forgot-password {
+  text-align: right;
+  font-size: 0.9rem;
+  color: #1976d2;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+  color: #155a9c;
+}
+
+.login-button {
+  background-color: #1976d2;
+  color: #ffffff;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.login-button:hover {
+  background-color: #155a9c;
+  transform: scale(1.05);
+}
+
+.login-divider {
+  margin: 20px 0;
+  text-align: center;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.social-login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.social-login-button.google {
+  background-color: #db4437;
+  color: #ffffff;
+}
+
+.social-login-button.google:hover {
+  background-color: #c23321;
+  transform: scale(1.05);
+}
+
+.social-login-button.facebook {
+  background-color: #4267b2;
+  color: #ffffff;
+}
+
+.social-login-button.facebook:hover {
+  background-color: #365899;
+  transform: scale(1.05);
+}
+
+.register-link {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 20px;
+}
+
+.register-link a {
+  color: #1976d2;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.register-link a:hover {
+  color: #155a9c;
+}

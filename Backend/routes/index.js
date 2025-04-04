@@ -1,0 +1,23 @@
+const express = require('express');
+const authRoutes = require('./auth.routes');
+const drugRoutes = require('./drug.routes');
+const interactionRoutes = require('./interaction.routes');
+const profileRoutes = require('./profile.routes');
+const adminRoutes = require('./admin.routes');
+const clientRoutes = require('./client.routes');
+const prescriptionRoutes = require('./prescription.routes');
+const interactionHistoryRoutes = require('./interactionhistory.routes');
+
+const router = express.Router();
+
+// Định tuyến các route
+router.use('/auth', authRoutes);
+router.use('/drugs', drugRoutes);
+router.use('/interactions', interactionRoutes);
+router.use('/profile', profileRoutes);
+router.use('/admin', adminRoutes);
+router.use('/client', clientRoutes); // Thông tin người dùng
+router.use('/prescriptions', prescriptionRoutes); // Quản lý đơn thuốc
+router.use('/interaction-history', interactionHistoryRoutes); // Lịch sử kiểm tra tương tác
+
+module.exports = router;

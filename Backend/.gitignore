@@ -1,0 +1,48 @@
+# Node modules (thư viện cài bằng npm hoặc yarn)
+node_modules/
+
+# Log files
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Thư mục tạm hoặc cache
+dist/
+build/
+tmp/
+temp/
+.cache/
+.serve/
+
+# Dotenv file chứa biến môi trường (chứa các thông tin nhạy cảm như DB, API_KEY...)
+.env
+.env.*  # Nếu có nhiều file môi trường như .env.dev, .env.production...
+
+# Tệp lock (tùy chọn)
+package-lock.json
+yarn.lock
+
+# IDE/editor config (Visual Studio Code, JetBrains...)
+.vscode/
+.idea/
+
+# OS-specific files (hệ điều hành tự tạo)
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+
+# PM2 (nếu dùng để chạy Node.js production)
+pids
+*.pid
+*.seed
+
+# TypeScript build (nếu dùng TypeScript)
+*.tsbuildinfo
+
+# Optional: loại trừ dữ liệu upload (nếu có)
+uploads/
+public/uploads/
