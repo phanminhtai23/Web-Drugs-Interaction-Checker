@@ -35,6 +35,15 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    if (window.confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+  };
+
   return (
     <AppBar
       position="sticky"
@@ -73,24 +82,24 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
           />
         </Box>
 
-        {/* Desktop Navigation */}
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}> {/* Reduced gap for the first group */}
+        {/* Desktop Navigation */} 
+        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
           <Button
             color="inherit"
             component={Link}
             to="/"
             sx={{
-              color: '#333', // Màu chữ đen
+              color: '#333',
               fontWeight: 'bold',
               textTransform: 'none',
               '&:hover': {
-                color: '#0073e6', // Màu xanh khi hover
+                color: '#0073e6',
                 backgroundColor: 'transparent',
               },
             }}
           >
             <HomeIcon sx={{ marginRight: '8px' }} />
-            Home
+            Trang chủ
           </Button>
           <Button
             color="inherit"
@@ -107,7 +116,7 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
             }}
           >
             <ListIcon sx={{ marginRight: '8px' }} />
-            Drugs List
+            Danh sách thuốc
           </Button>
           <Button
             color="inherit"
@@ -124,28 +133,26 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
             }}
           >
             <MedicationIcon sx={{ marginRight: '8px' }} />
-            Check Interactions
+            Kiểm tra tương tác
           </Button>
 
-           {/* Nút Giới thiệu */}
-            <Button
-              color="inherit"
-              component={Link}
-              to="/about"
-              sx={{
-                color: '#333',
-                fontWeight: 'bold',
-                textTransform: 'none',
-                '&:hover': {
-                  color: '#0073e6',
-                  backgroundColor: 'transparent',
-                },
-              }}
-            >
-              <InfoIcon sx={{ marginRight: '8px' }} /> {/* Thay đổi biểu tượng */}
-              About
-            </Button>
-
+          <Button
+            color="inherit"
+            component={Link}
+            to="/about"
+            sx={{
+              color: '#333',
+              fontWeight: 'bold',
+              textTransform: 'none',
+              '&:hover': {
+                color: '#0073e6',
+                backgroundColor: 'transparent',
+              },
+            }}
+          >
+            <InfoIcon sx={{ marginRight: '8px' }} />
+            Giới thiệu
+          </Button>
         </Box>
 
         {/* Divider between navigation groups */}
@@ -153,7 +160,7 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
           <Box sx={{ width: '1px', height: '40px', backgroundColor: '#ddd' }} />
         </Box>
 
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, marginLeft: 4 }}> {/* Reduced gap for the second group and added margin */}
+        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, marginLeft: 4 }}>
           {isLoggedIn ? (
             <>
               <Button
@@ -161,21 +168,21 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
                 component={Link}
                 to="/profile"
                 sx={{
-                  backgroundColor: '#f5f5f5', // Light gray background
-                  color: '#333', // Dark text color
+                  backgroundColor: '#f5f5f5',
+                  color: '#333',
                   fontWeight: 'bold',
                   textTransform: 'none',
                   padding: '8px 16px',
                   borderRadius: '8px',
-                  border: '1px solid #ddd', // Subtle border
+                  border: '1px solid #ddd',
                   '&:hover': {
-                    backgroundColor: '#e0e0e0', // Slightly darker gray on hover
-                    color: '#0073e6', // Blue text on hover
+                    backgroundColor: '#e0e0e0',
+                    color: '#0073e6',
                   },
                 }}
               >
                 <PersonIcon sx={{ marginRight: '8px' }} />
-                Profile
+                Hồ sơ
               </Button>
               {role === 'admin' && (
                 <Button
@@ -193,29 +200,28 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
                   }}
                 >
                   <AdminPanelSettingsIcon sx={{ marginRight: '8px' }} />
-                  Admin Panel
+                  Quản trị
                 </Button>
               )}
-              <Button
-                color="inherit"
-                onClick={onLogout}
-                sx={{
-                  backgroundColor: '#f5f5f5', // Light gray background
-                  color: '#333', // Dark text color
-                  fontWeight: 'bold',
-                  textTransform: 'none',
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  border: '1px solid #ddd', // Subtle border
-                  '&:hover': {
-                    backgroundColor: '#e0e0e0', // Slightly darker gray on hover
-                    color: '#d32f2f', // Red text on hover
-                  },
-                }}
-              >
-                <LogoutIcon sx={{ marginRight: '8px' }} />
-                Logout
-              </Button>
+            <Button
+              color="inherit"
+              onClick={handleLogout} // Gọi hàm handleLogout khi nhấn nút
+              sx={{
+                backgroundColor: '#f5f5f5',
+                color: '#333',
+                fontWeight: 'bold',
+                textTransform: 'none',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                border: '1px solid #ddd',
+                '&:hover': {
+                  backgroundColor: '#e0e0e0',
+                },
+              }}
+            >
+              <LogoutIcon sx={{ marginRight: '8px' }} />
+              Đăng xuất
+            </Button>
             </>
           ) : (
             <>
@@ -224,7 +230,7 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
                 component={Link}
                 to="/login"
                 sx={{
-                  backgroundColor: '#FFFFFFFF', // Màu xanh giống drugs.com
+                  backgroundColor: '#FFFFFFFF',
                   color: '#000',
                   fontWeight: 'bold',
                   textTransform: 'none',
@@ -232,31 +238,31 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
                   borderRadius: '10px',
                   border: '1px solid #000',
                   '&:hover': {
-                    backgroundColor: '#A6AAAEFF', // Màu xanh đậm hơn khi hover
+                    backgroundColor: '#A6AAAEFF',
                   },
                 }}
               >
                 <LoginIcon sx={{ marginRight: '8px' }} />
-                Login
+                Đăng nhập
               </Button>
               <Button
                 variant="contained"
                 component={Link}
                 to="/register"
                 sx={{
-                  backgroundColor: '#0073e6', // Màu vàng giống drugs.com
+                  backgroundColor: '#0073e6',
                   color: '#fff',
                   fontWeight: 'bold',
                   textTransform: 'none',
                   padding: '8px 16px',
                   borderRadius: '10px',
                   '&:hover': {
-                    backgroundColor: '#005bb5', // Màu vàng đậm hơn khi hover
+                    backgroundColor: '#005bb5',
                   },
                 }}
               >
                 <AppRegistrationIcon sx={{ marginRight: '8px' }} />
-                Register
+                Đăng ký
               </Button>
             </>
           )}
@@ -294,23 +300,23 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
             {/* Nhóm các mục menu */}
             <MenuItem component={Link} to="/" onClick={handleMenuClose}>
               <HomeIcon sx={{ marginRight: '8px' }} />
-              Home
+              Trang chủ
             </MenuItem>
             <MenuItem component={Link} to="/drugs-a-z" onClick={handleMenuClose}>
               <SortByAlphaIcon sx={{ marginRight: '8px' }} />
-              Drugs A-Z
+              Thuốc A-Z
             </MenuItem>
             <MenuItem component={Link} to="/drugs" onClick={handleMenuClose}>
               <ListIcon sx={{ marginRight: '8px' }} />
-              Drugs List
+              Danh sách thuốc
             </MenuItem>
             <MenuItem component={Link} to="/interactions" onClick={handleMenuClose}>
               <MedicationIcon sx={{ marginRight: '8px' }} />
-              Check Interactions
+              Kiểm tra tương tác
             </MenuItem>
             <MenuItem component={Link} to="/about" onClick={handleMenuClose}>
               <InfoIcon sx={{ marginRight: '8px' }} />
-              About
+              Giới thiệu
             </MenuItem>
 
             {/* Hiển thị các mục liên quan đến người dùng */}
@@ -318,12 +324,12 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
               <>
                 <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>
                   <PersonIcon sx={{ marginRight: '8px' }} />
-                  Profile
+                  Hồ sơ
                 </MenuItem>
                 {role === 'admin' && (
                   <MenuItem component={Link} to="/admin" onClick={handleMenuClose}>
                     <AdminPanelSettingsIcon sx={{ marginRight: '8px' }} />
-                    Admin Panel
+                    Quản trị
                   </MenuItem>
                 )}
                 <MenuItem
@@ -333,18 +339,18 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
                   }}
                 >
                   <LogoutIcon sx={{ marginRight: '8px' }} />
-                  Logout
+                  Đăng xuất
                 </MenuItem>
               </>
             ) : (
               <>
                 <MenuItem component={Link} to="/login" onClick={handleMenuClose}>
                   <LoginIcon sx={{ marginRight: '8px' }} />
-                  Login
+                  Đăng nhập
                 </MenuItem>
                 <MenuItem component={Link} to="/register" onClick={handleMenuClose}>
                   <AppRegistrationIcon sx={{ marginRight: '8px' }} />
-                  Register
+                  Đăng ký
                 </MenuItem>
               </>
             )}

@@ -20,7 +20,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
         >
           <img
             src={logo}
-            alt="Drug Interaction Checker Logo"
+            alt="Logo Kiểm Tra Tương Tác Thuốc"
             style={{
               height: '200px', // Tăng kích thước logo
               marginRight: '10px', // Khoảng cách giữa logo và navigation
@@ -31,30 +31,30 @@ const Header = ({ isLoggedIn, onLogout }) => {
         {/* Navigation Buttons */}
         <Box sx={{ display: 'flex', gap: 3 }}>
           <Link to="/" className="header-link">
-            Home
+            Trang chủ
           </Link>
           <Link to="/interactions" className="header-link">
-            Check Interactions
+            Kiểm tra tương tác
           </Link>
           <Link to="/drugs" className="header-link">
-            Drugs List
+            Danh sách thuốc
           </Link>
           {isLoggedIn ? (
             <>
               <Link to="/profile" className="header-link">
-                Profile
+                Hồ sơ
               </Link>
               <button onClick={onLogout} className="header-link">
-                Logout
+                Đăng xuất
               </button>
             </>
           ) : (
             <>
               <Link to="/login" className="header-link">
-                Login
+                Đăng nhập
               </Link>
               <Link to="/register" className="header-link">
-                Register
+                Đăng ký
               </Link>
             </>
           )}

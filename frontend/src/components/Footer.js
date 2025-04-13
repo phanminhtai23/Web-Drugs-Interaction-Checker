@@ -5,7 +5,6 @@ import '../styles/Footer.css'; // Import Footer styles
 import CTULogo from '../assets/footer/0305-logo-ctu.png';
 import sealLogo from '../assets/footer/seal.svg';
 import CICTLogo from '../assets/footer/CICT.jpg';
-// import trustMarkLogo from '../assets/footer/trust-mark-logo.png';
 import logoDTDrugs from '../assets/logo_DTdrug.png'; // Logo chính của DTDrugs
 
 const Footer = () => {
@@ -26,30 +25,17 @@ const Footer = () => {
               {/* About Section */}
               <Grid item xs={12} sm={4}>
                 <Typography variant="h6" sx={{ mb: 2, color: '#333', fontWeight: 'bold' }}>
-                  About
+                  Giới thiệu
                 </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  <Link href="/about" underline="hover" color="textSecondary" sx={{ fontSize: '0.9rem', color: "textSecondary" , '&:hover': {
-                      color: '#000000FF',
-                      backgroundColor: 'transparent',
-                    }, }}>
-                    About Drugs.com
+                  <Link href="/about" underline="hover" color="textSecondary" sx={{ fontSize: '0.9rem', '&:hover': { color: '#000000FF' } }}>
+                    Về DTDrugs
                   </Link>
-                  <Link href="/advertising" underline="hover" color="textSecondary" sx={{
-                    fontSize: '0.9rem', color: "textSecondary" ,
-                    '&:hover': {
-                      color: '#000000FF',
-                      backgroundColor: 'transparent',
-                    }, }}>
-                    Advertising policy
+                  <Link href="/advertising" underline="hover" color="textSecondary" sx={{ fontSize: '0.9rem', '&:hover': { color: '#000000FF' } }}>
+                    Chính sách quảng cáo
                   </Link>
-                  <Link href="/attribution" underline="hover" color="textSecondary" sx={{
-                    fontSize: '0.9rem', color: "textSecondary" ,
-                    '&:hover': {
-                      color: '#000000FF',
-                      backgroundColor: 'transparent',
-                    }, }}>
-                    Attribution & citations
+                  <Link href="/attribution" underline="hover" color="textSecondary" sx={{ fontSize: '0.9rem', '&:hover': { color: '#000000FF' } }}>
+                    Nguồn và trích dẫn
                   </Link>
                 </Box>
               </Grid>
@@ -57,26 +43,17 @@ const Footer = () => {
               {/* Terms Section */}
               <Grid item xs={12} sm={4}>
                 <Typography variant="h6" sx={{ mb: 2, color: '#333', fontWeight: 'bold' }}>
-                  Terms & privacy
+                  Điều khoản & quyền riêng tư
                 </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  <Link href="/terms" underline="hover" color="textSecondary" sx={{ fontSize: '0.9rem', color: "textSecondary" , '&:hover': {
-                      color: '#000000FF',
-                      backgroundColor: 'transparent',
-                    }, }}>
-                    Terms of use
+                  <Link href="/terms" underline="hover" color="textSecondary" sx={{ fontSize: '0.9rem', '&:hover': { color: '#000000FF' } }}>
+                    Điều khoản sử dụng
                   </Link>
-                  <Link href="/editorial" underline="hover" color="textSecondary" sx={{ fontSize: '0.9rem', color: "textSecondary" , '&:hover': {
-                      color: '#000000FF',
-                      backgroundColor: 'transparent',
-                    }, }}>
-                    Editorial policy
+                  <Link href="/editorial" underline="hover" color="textSecondary" sx={{ fontSize: '0.9rem', '&:hover': { color: '#000000FF' } }}>
+                    Chính sách biên tập
                   </Link>
-                  <Link href="/privacy" underline="hover" color="textSecondary" sx={{ fontSize: '0.9rem', color: "textSecondary" , '&:hover': {
-                      color: '#000000FF',
-                      backgroundColor: 'transparent',
-                    }, }}>
-                    Privacy policy
+                  <Link href="/privacy" underline="hover" color="textSecondary" sx={{ fontSize: '0.9rem', '&:hover': { color: '#000000FF' } }}>
+                    Chính sách bảo mật
                   </Link>
                 </Box>
               </Grid>
@@ -84,32 +61,16 @@ const Footer = () => {
               {/* Support Section */}
               <Grid item xs={12} sm={4}>
                 <Typography variant="h6" sx={{ mb: 2, color: '#333', fontWeight: 'bold' }}>
-                  Support
+                  Hỗ trợ
                 </Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  <Link href="/help" underline="hover" color="textSecondary" sx={{ fontSize: '0.9rem', color: "textSecondary" , '&:hover': {
-                      color: '#000000FF',
-                      backgroundColor: 'transparent',
-                    }, }}>
-                    Help center
-                  </Link>
-                  <Link href="/sitemap" underline="hover" color="textSecondary" sx={{ fontSize: '0.9rem', color: "textSecondary" , '&:hover': {
-                      color: '#000000FF',
-                      backgroundColor: 'transparent',
-                    }, }}>
-                    Sitemap
-                  </Link>
-                  <Link href="/contact" underline="hover" color="textSecondary" sx={{ fontSize: '0.9rem', color: "textSecondary" , '&:hover': {
-                      color: '#000000FF',
-                      backgroundColor: 'transparent',
-                    }, }}>
-                    Contact us
+                  <Link href="/contact" underline="hover" color="textSecondary" sx={{ fontSize: '0.9rem', '&:hover': { color: '#000000FF' } }}>
+                    Liên hệ
                   </Link>
                 </Box>
               </Grid>
             </Grid>
           </Grid>
-          
 
           {/* Social Media Icons */}
           <Grid item xs={12} sm={3}>
@@ -136,12 +97,11 @@ const Footer = () => {
 
             {/* Newsletter Section */}
             <Box sx={{ mt: 1, textAlign: 'justify' }}>
-              
               <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
-                <Link variant="body2" href="/newsletter" color="textSecondary" sx={{'&:hover': {
-                      color: '#45A4D7FF',
-                      backgroundColor: 'transparent',
-                    },}} >Subscribe to our newsletter</Link> for the latest medication news, new drug approvals and FDA alerts.
+                <Link variant="body2" href="/register" color="textSecondary" sx={{ '&:hover': { color: '#45A4D7FF' } }}>
+                  Đăng ký
+                </Link>{' '}
+                để cập nhật tin tức về thuốc và các quyền lợi DTDrugs.
               </Typography>
             </Box>
           </Grid>
@@ -150,22 +110,22 @@ const Footer = () => {
         {/* Footer Bottom */}
         <Box sx={{ textAlign: 'justify', mt: 4 }}>
           <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
-            Drugs.com provides accurate and independent information on more than 24,000 prescription drugs, over-the-counter medicines and natural products. This material is provided for educational purposes only and is not intended for medical advice, diagnosis or treatment. Data sources include Micromedex (updated 10 Mar 2025), Cerner Multum™ (updated 23 Mar 2025), ASHP (updated 12 Mar 2025) and others.
+            DTDrugs cung cấp thông tin chính xác và độc lập về hơn 9.287 loại thuốc kê đơn, thuốc không kê đơn và các sản phẩm tự nhiên. Thông tin này chỉ mang tính chất giáo dục và không nhằm mục đích tư vấn y tế, chẩn đoán hoặc điều trị.
           </Typography>
         </Box>
+
         {/* Footer Bottom */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 3 }}>
           {/* Logos Section */}
           <Box sx={{ display: 'flex', gap: 3 }}>
             <img src={sealLogo} alt="Seal Logo" style={{ height: '40px' }} />
             <img src={CTULogo} alt="Tag Verified Logo" style={{ height: '50px' }} />
-            {/* <img src={trustMarkLogo} alt="Trust Mark Logo" style={{ height: '40px' }} /> */}
             <img src={CICTLogo} alt="AdChoices Logo" style={{ height: '50px' }} />
           </Box>
-        
+
           {/* Copyright Section */}
           <Typography variant="caption" color="textSecondary" sx={{ fontSize: '0.8rem' }}>
-            Copyright © 2000-2025 Drugs.com. All rights reserved.
+            Bản quyền © 2025 DTDrugs. Mọi quyền được bảo lưu.
           </Typography>
         </Box>
       </Box>

@@ -7,7 +7,7 @@ const adminRoutes = require('./admin.routes');
 const clientRoutes = require('./client.routes');
 const prescriptionRoutes = require('./prescription.routes');
 const interactionHistoryRoutes = require('./interactionhistory.routes');
-
+const contactRoutes = require('./contact.routes'); // Import contact routes
 const router = express.Router();
 
 // Định tuyến các route
@@ -19,5 +19,6 @@ router.use('/admin', adminRoutes);
 router.use('/client', clientRoutes); // Thông tin người dùng
 router.use('/prescriptions', prescriptionRoutes); // Quản lý đơn thuốc
 router.use('/interaction-history', interactionHistoryRoutes); // Lịch sử kiểm tra tương tác
+router.use('/contact', contactRoutes);
 
 module.exports = router;

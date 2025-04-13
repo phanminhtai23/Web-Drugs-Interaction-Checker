@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Typography, Box, Alert, CircularProgress, Divider, InputAdornment, IconButton } from '@mui/material';
 import '../styles/LoginPage.css'; // Import LoginPage styles
 import { isValidEmail, isValidPassword } from '../utils/validate'; // Import validate utils
-import googleIcon from '../assets/login/provider-google-logomark-24.svg'; // Import Google icon
+// import googleIcon from '../assets/login/provider-google-logomark-24.svg'; // Import Google icon
 import facebookIcon from '../assets/login/provider-facebook-logomark-24.svg';
 import { Visibility, VisibilityOff } from '@mui/icons-material'; // Import icons// Import Facebook icon
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 const LoginPage = ({ setIsLoggedIn }) => {
   const [email, setEmail] = useState('');
@@ -41,13 +42,24 @@ const LoginPage = ({ setIsLoggedIn }) => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    window.location.href = '/auth/google';
-  };
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      // const { credential } = credentialResponse; // Lấy token từ Google
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/google`, {
+      token: credentialResponse.credential,
+      });
+      const { token, user } = response.data;
 
-  const handleFacebookLogin = () => {
-    window.location.href = '/auth/facebook';
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      setIsLoggedIn(true);
+      navigate('/');
+    } catch (error) {
+      console.error(error.response?.data?.message || 'Google login failed');
+      setError(error.response?.data?.message || 'Google login failed');
+    }
   };
+  
 
   return (
     <Box
@@ -179,13 +191,11 @@ const LoginPage = ({ setIsLoggedIn }) => {
       </Button>
 
       <Divider sx={{ my: 3, color: '#6c757d' }}>Hoặc</Divider>
-
+      
       <Button
         variant="outlined"
         fullWidth
-        onClick={handleGoogleLogin}
         sx={{
-          mb: 2,
           fontWeight: 'bold',
           fontFamily: 'Poppins, Arial, sans-serif',
           color: '#DB4437',
@@ -199,16 +209,24 @@ const LoginPage = ({ setIsLoggedIn }) => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          mb: 2,
         }}
       >
-        <img src={googleIcon} alt="Google" style={{ height: 24, marginRight: 8 }} />
-        Đăng nhập bằng Google
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => console.log('Google Login Failed')}
+            text="signin_with" // Tùy chỉnh văn bản nút
+            shape="pill" // Tùy chỉnh hình dạng nút
+            theme="outline" // Tùy chỉnh giao diện nút
+          />
+        </GoogleOAuthProvider>
       </Button>
 
       <Button
         variant="outlined"
         fullWidth
-        onClick={handleFacebookLogin}
+        onClick={() => window.location.href = `${process.env.REACT_APP_API_URL}/auth/facebook`}
         sx={{
           fontWeight: 'bold',
           fontFamily: 'Poppins, Arial, sans-serif',

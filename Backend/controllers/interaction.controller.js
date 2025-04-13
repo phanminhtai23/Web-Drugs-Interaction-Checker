@@ -43,3 +43,19 @@ exports.checkInteraction = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.searchDrugs = async (req, res) => {
+  const { keyword } = req.query;
+
+  try {
+    const drugs = await Drug.find({
+      tenThuoc: { $regex: keyword, $options: 'i' }, // Tìm kiếm không phân biệt hoa thường
+    })
+      .limit(10) // Giới hạn 10 kết quả
+      .select('tenThuoc'); // Chỉ lấy trường tên thuốc
+
+    res.status(200).json(drugs);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

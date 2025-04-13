@@ -7,23 +7,23 @@ const AdminPage = () => {
 
   const handleFileUpload = async () => {
     if (!file) {
-      alert('Please select a file to upload.');
+      alert('Vui lòng chọn một tệp để tải lên.');
       return;
     }
 
     try {
       const response = await uploadFile(file);
-      alert('File uploaded successfully: ' + response.message);
+      alert('Tệp đã được tải lên thành công: ' + response.message);
     } catch (error) {
-      console.error('Error uploading file:', error);
-      alert('Failed to upload file. Please try again.');
+      console.error('Lỗi khi tải tệp lên:', error);
+      alert('Không thể tải tệp lên. Vui lòng thử lại.');
     }
   };
 
   return (
     <Box sx={{ maxWidth: 600, mx: 'auto', mt: 5 }}>
       <Typography variant="h4" gutterBottom>
-        Admin Panel
+        Bảng Quản Trị
       </Typography>
       <Input
         type="file"
@@ -31,7 +31,7 @@ const AdminPage = () => {
         sx={{ mb: 2 }}
       />
       <Button variant="contained" color="primary" onClick={handleFileUpload}>
-        Upload File
+        Tải Tệp Lên
       </Button>
     </Box>
   );

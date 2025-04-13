@@ -15,5 +15,5 @@ module.exports = {
   adminController,
   clientController,
   interactionHistoryController,
-  prescriptionController
+  prescriptionController,
 };

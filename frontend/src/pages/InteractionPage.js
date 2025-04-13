@@ -233,8 +233,8 @@ const InteractionPage = () => {
             </Typography>
             <List>
               <ListItem>
-                <Link href="/prescriptions" underline="hover" color="primary">
-                  Danh sách thuốc của tôi
+                <Link href="/drugs" underline="hover" color="primary">
+                  Danh sách thuốc hiện có
                 </Link>
               </ListItem>
               <ListItem>
@@ -243,23 +243,50 @@ const InteractionPage = () => {
                 </Link>
               </ListItem>
               <ListItem>
-                <Link href="/identify-drug" underline="hover" color="primary">
-                  Nhận dạng thuốc
+                <Link
+                  href="#"
+                  underline="hover"
+                  color="primary"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const isLoggedIn = !!localStorage.getItem('token'); // Kiểm tra token trong localStorage
+                    if (isLoggedIn) {
+                      window.location.href = '/prescriptions'; // Điều hướng đến trang Danh sách thuốc
+                    } else {
+                      window.location.href = '/login'; // Điều hướng đến trang đăng nhập
+                    }
+                  }}
+                >
+                  Danh sách thuốc của tôi
                 </Link>
               </ListItem>
               <ListItem>
-                <Link href="/compare-drugs" underline="hover" color="primary">
-                  So sánh thuốc
+                <Link
+                  href="#"
+                  underline="hover"
+                  color="primary"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const isLoggedIn = !!localStorage.getItem('token'); // Kiểm tra token trong localStorage
+                    if (isLoggedIn) {
+                      window.location.href = '/interaction-history'; // Điều hướng đến trang Lịch sử kiểm tra tương tác thuốc
+                    } else {
+                      window.location.href = '/login'; // Điều hướng đến trang đăng nhập
+                    }
+                  }}
+                >
+                  Lịch sử kiểm tra tương tác thuốc
                 </Link>
               </ListItem>
               <ListItem>
-                <Link href="/faq" underline="hover" color="primary">
-                  Hỏi & Đáp Y Khoa
+                <Link href="/terms" underline="hover" color="primary">
+                  Điều khoản sử dụng
                 </Link>
               </ListItem>
+
               <ListItem>
-                <Link href="/news" underline="hover" color="primary">
-                  Tin tức thuốc mới nhất
+                <Link href="/about" underline="hover" color="primary">
+                  Giới thiệu về chúng tôi
                 </Link>
               </ListItem>
             </List>

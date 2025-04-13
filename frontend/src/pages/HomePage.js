@@ -4,6 +4,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Medication, Search, LocalHospital, History } from '@mui/icons-material';
 import Slider from 'react-slick';
 import { Divider } from '@mui/material';
+import SearchBarWithSuggestions from '../components/SearchBarWithSuggestions';
 
 
 
@@ -50,7 +51,7 @@ const HomePage = () => {
         sx={{
           textAlign: 'center',
           py: 8,
-          background: 'linear-gradient(135deg, #1976d2, #42a5f5)',
+          background: 'linear-gradient(135deg, #7BACD4FF, #C5C8CAFF)',
           color: '#fff',
           position: 'relative',
           overflow: 'hidden',
@@ -89,7 +90,7 @@ const HomePage = () => {
         </Typography>
         <Button
           variant="contained"
-          color="secondary"
+          color="primary"
           component={RouterLink}
           to="/interactions"
           sx={{
@@ -103,8 +104,63 @@ const HomePage = () => {
         >
           Bắt đầu kiểm tra tương tác
         </Button>
+        {/* Phần Tìm kiếm */}
+        <Box
+          sx={{
+            textAlign: 'center',
+            mt: 4,
+            py: 3,
+            px: 10,
+            background: 'linear-gradient(135deg, #e3f2fd, #ffffff)',
+            borderRadius: 3,
+            boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)',
+            mx: 'auto',
+            maxWidth: '900px',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              background: 'url(/path-to-light-background.jpg) no-repeat center center',
+              backgroundSize: 'cover',
+              opacity: 0.1,
+            }}
+          />
+          <Typography
+            variant="h4"
+            gutterBottom
+            sx={{
+              fontWeight: 'bold',
+              color: '#1976d2',
+              textTransform: 'uppercase',
+              letterSpacing: '2px',
+              mb: 2,
+            }}
+          >
+            Tìm kiếm thông tin thuốc
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              mb: 2,
+              color: 'text.secondary',
+              fontSize: '1.1rem',
+              maxWidth: '700px',
+              mx: 'auto',
+              lineHeight: 1.8,
+            }}
+          >
+            Nhập tên thuốc để tra cứu thông tin chi tiết hoặc kiểm tra tương tác thuốc.
+          </Typography>
+          <SearchBarWithSuggestions />
+        </Box>
       </Box>
-
       <Divider sx={{ my: 4, borderColor: 'rgba(0, 0, 0, 0.1)' }} />
 
       {/* Phần Tính năng */}
@@ -228,6 +284,260 @@ const HomePage = () => {
         </Slider>
       </Box>
       <Divider sx={{ my: 4, borderColor: 'rgba(0, 0, 0, 0.1)' }} />
+
+      {/* Câu hỏi thường gặp */}
+      <Box
+        sx={{
+          py: 6,
+          px: 4,
+          background: 'linear-gradient(135deg, #f9f9f9, #ffffff)',
+          textAlign: 'center',
+        }}
+      >
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{
+            fontWeight: 'bold',
+            color: '#1976d2', // Tiêu đề màu xanh dương phù hợp với trang web
+            textTransform: 'uppercase',
+            letterSpacing: '2px',
+            mb: 4,
+          }}
+        >
+          Câu hỏi thường gặp
+        </Typography>
+        <Box
+          sx={{
+            maxWidth: '800px',
+            mx: 'auto',
+            textAlign: 'left',
+          }}
+        >
+          {[
+            {
+              question: 'DTDrugs có miễn phí không?',
+              answer: 'Có, ứng dụng DTDrugs hoàn toàn miễn phí để sử dụng.',
+            },
+            {
+              question: 'Làm thế nào để kiểm tra tương tác thuốc?',
+              answer: 'Bạn chỉ cần nhập tên các loại thuốc vào công cụ kiểm tra tương tác trên trang chủ.',
+            },
+            {
+              question: 'Thông tin thuốc có đáng tin cậy không?',
+              answer: 'Tất cả thông tin trên DTDrugs được kiểm chứng từ các nguồn y tế uy tín.',
+            },
+          ].map((faq, index) => (
+            <Box
+              key={index}
+              sx={{
+                mb: 3,
+                p: 3,
+                borderRadius: 2,
+                background: '#ffffff',
+                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                transition: 'transform 0.3s ease',
+                '&:hover': {
+                  transform: 'scale(1.02)',
+                  boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.2)',
+                },
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 'bold',
+                  color: '#1976d2', // Màu xanh dương cho câu hỏi
+                  mb: 1,
+                }}
+              >
+                {faq.question}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: '#555', // Màu xám nhạt cho câu trả lời
+                  fontSize: '1rem',
+                }}
+              >
+                {faq.answer}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+      <Divider sx={{ my: 4, borderColor: 'rgba(0, 0, 0, 0.1)' }} />
+      {/* Hướng dẫn sử dụng */}
+      <Box
+        sx={{
+          py: 6,
+          px: 4,
+          background: 'linear-gradient(135deg, #f5f5f5, #ffffff)',
+          textAlign: 'center',
+        }}
+      >
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{
+            fontWeight: 'bold',
+            color: '#1976d2', // Tiêu đề màu xanh dương phù hợp với trang web
+            textTransform: 'uppercase',
+            letterSpacing: '2px',
+            mb: 4,
+          }}
+        >
+          Hướng dẫn sử dụng
+        </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-around',
+            gap: 4,
+          }}
+        >
+          {[
+            {
+              step: '1',
+              title: 'Tìm kiếm thuốc',
+              description: 'Nhập tên thuốc vào thanh tìm kiếm để tra cứu thông tin chi tiết.',
+            },
+            {
+              step: '2',
+              title: 'Kiểm tra tương tác',
+              description: 'Chọn các loại thuốc để kiểm tra tương tác giữa chúng.',
+            },
+            {
+              step: '3',
+              title: 'Quản lý đơn thuốc',
+              description: 'Lưu trữ và quản lý các đơn thuốc của bạn một cách dễ dàng.',
+            },
+          ].map((guide, index) => (
+            <Box
+              key={index}
+              sx={{
+                textAlign: 'center',
+                maxWidth: '300px',
+                p: 3,
+                borderRadius: 2,
+                background: '#ffffff',
+                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                transition: 'transform 0.3s ease',
+                '&:hover': {
+                  transform: 'scale(1.05)',
+                  boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.2)',
+                },
+              }}
+            >
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: 'bold',
+                  color: '#1976d2', // Màu xanh dương cho số bước
+                }}
+              >
+                {guide.step}
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 'bold',
+                  color: '#000', // Tiêu đề màu đen
+                  mt: 2,
+                }}
+              >
+                {guide.title}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: '#555', // Màu xám nhạt cho mô tả
+                  mt: 1,
+                  fontSize: '1rem',
+                }}
+              >
+                {guide.description}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+      <Divider sx={{ my: 4, borderColor: 'rgba(0, 0, 0, 0.1)' }} />
+      {/* Thống kê nổi bật */}
+      <Box
+        sx={{
+          py: 6,
+          px: 4,
+          background: 'linear-gradient(135deg, #ffffff, #f5f5f5)',
+          textAlign: 'center',
+        }}
+      >
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{
+            fontWeight: 'bold',
+            color: '#1976d2', // Tiêu đề màu xanh dương phù hợp với trang web
+            textTransform: 'uppercase',
+            letterSpacing: '2px',
+            mb: 4,
+          }}
+        >
+          Thống kê nổi bật
+        </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-around',
+            gap: 4,
+          }}
+        >
+          {[
+            { label: 'Người dùng', value: '10,000+' },
+            { label: 'Loại thuốc', value: '9,000+' },
+            { label: 'Tương tác đã kiểm tra', value: '1,000+' },
+          ].map((stat, index) => (
+            <Box
+              key={index}
+              sx={{
+                textAlign: 'center',
+                maxWidth: '200px',
+                p: 3,
+                borderRadius: 2,
+                background: '#ffffff',
+                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                transition: 'transform 0.3s ease',
+                '&:hover': {
+                  transform: 'scale(1.05)',
+                  boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.2)',
+                },
+              }}
+            >
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: 'bold',
+                  color: '#1976d2', // Màu xanh dương cho giá trị
+                }}
+              >
+                {stat.value}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: '#555', // Màu xám nhạt cho nhãn
+                  mt: 1,
+                  fontSize: '1rem',
+                }}
+              >
+                {stat.label}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      </Box>
     </Box>
   );
 };

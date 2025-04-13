@@ -26,25 +26,25 @@ import SortIcon from '@mui/icons-material/Sort';
 
 const DrugsListPage = () => {
   const [drugs, setDrugs] = useState([]);
-  const [filteredDrugs, setFilteredDrugs] = useState([]); // Danh sách thuốc đã lọc
+  const [filteredDrugs, setFilteredDrugs] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
-  const [sortOrder, setSortOrder] = useState('asc'); // State for sorting order
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
     const fetchDrugs = async () => {
       setLoading(true);
       setError('');
       try {
-        const response = await getDrugs(page, 20, '', sortOrder); // Không truyền search để lấy toàn bộ dữ liệu
+        const response = await getDrugs(page, 20, '', sortOrder);
         setDrugs(response.drugs);
-        setFilteredDrugs(response.drugs); // Gán danh sách ban đầu vào filteredDrugs
+        setFilteredDrugs(response.drugs);
         setTotalPages(response.totalPages);
       } catch (error) {
-        setError('Failed to fetch drugs. Please try again later.');
+        setError('Không thể tải danh sách thuốc. Vui lòng thử lại sau.');
       } finally {
         setLoading(false);
       }
@@ -52,12 +52,11 @@ const DrugsListPage = () => {
     fetchDrugs();
   }, [page, sortOrder]);
 
-  // Hàm xử lý tìm kiếm
   const handleSearch = (e) => {
-    const query = e.target.value.toLowerCase(); // Chuyển chuỗi tìm kiếm về chữ thường
+    const query = e.target.value.toLowerCase();
     setSearch(query);
     const filtered = drugs.filter((drug) =>
-      drug.tenThuoc.toLowerCase().includes(query) // So sánh không phân biệt chữ hoa chữ thường
+      drug.tenThuoc.toLowerCase().includes(query)
     );
     setFilteredDrugs(filtered);
   };
@@ -76,32 +75,29 @@ const DrugsListPage = () => {
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
   };
 
-  const navigate = useNavigate(); // Khởi tạo useNavigate
+  const navigate = useNavigate();
 
-  // Hàm xử lý khi nhấn vào "View Details"
   const handleViewDetails = (drugName) => {
-    navigate(`/drugs/${drugName}`); // Điều hướng đến trang chi tiết thuốc
+    navigate(`/drugs/${drugName}`);
   };
 
   const handleAnimationComplete = () => {
-    console.log('Animation completed!');
+    console.log('Hoàn thành hiệu ứng!');
   };
 
   return (
     <Box className="container" sx={{ mt: 5, px: 3 }}>
-      {/* Tiêu đề trang */}
       <Typography
-        variant="h3" // Tăng cỡ chữ bằng cách sử dụng variant lớn hơn
+        variant="h3"
         gutterBottom
         align="center"
         sx={{
-          mb: 3, // Tăng khoảng cách dưới tiêu đề
+          mb: 3,
           fontWeight: 'bold',
-          color: 'primary.main', // Màu xanh đậm để nổi bật
-          textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)', // Hiệu ứng bóng chữ
-          textTransform: 'uppercase', // Chữ in hoa để tạo sự chuyên nghiệp
-          // fontFamily: "'Roboto Slab', serif",
-          letterSpacing: 2, // Tăng khoảng cách giữa các chữ
+          color: 'primary.main',
+          textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
+          textTransform: 'uppercase',
+          letterSpacing: 2,
         }}
       >
         <BlurText
@@ -115,7 +111,6 @@ const DrugsListPage = () => {
         />
       </Typography>
 
-      {/* Search Bar */}
       <Box
         sx={{
           display: 'flex',
@@ -128,9 +123,9 @@ const DrugsListPage = () => {
       >
         <TextField
           variant="outlined"
-          placeholder="Search for drugs..."
+          placeholder="Tìm kiếm thuốc..."
           value={search}
-          onChange={handleSearch} // Gọi hàm handleSearch khi nhập
+          onChange={handleSearch}
           InputProps={{
             startAdornment: <SearchIcon sx={{ mr: 1, color: 'grey.600' }} />,
           }}
@@ -154,23 +149,22 @@ const DrugsListPage = () => {
         </Alert>
       ) : (
         <>
-          {/* Table */}
           <TableContainer component={Paper} sx={{ mt: 3, boxShadow: 3, borderRadius: 2 }}>
             <Table>
               <TableHead sx={{ bgcolor: 'primary.main' }}>
                 <TableRow>
                   <TableCell
                     sx={{ color: 'white', fontWeight: 'bold', cursor: 'pointer' }}
-                    onClick={handleSort} // Gọi hàm sắp xếp khi nhấn vào tiêu đề
+                    onClick={handleSort}
                   >
                     <MedicationIcon sx={{ mr: 1 }} />
-                    Name <SortIcon sx={{ ml: 1 }} />
+                    Tên thuốc <SortIcon sx={{ ml: 1 }} />
                   </TableCell>
-                  <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Category</TableCell>
-                  <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Manufacturer</TableCell>
-                  <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Approval Date</TableCell>
+                  <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Phân loại</TableCell>
+                  <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Công ty sản xuất</TableCell>
+                  <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>Ngày phê duyệt</TableCell>
                   <TableCell align="center" sx={{ color: 'white', fontWeight: 'bold' }}>
-                    Actions
+                    Hành động
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -188,17 +182,17 @@ const DrugsListPage = () => {
                         {drug.tenThuoc}
                       </Typography>
                     </TableCell>
-                    <TableCell>{drug.phanLoai || 'N/A'}</TableCell>
-                    <TableCell>{drug.congTySx || 'N/A'}</TableCell>
-                    <TableCell>{drug.pheDuyet || 'N/A'}</TableCell>
+                    <TableCell>{drug.phanLoai || 'Không có'}</TableCell>
+                    <TableCell>{drug.congTySx || 'Không có'}</TableCell>
+                    <TableCell>{drug.pheDuyet || 'Không có'}</TableCell>
                     <TableCell align="center">
-                      <Tooltip title="View Details">
+                      <Tooltip title="Xem chi tiết">
                         <Button
                           variant="outlined"
                           size="small"
                           color="primary"
                           sx={{ mr: 1 }}
-                          onClick={() => handleViewDetails(drug.tenThuoc)} // Gọi hàm điều hướng
+                          onClick={() => handleViewDetails(drug.tenThuoc)}
                         >
                           <VisibilityIcon />
                         </Button>
@@ -210,10 +204,9 @@ const DrugsListPage = () => {
             </Table>
           </TableContainer>
 
-          {/* Pagination */}
           <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
             <Typography variant="body2" color="text.secondary">
-              Page {page} of {totalPages}
+              Trang {page} trên {totalPages}
             </Typography>
             <Pagination
               count={totalPages}

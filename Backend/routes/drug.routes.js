@@ -10,4 +10,6 @@ router.get('/', drugController.getDrugsWithPagination);
 // Lấy thông tin chi tiết của một thuốc - Không cần đăng nhập
 router.get('/:tenThuoc', drugController.getDrugByName);
 
+router.get('/search', drugController.searchDrugsByName);
+
 module.exports = router;

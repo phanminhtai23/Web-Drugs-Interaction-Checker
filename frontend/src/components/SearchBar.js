@@ -13,7 +13,7 @@ const SearchBar = ({ onSearch }) => {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
       <TextField
-        label="Search for drugs or interactions"
+        label="Tìm kiếm thuốc hoặc tương tác"
         variant="outlined"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
@@ -25,7 +25,7 @@ const SearchBar = ({ onSearch }) => {
         onClick={handleSearch}
         sx={{ ml: 2 }}
       >
-        Search
+        Tìm kiếm
       </Button>
     </Box>
   );

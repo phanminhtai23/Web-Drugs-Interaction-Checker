@@ -81,3 +81,28 @@ button {
     transform: translateY(0);
   }
 }
+
+/* AboutPage.css */
+.about-page {
+  font-family: 'Roboto', sans-serif;
+}
+
+.about-page .hero {
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  color: #fff;
+  text-align: center;
+  padding: 50px 20px;
+  border-radius: 8px;
+}
+
+.about-page .core-values {
+  margin: 50px 0;
+}
+
+.about-page .cta {
+  background: linear-gradient(135deg, #42a5f5, #1976d2);
+  color: #fff;
+  text-align: center;
+  padding: 50px 20px;
+  border-radius: 8px;
+}

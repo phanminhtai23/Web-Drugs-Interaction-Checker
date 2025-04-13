@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from '../services/api';
 import {
   TextField,
@@ -12,6 +12,7 @@ import {
   Typography,
   IconButton,
   Grid,
+  Autocomplete,
   // Card,
   // CardContent,
   // CardHeader,
@@ -33,12 +34,40 @@ const InteractionSearch = () => {
   const [error, setError] = useState('');
   const [noInteractions, setNoInteractions] = useState(false);
   const [noDrugsFound, setNoDrugsFound] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const [, setAllDrugs] = useState([]);
+
+  useEffect(() => {
+    const fetchAllDrugs = async () => {
+      try {
+        const response = await axios.get('/drugs');
+        setAllDrugs(response.data.map((drug) => drug.tenThuoc));
+      } catch (error) {
+        console.error('Lỗi khi lấy danh sách tất cả các thuốc:', error);
+      }
+    };
+
+    fetchAllDrugs();
+  }, []);
+
+  const fetchSuggestions = async (keyword) => {
+    if (!keyword) {
+      setSuggestions([]);
+      return;
+    }
+    try {
+      const response = await axios.get(`/interactions/search?keyword=${keyword}`);
+      setSuggestions(response.data.map((drug) => drug.tenThuoc)); // Lấy danh sách tên thuốc
+    } catch (error) {
+      console.error('Lỗi khi lấy gợi ý tên thuốc:', error);
+    }
+  };
 
   const handleAddDrug = () => {
     if (drugName.trim() && !drugList.includes(drugName.trim())) {
-      setDrugList([...drugList, drugName.trim()]);
-      setDrugName('');
+      setDrugList([...drugList, drugName.trim()]); // Thêm thuốc vào danh sách
     }
+    setDrugName(''); // Reset thanh nhập tên thuốc
   };
 
   const handleRemoveDrug = (drug) => {
@@ -51,11 +80,10 @@ const InteractionSearch = () => {
     setNoInteractions(false);
     setNoDrugsFound(false); // Reset trạng thái cảnh báo
 
-    if (drugList.length === 0) {
-      setError('Chú ý vui lòng nhập tên thuốc vào để kiểm tra.');
+    if (drugList.length < 2) { // Kiểm tra nếu danh sách thuốc có ít hơn 2 tên
+      setError('Vui lòng nhập ít nhất 2 tên thuốc để kiểm tra tương tác.');
       return;
     }
-
 
     setLoading(true);
     try {
@@ -68,22 +96,22 @@ const InteractionSearch = () => {
       }
     } catch (err) {
       if (err.response?.data?.message === 'No drugs found with the provided names') {
-        setNoDrugsFound(true); // Hiển thị cảnh báo "No drugs found"
+        setNoDrugsFound(true); // Hiển thị cảnh báo "Không tìm thấy thuốc"
       } else if (err.response?.data?.message === 'No interactions found for the provided drugs') {
         setNoInteractions(true);
       } else {
-        setError(err.response?.data?.message || 'Failed to fetch interactions. Please try again.');
+        setError(err.response?.data?.message || 'Unable to retrieve interaction information. Please try again.');
       }
     } finally {
       setLoading(false);
     }
   };
 
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      handleAddDrug();
-    }
-  };
+  // const handleKeyPress = (event) => {
+  //   if (event.key === 'Enter') {
+  //     handleAddDrug();
+  //   }
+  // };
 
   const handleSaveHistory = async () => {
     try {
@@ -119,20 +147,41 @@ const InteractionSearch = () => {
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-          <TextField
-            label="Nhập tên thuốc"
-            variant="outlined"
-            fullWidth
-            value={drugName}
-            onChange={(e) => setDrugName(e.target.value)}
-            onKeyPress={handleKeyPress}
-            sx={{
-              mr: 2,
-              '& .MuiOutlinedInput-root': {
-                borderRadius: 3,
-              },
+          <Autocomplete
+            freeSolo
+            options={suggestions}
+            onInputChange={(event, value) => {
+              setDrugName(value); // Cập nhật giá trị nhập
+              fetchSuggestions(value); // Gọi API để lấy gợi ý
             }}
+            onChange={(event, value) => {
+              if (value && !drugList.includes(value)) {
+                setDrugList([...drugList, value]); // Thêm thuốc vào danh sách
+              }
+              setDrugName(''); // Reset thanh nhập tên thuốc
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Nhập tên thuốc"
+                variant="outlined"
+                fullWidth
+                value={drugName}
+                onKeyPress={(event) => {
+                  if (event.key === 'Enter') {
+                    handleAddDrug(); // Thêm thuốc khi nhấn Enter
+                  }
+                }}
+                sx={{
+                  mr: 62,
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 3,
+                  },
+                }}
+              />
+            )}
           />
+          
           <Button
             variant="contained"
             color="primary"
@@ -171,7 +220,13 @@ const InteractionSearch = () => {
                 variant="text"
                 color="primary"
                 startIcon={<RestartAltIcon />}
-                onClick={() => setDrugList([])} // Xóa toàn bộ danh sách
+                onClick={() => {
+                  setDrugList([]); // Xóa toàn bộ danh sách thuốc
+                  setInteractions([]); // Thu hồi kết quả kiểm tra tương tác
+                  setNoInteractions(false); // Đặt lại trạng thái không có tương tác
+                  setNoDrugsFound(false); // Đặt lại trạng thái không tìm thấy thuốc
+                  setError(''); // Xóa thông báo lỗi
+                }}
                 sx={{
                   textTransform: 'none',
                   fontWeight: 'bold',
@@ -196,7 +251,13 @@ const InteractionSearch = () => {
                   <Typography variant="body1" sx={{ color: '#1976d2' }}>
                     {drug}
                   </Typography>
-                  <IconButton edge="end" onClick={() => handleRemoveDrug(drug)}>
+                  <IconButton edge="end" onClick={() => {
+                    handleRemoveDrug(drug);
+                    setInteractions([]); // Thu hồi kết quả kiểm tra tương tác
+                    setNoInteractions(false); // Đặt lại trạng thái không có tương tác
+                    setNoDrugsFound(false); // Đặt lại trạng thái không tìm thấy thuốc
+                    setError(''); // Xóa thông báo lỗi
+                  }}>
                     <Delete sx={{ color: '#d32f2f' }} />
                   </IconButton>
                 </ListItem>

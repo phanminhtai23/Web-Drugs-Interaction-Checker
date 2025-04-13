@@ -29,7 +29,8 @@ const ProfilePage = () => {
     address: '',
     medical_history: [],
   });
-
+  // const [user, setUser] = useState(null);
+  
   const [newDisease, setNewDisease] = useState('');
 
   const navigate = useNavigate();
@@ -40,8 +41,9 @@ const ProfilePage = () => {
         const response = await getProfile();
         setProfile({
           ...response,
-          date_of_birth: response.date_of_birth || '', // Đảm bảo ngày sinh không bị undefined
-          medical_history: response.medical_history || [], // Đảm bảo medical_history luôn là mảng
+          date_of_birth: response.date_of_birth || '',
+          medical_history: response.medical_history || [],
+          profile_picture: response.profile_picture || '', // Đảm bảo nhận ảnh đại diện
         });
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -55,18 +57,17 @@ const ProfilePage = () => {
     const { name, value } = e.target;
     setProfile((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       try {
         const response = await uploadAvatar(file);
         const newProfilePicture = `${process.env.REACT_APP_API_URL}${response.profile_picture}`;
-        setProfile((prev) => ({ ...prev, profile_picture: newProfilePicture }));
-        alert('Avatar uploaded successfully');
+        setProfile((prev) => ({ ...prev, profile_picture: newProfilePicture })); // Cập nhật ảnh đại diện
+        alert('Tải lên ảnh đại diện thành công');
       } catch (error) {
-        console.error('Error uploading avatar:', error);
-        alert('Failed to upload avatar. Please try again.');
+        console.error('Lỗi khi tải lên ảnh đại diện:', error);
+        alert('Tải lên ảnh đại diện thất bại. Vui lòng thử lại.');
       }
     }
   };
@@ -162,7 +163,7 @@ const ProfilePage = () => {
                     border: '4px solid #fff',
                     boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)',
                   }}
-                  src={profile.profile_picture || ''}
+                  src={profile.profile_picture || ''} // Hiển thị ảnh đại diện
                 >
                   {!profile.profile_picture && (
                     <AccountCircleIcon sx={{ fontSize: 100, color: '#fff' }} />

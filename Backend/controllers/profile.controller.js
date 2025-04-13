@@ -25,7 +25,7 @@ exports.uploadAvatar = [
 
       const filePath = `/assets/avatars/${req.file.filename}`; // Đường dẫn ảnh
       const user = await Client.findByIdAndUpdate(
-        req.user.id,
+        req.user.id, // Liên kết với tài khoản người dùng
         { profile_picture: filePath },
         { new: true }
       );
@@ -47,7 +47,7 @@ exports.getProfile = async (req, res) => {
 
     res.status(200).json({
       ...user.toObject(),
-      date_of_birth: user.date_of_birth ? user.date_of_birth.toISOString().split('T')[0] : '', // Định dạng ngày
+      date_of_birth: user.date_of_birth ? user.date_of_birth.toISOString().split('T')[0] : '',
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
