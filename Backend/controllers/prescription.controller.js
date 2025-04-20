@@ -38,3 +38,18 @@ exports.deletePrescription = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.updatePrescription = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedPrescription = await Prescription.findByIdAndUpdate(id, req.body, { new: true });
+
+    if (!updatedPrescription) {
+      return res.status(404).json({ message: 'Prescription not found' });
+    }
+
+    res.status(200).json({ message: 'Prescription updated successfully', prescription: updatedPrescription });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

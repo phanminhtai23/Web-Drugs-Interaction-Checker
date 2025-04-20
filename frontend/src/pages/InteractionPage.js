@@ -257,7 +257,7 @@ const InteractionPage = () => {
                     }
                   }}
                 >
-                  Danh sách thuốc của tôi
+                  Danh sách đơn thuốc của tôi
                 </Link>
               </ListItem>
               <ListItem>

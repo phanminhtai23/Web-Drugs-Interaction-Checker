@@ -13,4 +13,5 @@ router.post('/', authMiddleware(['client']), prescriptionController.addPrescript
 // Xóa đơn thuốc
 router.delete('/:id', authMiddleware(['client']), prescriptionController.deletePrescription);
 
+router.put('/:id', authMiddleware(['client']), prescriptionController.updatePrescription);
 module.exports = router;
