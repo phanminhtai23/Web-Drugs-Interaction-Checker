@@ -74,38 +74,38 @@ const InteractionSearch = () => {
     setDrugList(drugList.filter((d) => d !== drug));
   };
 
-  const handleCheckInteractions = async () => {
-    setError('');
-    setInteractions([]);
-    setNoInteractions(false);
-    setNoDrugsFound(false); // Reset trạng thái cảnh báo
+const handleCheckInteractions = async () => {
+  setError('');
+  setInteractions([]);
+  setNoInteractions(false);
+  setNoDrugsFound(false); // Reset trạng thái cảnh báo
 
-    if (drugList.length < 2) { // Kiểm tra nếu danh sách thuốc có ít hơn 2 tên
-      setError('Vui lòng nhập ít nhất 2 tên thuốc để kiểm tra tương tác.');
-      return;
-    }
+  if (drugList.length < 2) { // Kiểm tra nếu danh sách thuốc có ít hơn 2 tên
+    setError('Vui lòng nhập ít nhất 2 tên thuốc để kiểm tra tương tác.');
+    return;
+  }
 
-    setLoading(true);
-    try {
-      const response = await axios.post('/interactions', { drugNames: drugList });
-      
-      if (response.data.length === 0) {
-        setNoInteractions(true);
-      } else {
-        setInteractions(response.data);
-      }
-    } catch (err) {
-      if (err.response?.data?.message === 'No drugs found with the provided names') {
-        setNoDrugsFound(true); // Hiển thị cảnh báo "Không tìm thấy thuốc"
-      } else if (err.response?.data?.message === 'No interactions found for the provided drugs') {
-        setNoInteractions(true);
-      } else {
-        setError(err.response?.data?.message || 'Unable to retrieve interaction information. Please try again.');
-      }
-    } finally {
-      setLoading(false);
+  setLoading(true);
+  try {
+    const response = await axios.post('/interactions', { drugNames: drugList });
+
+    if (response.data.length === 0) {
+      setNoInteractions(true);
+    } else {
+      setInteractions(response.data);
     }
-  };
+  } catch (err) {
+    if (err.response?.data?.message === 'No drugs found with the provided names') {
+      setNoDrugsFound(true); // Hiển thị cảnh báo "Không tìm thấy thuốc"
+    } else if (err.response?.data?.message === 'No interactions found for the provided drugs') {
+      setNoInteractions(true);
+    } else {
+      setError(err.response?.data?.message || 'Unable to retrieve interaction information. Please try again.');
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   // const handleKeyPress = (event) => {
   //   if (event.key === 'Enter') {
@@ -334,89 +334,89 @@ const InteractionSearch = () => {
               Tương tác giữa các loại thuốc của bạn
             </Typography>
             <Grid container spacing={2}>
-              {interactions.map((interaction, index) => (
-                <Grid item xs={12} key={index}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: 2,
-                      p: 2,
-                      backgroundColor:
-                        interaction.MucDoNghiemTrong === 'Cao'
-                          ? '#fdecea'
-                          : interaction.MucDoNghiemTrong === 'Trung bình'
-                          ? '#fff4e5'
-                          : interaction.MucDoNghiemTrong === 'Nhẹ'
-                          ? '#e8f5e9'
-                          : '#f5f5f5',
-                      borderRadius: 2,
-                      border:
-                        interaction.MucDoNghiemTrong === 'Cao'
-                          ? '1px solid #f5c6cb'
-                          : interaction.MucDoNghiemTrong === 'Trung bình'
-                          ? '1px solid #ffeeba'
-                          : interaction.MucDoNghiemTrong === 'Nhẹ'
-                          ? '1px solid #c8e6c9'
-                          : '1px solid #e0e0e0',
-                      boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-                    }}
-                  >
-                    <Avatar
-                      sx={{
-                        backgroundColor:
-                          interaction.MucDoNghiemTrong === 'Cao'
-                            ? 'error.main'
-                            : interaction.MucDoNghiemTrong === 'Trung bình'
-                            ? 'warning.main'
-                            : interaction.MucDoNghiemTrong === 'Nhẹ'
-                            ? 'info.main'
-                            : 'grey.500',
-                        width: 48,
-                        height: 48,
-                      }}
-                    >
-                      {interaction.MucDoNghiemTrong === 'Cao' ? (
-                        <ErrorIcon />
-                      ) : interaction.MucDoNghiemTrong === 'Trung bình' ? (
-                        <WarningAmberIcon />
-                      ) : (
-                        <InfoIcon />
-                      )}
-                    </Avatar>
-                    <Box>
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontWeight: 'bold',
-                          color:
-                            interaction.MucDoNghiemTrong === 'Cao'
-                              ? 'error.main'
-                              : interaction.MucDoNghiemTrong === 'Trung bình'
-                              ? 'warning.main'
-                              : interaction.MucDoNghiemTrong === 'Nhẹ'
-                              ? 'info.main'
-                              : 'grey.700',
-                        }}
-                      >
-                        {interaction.MucDoNghiemTrong}
-                      </Typography>
-                      <Typography variant="body1" sx={{ fontWeight: 'bold', mb: 1 }}>
-                        {interaction.HoatChat_1} ↔ {interaction.HoatChat_2}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
-                        Áp dụng cho: {interaction.TenThuoc}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        {interaction.CanhBaoTuongTacThuoc}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-                        <strong>Lưu ý:</strong> Luôn tham khảo ý kiến bác sĩ trước khi thay đổi hoặc ngừng sử dụng bất kỳ loại thuốc nào.
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Grid>
-              ))}
+ {interactions.map((interaction, index) => (
+        <Grid item xs={12} key={index}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: 2,
+              p: 2,
+              backgroundColor:
+                interaction.MucDoNghiemTrong === 'Nghiêm trọng'
+                  ? '#fdecea'
+                  : interaction.MucDoNghiemTrong === 'Trung bình'
+                  ? '#fff4e5'
+                  : interaction.MucDoNghiemTrong === 'Nhẹ'
+                  ? '#e8f5e9'
+                  : '#f5f5f5',
+              borderRadius: 2,
+              border:
+                interaction.MucDoNghiemTrong === 'Nghiêm trọng'
+                  ? '1px solid #f5c6cb'
+                  : interaction.MucDoNghiemTrong === 'Trung bình'
+                  ? '1px solid #ffeeba'
+                  : interaction.MucDoNghiemTrong === 'Nhẹ'
+                  ? '1px solid #c8e6c9'
+                  : '1px solid #e0e0e0',
+              boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+            }}
+          >
+            <Avatar
+              sx={{
+                backgroundColor:
+                  interaction.MucDoNghiemTrong === 'Nghiêm trọng'
+                    ? 'error.main'
+                    : interaction.MucDoNghiemTrong === 'Trung bình'
+                    ? 'warning.main'
+                    : interaction.MucDoNghiemTrong === 'Nhẹ'
+                    ? 'info.main'
+                    : 'grey.500',
+                width: 48,
+                height: 48,
+              }}
+            >
+              {interaction.MucDoNghiemTrong === 'Nghiêm trọng' ? (
+                <ErrorIcon />
+              ) : interaction.MucDoNghiemTrong === 'Trung bình' ? (
+                <WarningAmberIcon />
+              ) : (
+                <InfoIcon />
+              )}
+            </Avatar>
+            <Box>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 'bold',
+                  color:
+                    interaction.MucDoNghiemTrong === 'Nghiêm trọng'
+                      ? 'error.main'
+                      : interaction.MucDoNghiemTrong === 'Trung bình'
+                      ? 'warning.main'
+                      : interaction.MucDoNghiemTrong === 'Nhẹ'
+                      ? 'info.main'
+                      : 'grey.700',
+                }}
+              >
+                {interaction.MucDoNghiemTrong}
+              </Typography>
+              <Typography variant="body1" sx={{ fontWeight: 'bold', mb: 1 }}>
+                {interaction.HoatChat_1} ↔ {interaction.HoatChat_2}
+              </Typography>
+              {/* <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
+                Áp dụng cho: {interaction.TenThuoc}
+              </Typography> */}
+              <Typography variant="body2" color="textSecondary">
+                {interaction.CanhBaoTuongTacThuoc}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                <strong>Lưu ý:</strong> Luôn tham khảo ý kiến bác sĩ trước khi thay đổi hoặc ngừng sử dụng bất kỳ loại thuốc nào.
+              </Typography>
+            </Box>
+          </Box>
+        </Grid>
+      ))}
             </Grid>
             {/* Phân loại tương tác thuốc */}
             <Box

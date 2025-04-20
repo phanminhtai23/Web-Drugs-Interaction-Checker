@@ -5,7 +5,7 @@ exports.checkInteraction = async (req, res) => {
   const { drugNames } = req.body;
 
   try {
-    // Tìm các thuốc trong cơ sở dữ liệu dựa trên tên (không phân biệt chữ hoa/chữ thường)
+    // Tìm các thuốc trong cơ sở dữ liệu dựa trên tên (không phân biệt hoa thường)
     const drugs = await Drug.find({
       tenThuoc: { $in: drugNames.map((name) => new RegExp(`^${name.trim()}$`, 'i')) },
     });
@@ -24,12 +24,19 @@ exports.checkInteraction = async (req, res) => {
       drug.hoatChat.map((hc) => hc.tenHoatChat.trim().toLowerCase())
     );
 
-    // Tìm các tương tác dựa trên hoạt chất
-    const interactions = await Interaction.find({
-      $or: [
-        { HoatChat_1: { $in: activeIngredients }, HoatChat_2: { $in: activeIngredients } },
-        { HoatChat_2: { $in: activeIngredients }, HoatChat_1: { $in: activeIngredients } },
-      ],
+    // Lấy tất cả các tương tác từ cơ sở dữ liệu
+    const allInteractions = await Interaction.find();
+
+    // Lọc các tương tác dựa trên hoạt chất
+    const interactions = allInteractions.filter((interaction) => {
+      const hoatChat1 = interaction.HoatChat_1.toLowerCase();
+      const hoatChat2 = interaction.HoatChat_2.toLowerCase();
+
+      // Kiểm tra nếu cả HoatChat_1 và HoatChat_2 đều nằm trong danh sách hoạt chất
+      return (
+        activeIngredients.some((ingredient) => hoatChat1 === ingredient) &&
+        activeIngredients.some((ingredient) => hoatChat2 === ingredient)
+      );
     });
 
     if (!interactions.length) {
