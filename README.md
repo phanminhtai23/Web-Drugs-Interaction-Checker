@@ -1,14 +1,14 @@
-# Hệ Thống kiểm tra tương tác thuốc
+#💊 Hệ Thống kiểm tra tương tác thuốc
 Niên luận ngành Khoa học Máy tính  
 **Sinh viên thực hiện:** Nguyễn Hoàng Điển  
 **GVHD:** TS. Lưu Tiến Đạo
 
-## ✌️Giới thiệu
+##📚 Giới thiệu
 Drug Interaction Web là một ứng dụng web giúp người dùng tra cứu thông tin thuốc, kiểm tra tương tác thuốc và quản lý đơn thuốc. Dự án này được phát triển nhằm hỗ trợ người dùng trong việc quản lý và theo dõi thông tin y tế cá nhân.
 
-Hệ thống sẽ chia 2 quyền quản trị (Admin) và người dùng riêng, chạy trên 2 frontend và backend riêng mà các hệ thống lớn hay thường làm:
+Hệ thống sẽ chia 2 quyền quản trị (Admin) và người dùng riêng, chạy trên 2 frontend và backend riêng mà các hệ thống lớn đã làm:
 - Hệ thống web cho người quản trị (Admin) cài đặt theo dự án này: (https://github.com/phanminhtai23/DDIs-Management)
-- Hệ thống web cho người dùng cài theo dự án này.
+- Hệ thống web cho người dùng cài theo dự án hiện tại.
 
 Công nghệ sử dụng:
 - Frontend: `React`
@@ -24,6 +24,16 @@ Công nghệ sử dụng:
 - **Hệ thống lấy lại mật khẩu và gửi phản hồi thông qua email**: Có thêm chức năng lấy lại mật khẩu thông qua email mã OTP và gửi ý kiến thông qua địa chỉ mail.
 ---
 
+## 🔧 Import dữ liệu MongoDB (tuỳ chọn)
+Dữ liệu mẫu đã export trong thư mục data/, dùng lệnh sau để import:
+``` bash
+mongoimport --uri "your mongodb uri" --db your_database_name --collection drugs --file data/Drug_interactions.drugs.json --jsonArray
+mongoimport --uri "your mongodb uri" --db your_database_name --collection drug_interaction --file data/Drug_interactions.drug_interaction.json --jsonArray
+mongoimport --uri "your mongodb uri" --db your_database_name --collection client --file data/Drug_interactions.client.json --jsonArray
+mongoimport --uri "your mongodb uri" --db your_database_name --collection interaction_history --file data/Drug_interactions.interaction_history.json --jsonArray
+mongoimport --uri "your mongodb uri" --db your_database_name --collection prescriptions --file data/Drug_interactions.prescriptions.json --jsonArray
+```
+
 ## Yêu cầu hệ thống
 - **Node.js**: >= 14.x
 - **npm**: >= 6.x
@@ -37,7 +47,7 @@ Công nghệ sử dụng:
 ### 1. Clone dự án
 Sử dụng lệnh sau để clone dự án từ GitHub:
 ```bash
-git clone https://github.com/phanminhtai23/DDIs-Management.git
+https://github.com/Hoang-Dien-IT/Web-Drugs-Interaction-Checker.git
 ```
 
 ### 2. Cài đặt Backend
@@ -67,8 +77,9 @@ git clone https://github.com/phanminhtai23/DDIs-Management.git
    EMAIL_USER=<your-email>
    EMAIL_PASS=<your-pass>
    ```
-   
-4. Khởi chạy server:
+   Để lấy các các Key: ID và SECRET của Google xem hướng dẫn này: `https://www.youtube.com/watch?v=ssgr6jWGBnY`.
+   Để lấy các các Key: ID và SECRET của Facebook xem hướng dẫn này: `https://www.youtube.com/watch?v=gtH-5T9cmO0&t=254s`.
+5. Khởi chạy server:
    ```bash
    npm start
    ```
@@ -87,8 +98,12 @@ git clone https://github.com/phanminhtai23/DDIs-Management.git
    ```
 3. Tạo file `.env` trong thư mục `frontend` và cấu hình biến môi trường:
    ```env
-   REACT_APP_API_URL=http://localhost:5000/api
+   PORT=3000
+   REACT_APP_API_URL=http://localhost:5000
+   
+   REACT_APP_GOOGLE_CLIENT_ID=<your-id-google-key>
    ```
+   Để lấy REACT_APP_GOOGLE_CLIENT_ID của Google xem hướng dẫn này: `https://www.youtube.com/watch?v=ssgr6jWGBnY`.
 4. Khởi chạy ứng dụng React:
    ```bash
    npm start
@@ -138,10 +153,6 @@ drug-interaction-web/
 
 ---
 
-## Đóng góp
-Nếu bạn muốn đóng góp cho dự án, vui lòng tạo một **Pull Request** hoặc mở **Issue** trên GitHub.
-
----
 
 ## Liên hệ
 - **Email**: DTDrugs@gmail.com
