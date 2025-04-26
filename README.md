@@ -24,7 +24,7 @@ Công nghệ sử dụng:
 - **Hệ thống lấy lại mật khẩu và gửi phản hồi thông qua email**: Có thêm chức năng lấy lại mật khẩu thông qua email mã OTP và gửi ý kiến thông qua địa chỉ mail.
 ---
 
-## 🔧 Import dữ liệu MongoDB (tuỳ chọn)
+## 📝 Import dữ liệu MongoDB (tuỳ chọn)
 Dữ liệu mẫu đã export trong thư mục data/, dùng lệnh sau để import:
 ``` bash
 mongoimport --uri "your mongodb uri" --db your_database_name --collection drugs --file data/Drug_interactions.drugs.json --jsonArray
@@ -42,7 +42,7 @@ mongoimport --uri "your mongodb uri" --db your_database_name --collection prescr
 
 ---
 
-## Cài đặt và chạy dự án
+## 🔧 Cài đặt và chạy dự án
 
 ### 1. Clone dự án
 Sử dụng lệnh sau để clone dự án từ GitHub:
@@ -112,7 +112,7 @@ https://github.com/Hoang-Dien-IT/Web-Drugs-Interaction-Checker.git
 
 ---
 
-## Cấu trúc thư mục
+## 🌳 Cấu trúc thư mục
 ```
 drug-interaction-web/
 ├── Backend/
@@ -138,7 +138,7 @@ drug-interaction-web/
 
 ---
 
-## API Endpoints
+## 👍 API Endpoints
 
 ### Backend API
 - **Drugs**
@@ -154,6 +154,6 @@ drug-interaction-web/
 ---
 
 
-## Liên hệ
+## 📲 Liên hệ
 - **Email**: DTDrugs@gmail.com
 - **Số điện thoại**: +84 944 779 743
