@@ -189,5 +189,5 @@ drug-interaction-web/
 
 
 ## 📲 Liên hệ
-- **Email**: DTDrugs@gmail.com
+- **Email**: nguyenhoangdien1x@gmail.com
 - **Số điện thoại**: +84 944 779 743
