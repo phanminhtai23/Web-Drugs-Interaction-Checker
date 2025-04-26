@@ -14,6 +14,7 @@ Công nghệ sử dụng:
 - Frontend: `React`
 - Backend: `Nodejs`, `MongoDB`
 ---
+![image](https://github.com/user-attachments/assets/a745fea9-c010-4341-9268-88e32509fa31)
 
 ## Tính năng chính
 - **Tra cứu thuốc**: Tìm kiếm thông tin chi tiết về thuốc.
