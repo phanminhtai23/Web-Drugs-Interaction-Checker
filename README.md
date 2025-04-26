@@ -77,8 +77,8 @@ https://github.com/Hoang-Dien-IT/Web-Drugs-Interaction-Checker.git
    EMAIL_USER=<your-email>
    EMAIL_PASS=<your-pass>
    ```
-   Để lấy các các Key: ID và SECRET của Google xem hướng dẫn này: `https://www.youtube.com/watch?v=ssgr6jWGBnY`.
-   Để lấy các các Key: ID và SECRET của Facebook xem hướng dẫn này: `https://www.youtube.com/watch?v=gtH-5T9cmO0&t=254s`.
+   - **Để lấy các các Key: ID và SECRET của Google xem hướng dẫn này:** https://www.youtube.com/watch?v=ssgr6jWGBnY.
+   - **Để lấy các các Key: ID và SECRET của Facebook xem hướng dẫn này:** https://www.youtube.com/watch?v=gtH-5T9cmO0&t=254s.
 5. Khởi chạy server:
    ```bash
    npm start
@@ -103,7 +103,7 @@ https://github.com/Hoang-Dien-IT/Web-Drugs-Interaction-Checker.git
    
    REACT_APP_GOOGLE_CLIENT_ID=<your-id-google-key>
    ```
-   Để lấy REACT_APP_GOOGLE_CLIENT_ID của Google xem hướng dẫn này: `https://www.youtube.com/watch?v=ssgr6jWGBnY`.
+   - **Để lấy REACT_APP_GOOGLE_CLIENT_ID của Google xem hướng dẫn này:** https://www.youtube.com/watch?v=ssgr6jWGBnY.
 4. Khởi chạy ứng dụng React:
    ```bash
    npm start
