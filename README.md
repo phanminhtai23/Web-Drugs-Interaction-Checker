@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/3550c12d-1a9e-438e-ae21-a7460b68b78c)![image](https://github.com/user-attachments/assets/7d5ab7df-5380-4f77-9aad-b2b94f901b68)# 💊 Hệ Thống kiểm tra tương tác thuốc
+# 💊 Hệ Thống kiểm tra tương tác thuốc
 Niên luận ngành Khoa học Máy tính  
 **Sinh viên thực hiện:** Nguyễn Hoàng Điển  
 **GVHD:** TS. Lưu Tiến Đạo
