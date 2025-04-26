@@ -6,7 +6,7 @@ Niên luận ngành Khoa học Máy tính
 ## 📚 Giới thiệu
 Drug Interaction Web là một ứng dụng web giúp người dùng tra cứu thông tin thuốc, kiểm tra tương tác thuốc và quản lý đơn thuốc. Dự án này được phát triển nhằm hỗ trợ người dùng trong việc quản lý và theo dõi thông tin y tế cá nhân.
 
-Hệ thống sẽ chia 2 quyền quản trị (Admin) và người dùng riêng, chạy trên 2 frontend và backend riêng mà các hệ thống lớn đã làm:
+Hệ thống sẽ chia 2 quyền quản trị (Admin) và người dùng riêng, chạy trên 2 frontend và backend riêng kết nối cùng cơ sở dữ liệu mà các hệ thống lớn đã làm:
 - Hệ thống web cho người quản trị (Admin) cài đặt theo dự án này: (https://github.com/phanminhtai23/DDIs-Management)
 - Hệ thống web cho người dùng cài theo dự án hiện tại.
 
