@@ -118,7 +118,6 @@ const Footer = () => {
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 3 }}>
           {/* Logos Section */}
           <Box sx={{ display: 'flex', gap: 3 }}>
-            <img src={sealLogo} alt="Seal Logo" style={{ height: '40px' }} />
             <img src={CTULogo} alt="Tag Verified Logo" style={{ height: '50px' }} />
             <img src={CICTLogo} alt="AdChoices Logo" style={{ height: '50px' }} />
           </Box>
