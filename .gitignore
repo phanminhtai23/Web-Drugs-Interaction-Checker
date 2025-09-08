@@ -24,6 +24,8 @@ node_modules/
 package-lock.json
 yarn.lock
 
+folder-in-server
+
 # IDE/editor config (Visual Studio Code, JetBrains...)
 .vscode/
 .idea/
