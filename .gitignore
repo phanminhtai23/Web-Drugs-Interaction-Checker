@@ -30,7 +30,7 @@ yarn.lock
 .vscode/
 .idea/
 
-folder-in-server
+folder-in-server/
 
 # OS-specific files (hệ điều hành tự tạo)
 .DS_Store
