@@ -23,6 +23,9 @@ frontend\.env
 yarn.lock
 .backend.env
 .frontend.env
+# Tệp lock (tùy chọn)
+package-lock.json
+yarn.lock
 # IDE/editor config (Visual Studio Code, JetBrains...)
 .vscode/
 .idea/
