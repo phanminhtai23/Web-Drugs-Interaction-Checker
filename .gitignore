@@ -20,8 +20,6 @@ node_modules/
 .env
 .env.*  # Nếu có nhiều file môi trường như .env.dev, .env.production...
 frontend\.env
-# Tệp lock (tùy chọn)
-package-lock.json
 yarn.lock
 
 # IDE/editor config (Visual Studio Code, JetBrains...)
