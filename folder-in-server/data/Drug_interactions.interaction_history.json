@@ -1,0 +1,140 @@
+[{
+  "_id": {
+    "$oid": "67f037eb37fa06f8006dd2c9"
+  },
+  "user_id": {
+    "$oid": "67ee70c11b8042b7750f680b"
+  },
+  "drugs_checked": [
+    "Aluvia",
+    "Cupid 50"
+  ],
+  "interactions": [
+    {
+      "drug_a": "lopinavir",
+      "drug_b": "ritonavir",
+      "effect": "Aluvia chứa lopinavir và ritonavir đều có tác dụng ức chế CYP3A của hệ thống enzym chuyển hóa thuốc CYP450. Sử dụng đồng thời Aluvia với các thuốc chuyển hóa chủ yếu qua CYP3A có thể làm tăng nồng độ các thuốc này trong huyết tương dẫn tới tăng tác dụng điều trị và phản ứng có hại của chúng. Aluvia không ức chế CYP2D6, CYP2C9, CYP2C19, CYP2E1, CYP2B6 hoặc CYPIA ở nồng độ được ghi nhận trên lâm sàng.",
+      "severity": "Không xác định",
+      "_id": {
+        "$oid": "67f037eb37fa06f8006dd2ca"
+      }
+    }
+  ],
+  "recommendations": "Luôn tham khảo ý kiến bác sĩ trước khi thay đổi thuốc.",
+  "checked_at": {
+    "$date": "2025-04-04T19:50:03.807Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "680256836d9dc44d2a376539"
+  },
+  "user_id": {
+    "$oid": "67f8e3581dab5bc4586c115b"
+  },
+  "drugs_checked": [
+    "Aluvia",
+    "Cupid 50"
+  ],
+  "interactions": [
+    {
+      "drug_a": "lopinavir",
+      "drug_b": "ritonavir",
+      "effect": "Aluvia chứa lopinavir và ritonavir đều có tác dụng ức chế CYP3A của hệ thống enzym chuyển hóa thuốc CYP450. Sử dụng đồng thời Aluvia với các thuốc chuyển hóa chủ yếu qua CYP3A có thể làm tăng nồng độ các thuốc này trong huyết tương dẫn tới tăng tác dụng điều trị và phản ứng có hại của chúng. Aluvia không ức chế CYP2D6, CYP2C9, CYP2C19, CYP2E1, CYP2B6 hoặc CYPIA ở nồng độ được ghi nhận trên lâm sàng.",
+      "severity": "Không xác định",
+      "_id": {
+        "$oid": "680256836d9dc44d2a37653a"
+      }
+    }
+  ],
+  "recommendations": "Luôn tham khảo ý kiến bác sĩ trước khi thay đổi thuốc.",
+  "checked_at": {
+    "$date": "2025-04-18T13:41:23.879Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68038059d85e406d082522c1"
+  },
+  "user_id": {
+    "$oid": "67f8e3581dab5bc4586c115b"
+  },
+  "drugs_checked": [
+    "Warfarin 4",
+    "Lodovax"
+  ],
+  "interactions": [
+    {
+      "drug_a": "clopidogrel",
+      "drug_b": "warfarin natri",
+      "effect": "Bởi vì sử dụng đồng thời warfarin với clopidogrel bisulphate làm tăng nguy cơ chảy máu nên phải thận trọng khi sử dụng kết hợp. Không nên dùng kết hợp.",
+      "severity": "Nghiêm trọng",
+      "_id": {
+        "$oid": "68038059d85e406d082522c2"
+      }
+    }
+  ],
+  "recommendations": "Luôn tham khảo ý kiến bác sĩ trước khi thay đổi thuốc.",
+  "checked_at": {
+    "$date": "2025-04-19T10:52:09.929Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6805379b4faac5a1e701c3cd"
+  },
+  "user_id": {
+    "$oid": "67f8e3581dab5bc4586c115b"
+  },
+  "drugs_checked": [
+    "Lodovax",
+    "Aspirin 81"
+  ],
+  "interactions": [
+    {
+      "drug_a": "Clopidogrel",
+      "drug_b": "Aspirin",
+      "effect": "Sử dụng đồng thời Clopidogrel với Aspirin có thể làm tăng nguy cơ chảy máu. Cần thận trọng khi dùng phối hợp. Clopidogrel bisulfate có khả năng ảnh hưởng tới tác dụng của aspirin lên sự kết tập tiểu cầu gây nên bởi collagen. Clopidogrel bisulfate và aspirin đã được sử dụng đồng thời tới 1 năm.",
+      "severity": "Trung bình",
+      "_id": {
+        "$oid": "6805379b4faac5a1e701c3ce"
+      }
+    }
+  ],
+  "recommendations": "Luôn tham khảo ý kiến bác sĩ trước khi thay đổi thuốc.",
+  "checked_at": {
+    "$date": "2025-04-20T18:06:19.760Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68053b874faac5a1e701c46c"
+  },
+  "user_id": {
+    "$oid": "67f8e3581dab5bc4586c115b"
+  },
+  "drugs_checked": [
+    "Pharmitrole",
+    "Apbezo"
+  ],
+  "interactions": [
+    {
+      "drug_a": "Rabeprazole natri",
+      "drug_b": "Itraconazole",
+      "effect": "Sử dụng đồng thời Rabeprazole natri với itraconazole có thể làm giảm đáng kể nồng độ itraconazole trong huyết tương. Do đó, bệnh nhân cần được theo dõi để chỉnh liều khi sử dụng đồng thời itraconazole với Rabeprazole natri.",
+      "severity": "Trung bình",
+      "_id": {
+        "$oid": "68053b874faac5a1e701c46d"
+      }
+    }
+  ],
+  "recommendations": "Luôn tham khảo ý kiến bác sĩ trước khi thay đổi thuốc.",
+  "checked_at": {
+    "$date": "2025-04-20T18:23:03.571Z"
+  },
+  "__v": 0
+}]

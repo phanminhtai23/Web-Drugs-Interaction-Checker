@@ -9,5 +9,5 @@ docker exec -it ddis-mongodb mongoimport --db Check_DDIs --collection interactio
 
 docker exec -it ddis-mongodb mongoimport --db Check_DDIs --collection prescriptions --file /data/import/Drug_interactions.prescriptions.json --jsonArray
 
-docker-compose up -d --build
-docker-compose up down
+docker compose -f docker-compose.yml up -d
+docker compose -f docker-compose.yml down
