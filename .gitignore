@@ -19,11 +19,13 @@ node_modules/
 # Dotenv file chứa biến môi trường (chứa các thông tin nhạy cảm như DB, API_KEY...)
 .env
 .env.*  # Nếu có nhiều file môi trường như .env.dev, .env.production...
-
+frontend\.env
+yarn.lock
+.backend.env
+.frontend.env
 # Tệp lock (tùy chọn)
 package-lock.json
 yarn.lock
-
 # IDE/editor config (Visual Studio Code, JetBrains...)
 .vscode/
 .idea/

@@ -1,0 +1,72 @@
+services:
+  # MongoDB Database với init data
+  mongodb:
+    image: mongo:6
+    container_name: ddis-mongodb
+    restart: unless-stopped
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=Check_DDIs
+    volumes:
+      - mongodb_data:/data/db  # Persistent volume cho MongoDB
+      - ./data:/data/import  # Để import dữ liệu
+    networks:
+      - drug-interaction-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # Node.js Backend từ Docker Hub
+  backend:
+    image: minhtai03/drug-interaction-backend:1.0
+    container_name: drug-interaction-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./.backend.env
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - drug-interaction-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    volumes:
+      - ./Backend/assets:/app/assets  # Để lưu uploaded files
+
+  # React Frontend từ Docker Hub
+  frontend:
+    image: minhtai03/drug-interaction-frontend:1.0
+    container_name: drug-interaction-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./.frontend.env
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - drug-interaction-network
+    stdin_open: true
+    tty: true
+
+# Custom network
+networks:
+  drug-interaction-network:
+    driver: bridge
+    name: drug-interaction-network
+
+# Volumes để persist data
+volumes:
+  mongodb_data:
+    driver: local
