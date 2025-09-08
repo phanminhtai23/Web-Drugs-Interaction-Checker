@@ -6,9 +6,13 @@ RUN npm install --legacy-peer-deps
 
 COPY . .
 
-# Set correct API URL cho Docker environment
-ENV REACT_APP_API_URL=http://localhost:5000
+# Build-time args
+ARG REACT_APP_API_URL
+ARG REACT_APP_GOOGLE_CLIENT_ID
 
+# Đẩy vào env để npm build đọc
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+ENV REACT_APP_GOOGLE_CLIENT_ID=$REACT_APP_GOOGLE_CLIENT_ID
 RUN npm run build
 
 # Production server với nginx
