@@ -22,6 +22,9 @@ services:
 
   # Node.js Backend từ Docker Hub
   backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
     image: minhtai03/drug-interaction-backend:1.0
     container_name: drug-interaction-backend
     restart: unless-stopped
@@ -45,6 +48,9 @@ services:
 
   # React Frontend từ Docker Hub
   frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
     image: minhtai03/drug-interaction-frontend:1.0
     container_name: drug-interaction-frontend
     restart: unless-stopped
