@@ -29,70 +29,7 @@ passport.use(
     }
   )
 );
-
-
-
-
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: process.env.FACEBOOK_APP_ID,
-      clientSecret: process.env.FACEBOOK_APP_SECRET,
-      callbackURL: `${process.env.BACKEND_URL}/auth/facebook/callback`, // Đường dẫn callback
-      profileFields: ['id', 'emails', 'name', 'picture.type(large)'],
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        const { id, emails, name, photos } = profile;
-        let user = await Client.findOne({ facebook_id: id });
-
-        if (!user) {
-          user = await Client.create({
-            facebook_id: id,
-            email: emails[0].value,
-            full_name: `${name.givenName} ${name.familyName}`,
-            profile_picture: photos[0].value,
-            auth_provider: 'facebook',
-          });
-        }
-
-        return done(null, user);
-      } catch (error) {
-        return done(error, null);
-      }
-    }
-  )
-);
-
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: process.env.FACEBOOK_APP_ID,
-      clientSecret: process.env.FACEBOOK_APP_SECRET,
-      callbackURL: `${process.env.BACKEND_URL}/auth/facebook/callback`,
-      profileFields: ['id', 'emails', 'name', 'picture.type(large)'],
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        const { id, emails, name } = profile;
-        let user = await Client.findOne({ facebook_id: id });
-
-        if (!user) {
-          user = await Client.create({
-            facebook_id: id,
-            email: emails[0]?.value || `${id}@facebook.com`,
-            full_name: `${name.givenName} ${name.familyName}`,
-            auth_provider: 'facebook',
-          });
-        }
-
-        return done(null, user);
-      } catch (error) {
-        return done(error, null);
-      }
-    }
-  )
-);  
+ 
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
