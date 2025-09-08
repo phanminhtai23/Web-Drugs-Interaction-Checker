@@ -1,0 +1,146 @@
+[{
+  "_id": {
+    "$oid": "67f3a6dc9c144c6fccb119a1"
+  },
+  "user_id": {
+    "$oid": "67ee70c11b8042b7750f680b"
+  },
+  "doctor_name": "fasda",
+  "hospital": "âf",
+  "medications": [
+    {
+      "name": "ầ",
+      "dosage": "",
+      "_id": {
+        "$oid": "67f3a6dc9c144c6fccb119a2"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T10:20:12.523Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68037a7bd85e406d08252227"
+  },
+  "user_id": {
+    "$oid": "67f8e3581dab5bc4586c115b"
+  },
+  "doctor_name": "Trần Trung",
+  "hospital": "Bệnh viện Bình Dân TP. Hồ Chí Minh",
+  "medications": [
+    {
+      "name": "YESOM",
+      "dosage": "63 viên",
+      "_id": {
+        "$oid": "68037a7bd85e406d08252228"
+      }
+    },
+    {
+      "name": "SUCRATE",
+      "dosage": "63 viên",
+      "_id": {
+        "$oid": "68037a7bd85e406d08252229"
+      }
+    },
+    {
+      "name": "ARTHUR",
+      "dosage": "63 viên",
+      "_id": {
+        "$oid": "68037a7bd85e406d0825222a"
+      }
+    },
+    {
+      "name": "PAPAZE",
+      "dosage": "63 viên",
+      "_id": {
+        "$oid": "68037a7bd85e406d0825222b"
+      }
+    },
+    {
+      "name": "BIOCID",
+      "dosage": "21 chai",
+      "_id": {
+        "$oid": "68037a7bd85e406d0825222c"
+      }
+    },
+    {
+      "name": "DIGLUMISAN",
+      "dosage": "63 viên",
+      "_id": {
+        "$oid": "68037a7bd85e406d0825222d"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-19T10:27:07.844Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68037b95d85e406d08252236"
+  },
+  "user_id": {
+    "$oid": "67f8e3581dab5bc4586c115b"
+  },
+  "doctor_name": "Nguyện Thị Lợi",
+  "hospital": "Viện Y Dược Học Dân Tộc TP. Hồ Chí Minh",
+  "medications": [
+    {
+      "name": "Seotolac",
+      "dosage": "60 viên",
+      "_id": {
+        "$oid": "68037b95d85e406d08252237"
+      }
+    },
+    {
+      "name": "Độc hoạt TKS viên",
+      "dosage": "2 hộp",
+      "_id": {
+        "$oid": "68037b95d85e406d08252238"
+      }
+    },
+    {
+      "name": "Đại tần giao",
+      "dosage": "2 viên",
+      "_id": {
+        "$oid": "68037b95d85e406d08252239"
+      }
+    },
+    {
+      "name": "Rheumatin",
+      "dosage": "3 chai",
+      "_id": {
+        "$oid": "68037b95d85e406d0825223a"
+      }
+    },
+    {
+      "name": "Ginkobil",
+      "dosage": "90 viên",
+      "_id": {
+        "$oid": "68037b95d85e406d0825223b"
+      }
+    },
+    {
+      "name": "JEX",
+      "dosage": "2 viên",
+      "_id": {
+        "$oid": "68037b95d85e406d0825223c"
+      }
+    },
+    {
+      "name": "Cồn xoa bốp",
+      "dosage": "1 chai",
+      "_id": {
+        "$oid": "68037b95d85e406d0825223d"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-19T10:31:49.440Z"
+  },
+  "__v": 0
+}]
