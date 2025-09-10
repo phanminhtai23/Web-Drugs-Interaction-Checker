@@ -6,6 +6,27 @@ import Slider from 'react-slick';
 import { Divider } from '@mui/material';
 import SearchBarWithSuggestions from '../components/SearchBarWithSuggestions';
 
+// CSS cho animation
+const fadeInKeyframes = `
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
+// Thêm styles vào head
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = fadeInKeyframes;
+  document.head.appendChild(style);
+}
+
 
 
 const HomePage = () => {
@@ -28,29 +49,37 @@ const HomePage = () => {
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    pauseOnHover: true,
     responsive: [
       {
         breakpoint: 960, // Tablet
         settings: {
           slidesToShow: 2,
+          slidesToScroll: 1,
         },
       },
       {
         breakpoint: 600, // Mobile
         settings: {
           slidesToShow: 1,
+          slidesToScroll: 1,
+          dots: true,
+          arrows: false, // Ẩn mũi tên trên mobile để tiết kiệm không gian
         },
       },
     ],
   };
 
   return (
-    <Box sx={{ mx: 'auto', px: 2 }}>
+    <Box sx={{ mx: 'auto', px: { xs: 1, sm: 2 } }}>
       {/* Phần Hero */}
       <Box
         sx={{
           textAlign: 'center',
-          py: 8,
+          py: { xs: 4, sm: 6, md: 8 },
+          px: { xs: 2, sm: 3, md: 4 },
           background: 'linear-gradient(135deg, #7BACD4FF, #C5C8CAFF)',
           color: '#fff',
           position: 'relative',
@@ -75,6 +104,9 @@ const HomePage = () => {
           sx={{
             fontWeight: 'bold',
             animation: 'fadeIn 1s ease-in-out',
+            fontSize: { xs: '2rem', sm: '2.5rem', md: '3.75rem' },
+            lineHeight: { xs: 1.2, sm: 1.2, md: 1.167 },
+            px: { xs: 1, sm: 2 },
           }}
         >
           Chào mừng đến với DTDrugs
@@ -82,8 +114,11 @@ const HomePage = () => {
         <Typography
           variant="h6"
           sx={{
-            mb: 4,
+            mb: { xs: 3, sm: 4 },
             animation: 'fadeIn 1.5s ease-in-out',
+            fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
+            px: { xs: 2, sm: 3, md: 0 },
+            lineHeight: 1.5,
           }}
         >
           Tra cứu tương tác thuốc và thông tin thuốc một cách dễ dàng và nhanh chóng.
@@ -94,12 +129,13 @@ const HomePage = () => {
           component={RouterLink}
           to="/interactions"
           sx={{
-            px: 4,
-            py: 2,
-            fontSize: '1.2rem',
+            px: { xs: 3, sm: 4 },
+            py: { xs: 1.5, sm: 2 },
+            fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem' },
             fontWeight: 'bold',
             borderRadius: 3,
             animation: 'fadeIn 2s ease-in-out',
+            minWidth: { xs: '200px', sm: 'auto' },
           }}
         >
           Bắt đầu kiểm tra tương tác
@@ -108,14 +144,14 @@ const HomePage = () => {
         <Box
           sx={{
             textAlign: 'center',
-            mt: 4,
-            py: 3,
-            px: 10,
+            mt: { xs: 3, sm: 4 },
+            py: { xs: 2, sm: 3 },
+            px: { xs: 2, sm: 4, md: 10 },
             background: 'linear-gradient(135deg, #e3f2fd, #ffffff)',
             borderRadius: 3,
             boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.1)',
-            mx: 'auto',
-            maxWidth: '900px',
+            mx: { xs: 1, sm: 2, md: 'auto' },
+            maxWidth: { xs: 'calc(100% - 16px)', sm: 'calc(100% - 32px)', md: '900px' },
             position: 'relative',
             overflow: 'hidden',
           }}
@@ -139,8 +175,10 @@ const HomePage = () => {
               fontWeight: 'bold',
               color: '#1976d2',
               textTransform: 'uppercase',
-              letterSpacing: '2px',
+              letterSpacing: { xs: '1px', sm: '2px' },
               mb: 2,
+              fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' },
+              px: { xs: 1, sm: 0 },
             }}
           >
             Tìm kiếm thông tin thuốc
@@ -150,10 +188,11 @@ const HomePage = () => {
             sx={{
               mb: 2,
               color: 'text.secondary',
-              fontSize: '1.1rem',
-              maxWidth: '700px',
+              fontSize: { xs: '0.95rem', sm: '1rem', md: '1.1rem' },
+              maxWidth: { xs: '100%', sm: '600px', md: '700px' },
               mx: 'auto',
               lineHeight: 1.8,
+              px: { xs: 1, sm: 0 },
             }}
           >
             Nhập tên thuốc để tra cứu thông tin chi tiết hoặc kiểm tra tương tác thuốc.
@@ -161,10 +200,10 @@ const HomePage = () => {
           <SearchBarWithSuggestions />
         </Box>
       </Box>
-      <Divider sx={{ my: 4, borderColor: 'rgba(0, 0, 0, 0.1)' }} />
+      <Divider sx={{ my: { xs: 2, sm: 3, md: 4 }, borderColor: 'rgba(0, 0, 0, 0.1)' }} />
 
       {/* Phần Tính năng */}
-      <Box sx={{ maxWidth: '1200px', mx: 'auto', py: 1, px: 4, backgroundColor: '#f9f9f9' }}>
+      <Box sx={{ maxWidth: '1200px', mx: 'auto', py: { xs: 2, sm: 3, md: 1 }, px: { xs: 2, sm: 3, md: 4 }, backgroundColor: '#f9f9f9' }}>
       <Typography
         variant="h4"
         align="center"
@@ -173,8 +212,9 @@ const HomePage = () => {
           fontWeight: 'bold',
           color: '#1976d2',
           textTransform: 'uppercase',
-          letterSpacing: '2px',
+          letterSpacing: { xs: '1px', sm: '2px' },
           mb: 2,
+          fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' },
         }}
       >
         Tính năng nổi bật
@@ -183,53 +223,54 @@ const HomePage = () => {
         variant="body1"
         align="center"
         sx={{
-          mb: 6,
+          mb: { xs: 4, sm: 5, md: 6 },
           color: 'text.secondary',
-          fontSize: '1.1rem',
-          maxWidth: '800px',
+          fontSize: { xs: '0.95rem', sm: '1rem', md: '1.1rem' },
+          maxWidth: { xs: '100%', sm: '700px', md: '800px' },
           mx: 'auto',
           lineHeight: 1.8,
+          px: { xs: 1, sm: 2, md: 0 },
         }}
       >
         Khám phá các tính năng mạnh mẽ của ứng dụng của chúng tôi, giúp bạn tra cứu thông tin thuốc và tương tác thuốc một cách dễ dàng, nhanh chóng và an toàn.
       </Typography>
       <Box
         sx={{
-          width: '80px',
+          width: { xs: '60px', sm: '70px', md: '80px' },
           height: '4px',
           backgroundColor: '#1976d2',
           mx: 'auto',
-          mb: 4,
+          mb: { xs: 3, sm: 3, md: 4 },
           borderRadius: '2px',
         }}
       />
         <Slider
           {...settings}
           style={{
-            padding: '0 20px', // Tăng khoảng cách hai bên slider
+            padding: { xs: '0 10px', sm: '0 15px', md: '0 20px' }, // Responsive padding
           }}
         >
           {[
             {
-              icon: <Search sx={{ fontSize: 60, color: '#1976d2', mb: 2 }} />,
+              icon: <Search sx={{ fontSize: { xs: 40, sm: 50, md: 60 }, color: '#1976d2', mb: 2 }} />,
               title: 'Tra cứu thuốc',
               description: 'Tìm kiếm thông tin chi tiết về các loại thuốc phổ biến.',
               onClick: () => navigate('/drugs'), // Không yêu cầu đăng nhập
             },
             {
-              icon: <Medication sx={{ fontSize: 60, color: '#1976d2', mb: 2 }} />,
+              icon: <Medication sx={{ fontSize: { xs: 40, sm: 50, md: 60 }, color: '#1976d2', mb: 2 }} />,
               title: 'Kiểm tra tương tác thuốc',
               description: 'Đảm bảo an toàn khi sử dụng nhiều loại thuốc cùng lúc.',
               onClick: () => navigate('/interactions'), // Không yêu cầu đăng nhập
             },
             {
-              icon: <LocalHospital sx={{ fontSize: 60, color: '#1976d2', mb: 2 }} />,
+              icon: <LocalHospital sx={{ fontSize: { xs: 40, sm: 50, md: 60 }, color: '#1976d2', mb: 2 }} />,
               title: 'Quản lý đơn thuốc',
               description: 'Lưu trữ và quản lý các đơn thuốc của bạn một cách dễ dàng.',
               onClick: () => handleProtectedNavigation('/prescriptions'), // Yêu cầu đăng nhập
             },
             {
-              icon: <History sx={{ fontSize: 60, color: '#1976d2', mb: 2 }} />,
+              icon: <History sx={{ fontSize: { xs: 40, sm: 50, md: 60 }, color: '#1976d2', mb: 2 }} />,
               title: 'Lịch sử tra cứu',
               description: 'Xem lại các tương tác thuốc đã tra cứu gần đây của bạn.',
               onClick: () => handleProtectedNavigation('/interaction-history'), // Yêu cầu đăng nhập
@@ -238,14 +279,14 @@ const HomePage = () => {
             <Box
               key={index}
               sx={{
-                px: 0,
-                py: 3,
+                px: { xs: 0.5, sm: 1, md: 0 },
+                py: { xs: 2, sm: 2.5, md: 3 },
               }}
             >
               <Card
                 sx={{
                   textAlign: 'center',
-                  p: 4,
+                  p: { xs: 2.5, sm: 3, md: 4 },
                   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                   '&:hover': {
                     transform: 'scale(1.05)',
@@ -254,6 +295,11 @@ const HomePage = () => {
                   borderRadius: 4,
                   background: 'linear-gradient(to right, #ffffff, #f9f9f9)',
                   boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
+                  cursor: 'pointer',
+                  minHeight: { xs: '160px', sm: '180px', md: '200px' },
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
                 }}
                 onClick={feature.onClick} // Gọi hàm điều hướng khi nhấn vào card
               >
@@ -264,6 +310,7 @@ const HomePage = () => {
                     fontWeight: 'bold',
                     color: '#1976d2',
                     mb: 1,
+                    fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
                   }}
                 >
                   {feature.title}
@@ -273,7 +320,8 @@ const HomePage = () => {
                   sx={{
                     color: 'text.secondary',
                     mt: 1,
-                    fontSize: '1rem',
+                    fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
+                    lineHeight: 1.4,
                   }}
                 >
                   {feature.description}
@@ -283,13 +331,13 @@ const HomePage = () => {
           ))}
         </Slider>
       </Box>
-      <Divider sx={{ my: 4, borderColor: 'rgba(0, 0, 0, 0.1)' }} />
+      <Divider sx={{ my: { xs: 2, sm: 3, md: 4 }, borderColor: 'rgba(0, 0, 0, 0.1)' }} />
 
       {/* Câu hỏi thường gặp */}
       <Box
         sx={{
-          py: 6,
-          px: 4,
+          py: { xs: 4, sm: 5, md: 6 },
+          px: { xs: 2, sm: 3, md: 4 },
           background: 'linear-gradient(135deg, #f9f9f9, #ffffff)',
           textAlign: 'center',
         }}
@@ -301,15 +349,16 @@ const HomePage = () => {
             fontWeight: 'bold',
             color: '#1976d2', // Tiêu đề màu xanh dương phù hợp với trang web
             textTransform: 'uppercase',
-            letterSpacing: '2px',
-            mb: 4,
+            letterSpacing: { xs: '1px', sm: '2px' },
+            mb: { xs: 3, sm: 4 },
+            fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' },
           }}
         >
           Câu hỏi thường gặp
         </Typography>
         <Box
           sx={{
-            maxWidth: '800px',
+            maxWidth: { xs: '100%', sm: '700px', md: '800px' },
             mx: 'auto',
             textAlign: 'left',
           }}
@@ -331,8 +380,8 @@ const HomePage = () => {
             <Box
               key={index}
               sx={{
-                mb: 3,
-                p: 3,
+                mb: { xs: 2, sm: 2.5, md: 3 },
+                p: { xs: 2, sm: 2.5, md: 3 },
                 borderRadius: 2,
                 background: '#ffffff',
                 boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
@@ -349,6 +398,7 @@ const HomePage = () => {
                   fontWeight: 'bold',
                   color: '#1976d2', // Màu xanh dương cho câu hỏi
                   mb: 1,
+                  fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
                 }}
               >
                 {faq.question}
@@ -357,7 +407,8 @@ const HomePage = () => {
                 variant="body2"
                 sx={{
                   color: '#555', // Màu xám nhạt cho câu trả lời
-                  fontSize: '1rem',
+                  fontSize: { xs: '0.9rem', sm: '0.95rem', md: '1rem' },
+                  lineHeight: 1.5,
                 }}
               >
                 {faq.answer}
@@ -366,12 +417,12 @@ const HomePage = () => {
           ))}
         </Box>
       </Box>
-      <Divider sx={{ my: 4, borderColor: 'rgba(0, 0, 0, 0.1)' }} />
+      <Divider sx={{ my: { xs: 2, sm: 3, md: 4 }, borderColor: 'rgba(0, 0, 0, 0.1)' }} />
       {/* Hướng dẫn sử dụng */}
       <Box
         sx={{
-          py: 6,
-          px: 4,
+          py: { xs: 4, sm: 5, md: 6 },
+          px: { xs: 2, sm: 3, md: 4 },
           background: 'linear-gradient(135deg, #f5f5f5, #ffffff)',
           textAlign: 'center',
         }}
@@ -383,8 +434,9 @@ const HomePage = () => {
             fontWeight: 'bold',
             color: '#1976d2', // Tiêu đề màu xanh dương phù hợp với trang web
             textTransform: 'uppercase',
-            letterSpacing: '2px',
-            mb: 4,
+            letterSpacing: { xs: '1px', sm: '2px' },
+            mb: { xs: 3, sm: 4 },
+            fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' },
           }}
         >
           Hướng dẫn sử dụng
@@ -392,9 +444,11 @@ const HomePage = () => {
         <Box
           sx={{
             display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
             flexWrap: 'wrap',
             justifyContent: 'space-around',
-            gap: 4,
+            gap: { xs: 3, sm: 3, md: 4 },
+            alignItems: { xs: 'center', sm: 'stretch' },
           }}
         >
           {[
@@ -418,8 +472,9 @@ const HomePage = () => {
               key={index}
               sx={{
                 textAlign: 'center',
-                maxWidth: '300px',
-                p: 3,
+                maxWidth: { xs: '280px', sm: '300px', md: '300px' },
+                width: { xs: '100%', sm: 'calc(50% - 16px)', md: 'calc(33.333% - 16px)' },
+                p: { xs: 2.5, sm: 3, md: 3 },
                 borderRadius: 2,
                 background: '#ffffff',
                 boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
@@ -435,6 +490,7 @@ const HomePage = () => {
                 sx={{
                   fontWeight: 'bold',
                   color: '#1976d2', // Màu xanh dương cho số bước
+                  fontSize: { xs: '2.5rem', sm: '3rem', md: '3.75rem' },
                 }}
               >
                 {guide.step}
@@ -445,6 +501,7 @@ const HomePage = () => {
                   fontWeight: 'bold',
                   color: '#000', // Tiêu đề màu đen
                   mt: 2,
+                  fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
                 }}
               >
                 {guide.title}
@@ -454,7 +511,8 @@ const HomePage = () => {
                 sx={{
                   color: '#555', // Màu xám nhạt cho mô tả
                   mt: 1,
-                  fontSize: '1rem',
+                  fontSize: { xs: '0.9rem', sm: '0.95rem', md: '1rem' },
+                  lineHeight: 1.5,
                 }}
               >
                 {guide.description}
@@ -463,12 +521,12 @@ const HomePage = () => {
           ))}
         </Box>
       </Box>
-      <Divider sx={{ my: 4, borderColor: 'rgba(0, 0, 0, 0.1)' }} />
+      <Divider sx={{ my: { xs: 2, sm: 3, md: 4 }, borderColor: 'rgba(0, 0, 0, 0.1)' }} />
       {/* Thống kê nổi bật */}
       <Box
         sx={{
-          py: 6,
-          px: 4,
+          py: { xs: 4, sm: 5, md: 6 },
+          px: { xs: 2, sm: 3, md: 4 },
           background: 'linear-gradient(135deg, #ffffff, #f5f5f5)',
           textAlign: 'center',
         }}
@@ -480,8 +538,9 @@ const HomePage = () => {
             fontWeight: 'bold',
             color: '#1976d2', // Tiêu đề màu xanh dương phù hợp với trang web
             textTransform: 'uppercase',
-            letterSpacing: '2px',
-            mb: 4,
+            letterSpacing: { xs: '1px', sm: '2px' },
+            mb: { xs: 3, sm: 4 },
+            fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' },
           }}
         >
           Thống kê nổi bật
@@ -489,9 +548,11 @@ const HomePage = () => {
         <Box
           sx={{
             display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
             flexWrap: 'wrap',
             justifyContent: 'space-around',
-            gap: 4,
+            gap: { xs: 3, sm: 3, md: 4 },
+            alignItems: { xs: 'center', sm: 'stretch' },
           }}
         >
           {[
@@ -503,8 +564,9 @@ const HomePage = () => {
               key={index}
               sx={{
                 textAlign: 'center',
-                maxWidth: '200px',
-                p: 3,
+                maxWidth: { xs: '200px', sm: '180px', md: '200px' },
+                width: { xs: '100%', sm: 'calc(33.333% - 16px)', md: 'auto' },
+                p: { xs: 2.5, sm: 3, md: 3 },
                 borderRadius: 2,
                 background: '#ffffff',
                 boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
@@ -520,6 +582,7 @@ const HomePage = () => {
                 sx={{
                   fontWeight: 'bold',
                   color: '#1976d2', // Màu xanh dương cho giá trị
+                  fontSize: { xs: '2rem', sm: '2.5rem', md: '3.75rem' },
                 }}
               >
                 {stat.value}
@@ -529,7 +592,8 @@ const HomePage = () => {
                 sx={{
                   color: '#555', // Màu xám nhạt cho nhãn
                   mt: 1,
-                  fontSize: '1rem',
+                  fontSize: { xs: '0.9rem', sm: '0.95rem', md: '1rem' },
+                  lineHeight: 1.5,
                 }}
               >
                 {stat.label}
