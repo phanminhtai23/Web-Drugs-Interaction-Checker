@@ -332,14 +332,6 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
                         </MenuItem>
                         <MenuItem
                             component={Link}
-                            to="/drugs-a-z"
-                            onClick={handleMenuClose}
-                        >
-                            <SortByAlphaIcon sx={{ marginRight: "8px" }} />
-                            Thuốc A-Z
-                        </MenuItem>
-                        <MenuItem
-                            component={Link}
                             to="/drugs"
                             onClick={handleMenuClose}
                         >
