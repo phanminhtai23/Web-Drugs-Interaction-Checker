@@ -1,122 +1,414 @@
 import React from "react";
+import { 
+  Box, 
+  Typography, 
+  Container, 
+  Grid, 
+  Paper, 
+  Link,
+  Card,
+  CardContent,
+  IconButton,
+  Divider
+} from '@mui/material';
+import { Facebook, Twitter, LinkedIn, Home } from '@mui/icons-material';
 
 const AttributionPage = () => {
+  const dataSources = [
+    {
+      title: "Tổ chức Y tế Thế giới (WHO)",
+      description: "Cung cấp thông tin y tế toàn cầu đáng tin cậy.",
+      link: "https://www.who.int/",
+    },
+    {
+      title: "PubMed - Thư viện Y khoa Quốc gia Hoa Kỳ",
+      description: "Nền tảng nghiên cứu y khoa hàng đầu thế giới.",
+      link: "https://pubmed.ncbi.nlm.nih.gov/",
+    },
+    {
+      title: "Cục Quản lý Thực phẩm và Dược phẩm Hoa Kỳ (FDA)",
+      description: "Thông tin về an toàn thực phẩm và dược phẩm.",
+      link: "https://www.fda.gov/",
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 text-gray-800">
+    <Box sx={{ 
+      minHeight: '100vh', 
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)',
+      backgroundSize: '400% 400%',
+      animation: 'gradientShift 15s ease infinite',
+      position: 'relative',
+      '&::before': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: `
+          radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+          radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+          radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%)
+        `,
+        pointerEvents: 'none',
+        zIndex: 0
+      },
+      '@keyframes gradientShift': {
+        '0%': {
+          backgroundPosition: '0% 50%'
+        },
+        '50%': {
+          backgroundPosition: '100% 50%'
+        },
+        '100%': {
+          backgroundPosition: '0% 50%'
+        }
+      },
+      '@keyframes pulse': {
+        '0%': {
+          transform: 'scale(1)',
+          opacity: 1
+        },
+        '50%': {
+          transform: 'scale(1.05)',
+          opacity: 0.8
+        },
+        '100%': {
+          transform: 'scale(1)',
+          opacity: 1
+        }
+      },
+      '@keyframes float': {
+        '0%': {
+          transform: 'translateY(0px)'
+        },
+        '50%': {
+          transform: 'translateY(-20px)'
+        },
+        '100%': {
+          transform: 'translateY(0px)'
+        }
+      }
+    }}>
+      {/* Floating Particles */}
+      <Box
+        sx={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          overflow: 'hidden',
+          zIndex: 1,
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: '10%',
+            left: '10%',
+            width: '20px',
+            height: '20px',
+            background: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: '50%',
+            animation: 'float 6s ease-in-out infinite'
+          },
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            top: '60%',
+            right: '20%',
+            width: '15px',
+            height: '15px',
+            background: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: '50%',
+            animation: 'float 8s ease-in-out infinite reverse'
+          }
+        }}
+      />
       {/* Header */}
-      <header className="relative bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 text-white py-20 shadow-lg">
-        <div className="container mx-auto px-6 text-center">
-          <h1 className="text-6xl font-extrabold tracking-tight animate-pulse">
-            Nguồn và Trích dẫn
-          </h1>
-          <p className="mt-6 text-xl max-w-3xl mx-auto">
-            Danh sách các nguồn và tài liệu tham khảo được sử dụng trong dự án
-            này, đảm bảo tính chính xác và đáng tin cậy.
-          </p>
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-blue-900 opacity-20 pointer-events-none"></div>
-      </header>
+      <Box
+        sx={{
+          background: 'linear-gradient(135deg, rgba(25, 118, 210, 0.95) 0%, rgba(66, 165, 245, 0.9) 50%, rgba(100, 181, 246, 0.85) 100%)',
+          backdropFilter: 'blur(10px)',
+          color: 'white',
+          py: { xs: 8, sm: 12, md: 16 },
+          position: 'relative',
+          overflow: 'hidden',
+          zIndex: 2,
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: `
+              radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%)
+            `,
+            pointerEvents: 'none'
+          },
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            top: '-50%',
+            left: '-50%',
+            width: '200%',
+            height: '200%',
+            background: 'conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,0.1) 0deg, transparent 60deg, rgba(255,255,255,0.1) 120deg, transparent 180deg, rgba(255,255,255,0.1) 240deg, transparent 300deg)',
+            animation: 'rotate 20s linear infinite',
+            pointerEvents: 'none'
+          },
+          '@keyframes rotate': {
+            '0%': {
+              transform: 'rotate(0deg)'
+            },
+            '100%': {
+              transform: 'rotate(360deg)'
+            }
+          }
+        }}
+      >
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 3 }}>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography
+              variant="h2"
+              sx={{
+                fontWeight: 'bold',
+                mb: { xs: 3, sm: 4 },
+                fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4rem' },
+                textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                animation: 'pulse 3s ease-in-out infinite',
+                background: 'linear-gradient(45deg, #ffffff 30%, #e3f2fd 90%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))'
+              }}
+            >
+              Nguồn và Trích dẫn
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                maxWidth: '800px',
+                mx: 'auto',
+                fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
+                lineHeight: 1.6,
+                opacity: 0.95,
+                px: { xs: 2, sm: 0 }
+              }}
+            >
+              Danh sách các nguồn và tài liệu tham khảo được sử dụng trong dự án
+              này, đảm bảo tính chính xác và đáng tin cậy.
+            </Typography>
+          </Box>
+        </Container>
+      </Box>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 py-16">
+      <Container maxWidth="lg" sx={{ py: { xs: 6, sm: 8, md: 12 }, position: 'relative', zIndex: 2 }}>
         {/* Data Sources Section */}
-        <section className="bg-white shadow-2xl rounded-lg p-10 mb-16">
-          <h2 className="text-4xl font-bold mb-8 text-blue-600 text-center">
+        <Paper
+          elevation={12}
+          sx={{
+            p: { xs: 4, sm: 6, md: 8 },
+            mb: { xs: 6, sm: 8, md: 12 },
+            borderRadius: 4,
+            background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.9) 100%)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+            position: 'relative',
+            overflow: 'hidden',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: `
+                radial-gradient(circle at 10% 20%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 50%)
+              `,
+              pointerEvents: 'none'
+            }
+          }}
+          >
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 'bold',
+              mb: { xs: 4, sm: 6 },
+              color: '#1976d2',
+              textAlign: 'center',
+              fontSize: { xs: '1.75rem', sm: '2rem', md: '2.125rem' },
+              position: 'relative',
+              zIndex: 1,
+              background: 'linear-gradient(45deg, #1976d2 30%, #42a5f5 90%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              textShadow: 'none',
+              filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.1))'
+            }}
+          >
             Nguồn Dữ Liệu
-          </h2>
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Tổ chức Y tế Thế giới (WHO)",
-                description: "Cung cấp thông tin y tế toàn cầu đáng tin cậy.",
-                link: "https://www.who.int/",
-              },
-              {
-                title: "PubMed - Thư viện Y khoa Quốc gia Hoa Kỳ",
-                description: "Nền tảng nghiên cứu y khoa hàng đầu thế giới.",
-                link: "https://pubmed.ncbi.nlm.nih.gov/",
-              },
-              {
-                title: "Cục Quản lý Thực phẩm và Dược phẩm Hoa Kỳ (FDA)",
-                description: "Thông tin về an toàn thực phẩm và dược phẩm.",
-                link: "https://www.fda.gov/",
-              },
-            ].map((source, index) => (
-              <li
-                key={index}
-                className="bg-gray-50 p-8 rounded-lg shadow-md hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2"
-              >
-                <a
-                  href={source.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:text-blue-700 hover:underline transition duration-200"
+          </Typography>          <Grid container spacing={{ xs: 3, sm: 4, md: 6 }}>
+            {dataSources.map((source, index) => (
+              <Grid item xs={12} sm={6} lg={4} key={index}>
+                <Card
+                  sx={{
+                    height: '100%',
+                    transition: 'all 0.4s ease-in-out',
+                    '&:hover': {
+                      transform: 'translateY(-12px) scale(1.02)',
+                      boxShadow: '0 20px 40px rgba(0,0,0,0.15), 0 0 20px rgba(25, 118, 210, 0.2)',
+                    },
+                    borderRadius: 3,
+                    background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(250, 250, 250, 0.8) 100%)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: '4px',
+                      background: 'linear-gradient(90deg, #1976d2, #42a5f5, #64b5f6, #1976d2)',
+                      backgroundSize: '200% 100%',
+                      animation: 'shimmer 3s ease-in-out infinite'
+                    },
+                    '@keyframes shimmer': {
+                      '0%': {
+                        backgroundPosition: '-200% 0'
+                      },
+                      '100%': {
+                        backgroundPosition: '200% 0'
+                      }
+                    }
+                  }}
                 >
-                  <h3 className="text-2xl font-semibold mb-4">{source.title}</h3>
-                  <p className="text-base text-gray-600">{source.description}</p>
-                </a>
-              </li>
+                  <CardContent sx={{ p: { xs: 3, sm: 4 }, height: '100%' }}>
+                    <Link
+                      href={source.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{
+                        textDecoration: 'none',
+                        color: 'inherit',
+                        display: 'block',
+                        height: '100%',
+                        '&:hover': {
+                          '& .source-title': {
+                            color: '#1976d2'
+                          }
+                        }
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        className="source-title"
+                        sx={{
+                          fontWeight: 'bold',
+                          mb: 2,
+                          color: '#333',
+                          transition: 'color 0.3s ease',
+                          fontSize: { xs: '1.1rem', sm: '1.25rem' },
+                          lineHeight: 1.3
+                        }}
+                      >
+                        {source.title}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: '#666',
+                          lineHeight: 1.6,
+                          fontSize: { xs: '0.9rem', sm: '0.875rem' }
+                        }}
+                      >
+                        {source.description}
+                      </Typography>
+                    </Link>
+                  </CardContent>
+                </Card>
+              </Grid>
             ))}
-          </ul>
-        </section>
+          </Grid>
+        </Paper>
 
         {/* Citations Section */}
-        <section className="bg-white shadow-2xl rounded-lg p-10">
-          <h2 className="text-4xl font-bold mb-8 text-blue-600 text-center">
+        <Paper
+          elevation={12}
+          sx={{
+            p: { xs: 4, sm: 6, md: 8 },
+            borderRadius: 4,
+            background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.9) 100%)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+            position: 'relative',
+            overflow: 'hidden',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: `
+                radial-gradient(circle at 80% 20%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(255, 119, 198, 0.1) 0%, transparent 50%)
+              `,
+              pointerEvents: 'none'
+            }
+          }}
+        >
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 'bold',
+              mb: { xs: 4, sm: 6 },
+              color: '#1976d2',
+              textAlign: 'center',
+              fontSize: { xs: '1.75rem', sm: '2rem', md: '2.125rem' },
+              position: 'relative',
+              zIndex: 1,
+              background: 'linear-gradient(45deg, #1976d2 30%, #42a5f5 90%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              textShadow: 'none',
+              filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.1))'
+            }}
+          >
             Trích Dẫn
-          </h2>
-          <p className="text-lg leading-relaxed text-gray-700 text-center">
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              fontSize: { xs: '1rem', sm: '1.125rem' },
+              lineHeight: 1.7,
+              color: '#555',
+              textAlign: 'center',
+              maxWidth: '800px',
+              mx: 'auto',
+              px: { xs: 1, sm: 0 },
+              position: 'relative',
+              zIndex: 1
+            }}
+          >
             Tất cả các thông tin và dữ liệu được sử dụng trong dự án này đều
             được trích dẫn từ các nguồn đáng tin cậy. Vui lòng tham khảo các
             liên kết trên để biết thêm chi tiết. Chúng tôi cam kết đảm bảo tính
             minh bạch và chính xác trong việc sử dụng dữ liệu.
-          </p>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-10">
-        <div className="container mx-auto px-6 text-center">
-          <p className="text-sm">
-            &copy; 2025 Drug Interaction Web. All rights reserved.
-          </p>
-          <div className="mt-4 flex justify-center space-x-6">
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-400 hover:text-blue-600 transition duration-200"
-            >
-              Facebook
-            </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-400 hover:text-blue-600 transition duration-200"
-            >
-              Twitter
-            </a>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-400 hover:text-blue-600 transition duration-200"
-            >
-              LinkedIn
-            </a>
-          </div>
-          <p className="mt-4">
-            <a
-              href="/"
-              className="text-blue-400 hover:text-blue-600 hover:underline transition duration-200"
-            >
-              Trang chủ
-            </a>
-          </p>
-        </div>
-      </footer>
-    </div>
+          </Typography>
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 
