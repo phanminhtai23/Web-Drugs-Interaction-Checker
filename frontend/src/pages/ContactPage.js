@@ -9,6 +9,7 @@ import {
   Snackbar,
   Alert,
   useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { Email, Phone, LocationOn } from '@mui/icons-material';
 import axios from '../services/api';
@@ -18,6 +19,8 @@ const ContactPage = () => {
   const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,49 +52,119 @@ const ContactPage = () => {
   return (
     <Box
       sx={{
-        py: 6,
-        px: 4,
+        py: { xs: 2, sm: 4, md: 6 },
+        px: { xs: 1, sm: 2, md: 4 },
         background: `linear-gradient(135deg, ${theme.palette.primary.light}, ${theme.palette.primary.dark})`,
         minHeight: '100vh',
         color: '#fff',
       }}
     >
-      <Box sx={{ maxWidth: '1200px', mx: 'auto', textAlign: 'center', mb: 6 }}>
-        <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>
+      <Box sx={{ 
+        maxWidth: '1200px', 
+        mx: 'auto', 
+        textAlign: 'center', 
+        mb: { xs: 3, sm: 4, md: 6 },
+        px: { xs: 1, sm: 2 }
+      }}>
+        <Typography 
+          variant="h3" 
+          sx={{ 
+            fontWeight: 'bold', 
+            mb: 2,
+            fontSize: { xs: '1.8rem', sm: '2.2rem', md: '3rem' }
+          }}
+        >
           Liên Hệ Với Chúng Tôi
         </Typography>
-        <Typography variant="body1" sx={{ lineHeight: 1.8 }}>
+        <Typography 
+          variant="body1" 
+          sx={{ 
+            lineHeight: 1.8,
+            fontSize: { xs: '0.9rem', sm: '1rem' },
+            px: { xs: 1, sm: 0 }
+          }}
+        >
           Nếu bạn có bất kỳ câu hỏi hoặc cần hỗ trợ, vui lòng liên hệ với chúng tôi qua biểu mẫu dưới đây hoặc thông tin liên hệ.
         </Typography>
       </Box>
 
-      <Grid container spacing={4}>
+      <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
         {/* Thông tin liên hệ */}
         <Grid item xs={12} md={6}>
           <Paper
             elevation={6}
             sx={{
-              p: 4,
+              p: { xs: 2, sm: 3, md: 4 },
               borderRadius: 3,
               background: '#fff',
               color: '#000',
               boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
+              mb: { xs: 2, md: 0 }
             }}
           >
-            <Typography variant="h5" sx={{ fontWeight: 'bold', color: theme.palette.primary.main, mb: 2 }}>
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                fontWeight: 'bold', 
+                color: theme.palette.primary.main, 
+                mb: { xs: 1.5, sm: 2 },
+                fontSize: { xs: '1.2rem', sm: '1.4rem', md: '1.5rem' }
+              }}
+            >
               Thông Tin Liên Hệ
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Email sx={{ color: theme.palette.primary.main, mr: 2 }} />
-              <Typography variant="body1">DTDrugs@gmail.com</Typography>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              mb: { xs: 1.5, sm: 2 },
+              flexWrap: 'wrap'
+            }}>
+              <Email sx={{ 
+                color: theme.palette.primary.main, 
+                mr: 2,
+                fontSize: { xs: '1.2rem', sm: '1.5rem' }
+              }} />
+              <Typography 
+                variant="body1"
+                sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
+              >
+                DTDrugs@gmail.com
+              </Typography>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Phone sx={{ color: theme.palette.primary.main, mr: 2 }} />
-              <Typography variant="body1">+84 944 779 743</Typography>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              mb: { xs: 1.5, sm: 2 },
+              flexWrap: 'wrap'
+            }}>
+              <Phone sx={{ 
+                color: theme.palette.primary.main, 
+                mr: 2,
+                fontSize: { xs: '1.2rem', sm: '1.5rem' }
+              }} />
+              <Typography 
+                variant="body1"
+                sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
+              >
+                +84 944 779 743
+              </Typography>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <LocationOn sx={{ color: theme.palette.primary.main, mr: 2 }} />
-              <Typography variant="body1">Ninh Kiều, Cần Thơ</Typography>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              flexWrap: 'wrap'
+            }}>
+              <LocationOn sx={{ 
+                color: theme.palette.primary.main, 
+                mr: 2,
+                fontSize: { xs: '1.2rem', sm: '1.5rem' }
+              }} />
+              <Typography 
+                variant="body1"
+                sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
+              >
+                Ninh Kiều, Cần Thơ
+              </Typography>
             </Box>
           </Paper>
         </Grid>
@@ -101,14 +174,23 @@ const ContactPage = () => {
           <Paper
             elevation={6}
             sx={{
-              p: 4,
+              p: { xs: 2, sm: 3, md: 4 },
               borderRadius: 3,
               background: '#fff',
               color: '#000',
               boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
             }}
           >
-            <Typography variant="h5" sx={{ fontWeight: 'bold', color: theme.palette.primary.main, mb: 2, textAlign: 'center' }}>
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                fontWeight: 'bold', 
+                color: theme.palette.primary.main, 
+                mb: { xs: 1.5, sm: 2 }, 
+                textAlign: 'center',
+                fontSize: { xs: '1.2rem', sm: '1.4rem', md: '1.5rem' }
+              }}
+            >
               Gửi Tin Nhắn
             </Typography>
             <form onSubmit={handleSubmit}>
@@ -120,24 +202,53 @@ const ContactPage = () => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
+                size={isMobile ? "small" : "medium"}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    fontSize: { xs: '0.9rem', sm: '1rem' }
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: { xs: '0.9rem', sm: '1rem' }
+                  }
+                }}
               />
               <TextField
                 label="Email"
                 name="email"
+                type="email"
                 value={formData.email}
                 onChange={handleChange}
                 variant="outlined"
                 fullWidth
                 margin="normal"
+                size={isMobile ? "small" : "medium"}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    fontSize: { xs: '0.9rem', sm: '1rem' }
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: { xs: '0.9rem', sm: '1rem' }
+                  }
+                }}
               />
               <TextField
                 label="Số Điện Thoại"
                 name="phone"
+                type="tel"
                 value={formData.phone}
                 onChange={handleChange}
                 variant="outlined"
                 fullWidth
                 margin="normal"
+                size={isMobile ? "small" : "medium"}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    fontSize: { xs: '0.9rem', sm: '1rem' }
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: { xs: '0.9rem', sm: '1rem' }
+                  }
+                }}
               />
               <TextField
                 label="Chủ Đề"
@@ -147,6 +258,15 @@ const ContactPage = () => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
+                size={isMobile ? "small" : "medium"}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    fontSize: { xs: '0.9rem', sm: '1rem' }
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: { xs: '0.9rem', sm: '1rem' }
+                  }
+                }}
               />
               <TextField
                 label="Tin Nhắn"
@@ -156,8 +276,17 @@ const ContactPage = () => {
                 variant="outlined"
                 fullWidth
                 multiline
-                rows={4}
+                rows={isMobile ? 3 : 4}
                 margin="normal"
+                size={isMobile ? "small" : "medium"}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    fontSize: { xs: '0.9rem', sm: '1rem' }
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: { xs: '0.9rem', sm: '1rem' }
+                  }
+                }}
               />
               <Button
                 type="submit"
@@ -166,13 +295,17 @@ const ContactPage = () => {
                 fullWidth
                 disabled={loading}
                 sx={{
-                  mt: 2,
-                  py: 1.5,
-                  fontSize: '1rem',
+                  mt: { xs: 1.5, sm: 2 },
+                  py: { xs: 1.2, sm: 1.5 },
+                  fontSize: { xs: '0.9rem', sm: '1rem' },
+                  fontWeight: 'bold',
                   background: `linear-gradient(45deg, ${theme.palette.primary.light}, ${theme.palette.primary.main})`,
                   '&:hover': {
                     background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
                   },
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  minHeight: { xs: '44px', sm: '48px' } // Touch target size
                 }}
               >
                 {loading ? 'Đang gửi...' : 'Gửi Tin Nhắn'}
@@ -188,8 +321,23 @@ const ContactPage = () => {
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        sx={{
+          '& .MuiSnackbarContent-root': {
+            fontSize: { xs: '0.8rem', sm: '0.9rem' }
+          }
+        }}
       >
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity} 
+          sx={{ 
+            width: '100%',
+            fontSize: { xs: '0.8rem', sm: '0.9rem' },
+            '& .MuiAlert-message': {
+              fontSize: { xs: '0.8rem', sm: '0.9rem' }
+            }
+          }}
+        >
           {snackbar.message}
         </Alert>
       </Snackbar>
