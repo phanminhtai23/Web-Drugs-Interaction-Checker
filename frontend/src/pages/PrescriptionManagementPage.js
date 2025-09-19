@@ -101,7 +101,7 @@ const PrescriptionManagementPage = () => {
   );
 
   return (
-    <Box sx={{ maxWidth: 1200, mx: 'auto', mt: 5, p: 3 }}>
+    <Box sx={{ maxWidth: 1200, mx: 'auto', mt: { xs: 2, sm: 3, md: 5 }, p: { xs: 2, sm: 3 } }}>
       {/* Tiêu đề */}
       <Typography
         variant="h3"
@@ -112,19 +112,21 @@ const PrescriptionManagementPage = () => {
           background: 'linear-gradient(to right, #000000FF, #000000FF)', // Gradient màu sắc nổi bật hơn
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
-          mb: 4,
+          mb: { xs: 3, sm: 4 },
           animation: 'fadeIn 1s ease-in-out', // Hiệu ứng động khi xuất hiện
-          fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' }, // Kích thước chữ linh hoạt
+          fontSize: { xs: '1.75rem', sm: '2.25rem', md: '3rem' }, // Kích thước chữ linh hoạt
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 1, // Khoảng cách giữa biểu tượng và chữ
+          gap: { xs: 0.5, sm: 1 }, // Khoảng cách giữa biểu tượng và chữ
+          flexDirection: { xs: 'column', sm: 'row' }, // Column trên mobile
         }}
       >
         <Medication
           sx={{
-            fontSize: { xs: 40, sm: 50, md: 60 }, // Biểu tượng lớn hơn
+            fontSize: { xs: 30, sm: 40, md: 60 }, // Biểu tượng lớn hơn
             color: 'linear-gradient(to right, #6a11cb, #2575fc)',
+            mb: { xs: 1, sm: 0 }, // Margin bottom trên mobile
           }}
         />
         Quản lý đơn thuốc
@@ -138,12 +140,13 @@ const PrescriptionManagementPage = () => {
       value={searchQuery}
       onChange={(e) => setSearchQuery(e.target.value)}
       sx={{
-        mb: 3,
+        mb: { xs: 2, sm: 3 },
         background: 'linear-gradient(to right, #f3f4f6, #ffffff)', // Gradient nền
-        borderRadius: '30px', // Bo góc mềm mại
+        borderRadius: { xs: '20px', sm: '30px' }, // Bo góc mềm mại responsive
         boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Hiệu ứng shadow
         '& .MuiOutlinedInput-root': {
-          borderRadius: '30px', // Bo góc cho input
+          borderRadius: { xs: '20px', sm: '30px' }, // Bo góc cho input responsive
+          fontSize: { xs: '0.9rem', sm: '1rem' }, // Font size responsive
           '& fieldset': {
             border: 'none', // Loại bỏ viền mặc định
           },
@@ -161,7 +164,7 @@ const PrescriptionManagementPage = () => {
             <Search
               sx={{
                 color: '#2196f3', // Màu biểu tượng
-                fontSize: '1.5rem', // Kích thước biểu tượng
+                fontSize: { xs: '1.2rem', sm: '1.5rem' }, // Kích thước biểu tượng responsive
                 transition: 'transform 0.3s ease', // Hiệu ứng động
                 '&:hover': {
                   transform: 'scale(1.2)', // Phóng to khi hover
@@ -176,17 +179,19 @@ const PrescriptionManagementPage = () => {
       {/* Nút thêm đơn thuốc */}
       <Button
         variant="contained"
-        startIcon={<Add />}
+        startIcon={<Add sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }} />}
         onClick={() => handleOpen()}
         sx={{
-          mb: 3,
+          mb: { xs: 2, sm: 3 },
           background: 'linear-gradient(to right, #2196f3, #21cbf3)',
           color: '#fff',
           fontWeight: 'bold',
-          px: 3,
-          py: 1.5,
-          borderRadius: '30px',
+          px: { xs: 2, sm: 3 },
+          py: { xs: 1, sm: 1.5 },
+          borderRadius: { xs: '20px', sm: '30px' },
           boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
+          fontSize: { xs: '0.875rem', sm: '1rem' },
+          width: { xs: '100%', sm: 'auto' }, // Full width trên mobile
           '&:hover': {
             background: 'linear-gradient(to right, #21cbf3, #2196f3)',
             boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.3)',
@@ -198,7 +203,7 @@ const PrescriptionManagementPage = () => {
 
 
       {/* Danh sách đơn thuốc */}
-      <Grid container spacing={3}>
+      <Grid container spacing={{ xs: 2, sm: 3 }}>
         {paginatedPrescriptions.map((prescription) => (
           <Grid item xs={12} sm={6} md={4} key={prescription._id}>
             <Card
@@ -206,14 +211,17 @@ const PrescriptionManagementPage = () => {
               sx={{
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 background: 'linear-gradient(to right, #f3f4f6, #ffffff)', // Nền gradient sáng
-                borderRadius: '15px', // Bo góc mềm mại
+                borderRadius: { xs: '12px', sm: '15px' }, // Bo góc mềm mại responsive
+                height: '100%', // Đảm bảo cards có chiều cao đồng đều
+                display: 'flex',
+                flexDirection: 'column',
                 '&:hover': {
-                  transform: 'scale(1.05)', // Phóng to khi hover
+                  transform: { xs: 'scale(1.02)', sm: 'scale(1.05)' }, // Phóng to nhẹ hơn trên mobile
                   boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.3)', // Shadow khi hover
                 },
               }}
             >
-              <CardContent>
+              <CardContent sx={{ flexGrow: 1, p: { xs: 2, sm: 2.5 } }}>
                 <Typography
                   variant="h6"
                   gutterBottom
@@ -221,6 +229,8 @@ const PrescriptionManagementPage = () => {
                     fontWeight: 'bold',
                     color: '#333',
                     textAlign: 'center',
+                    fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
+                    lineHeight: 1.2,
                   }}
                 >
                   Bác sĩ: {prescription.doctor_name}
@@ -231,6 +241,7 @@ const PrescriptionManagementPage = () => {
                   sx={{
                     textAlign: 'center',
                     mb: 2,
+                    fontSize: { xs: '0.8rem', sm: '0.875rem' },
                   }}
                 >
                   Bệnh viện: {prescription.hospital}
@@ -240,7 +251,7 @@ const PrescriptionManagementPage = () => {
                     display: 'flex',
                     flexWrap: 'wrap',
                     justifyContent: 'center',
-                    gap: 1,
+                    gap: { xs: 0.5, sm: 1 },
                     mt: 2,
                   }}
                 >
@@ -251,11 +262,12 @@ const PrescriptionManagementPage = () => {
                       color="primary"
                       variant="outlined"
                       sx={{
-                        fontSize: '0.875rem',
+                        fontSize: { xs: '0.75rem', sm: '0.875rem' },
                         fontWeight: 'bold',
-                        borderRadius: '20px', // Bo góc mềm mại
+                        borderRadius: { xs: '15px', sm: '20px' }, // Bo góc mềm mại responsive
                         background: '#e3f2fd', // Nền sáng
                         color: '#1976d2', // Màu chữ
+                        height: { xs: '28px', sm: '32px' }, // Chiều cao responsive
                       }}
                     />
                   ))}
@@ -265,7 +277,8 @@ const PrescriptionManagementPage = () => {
                 sx={{
                   display: 'flex',
                   justifyContent: 'space-around',
-                  padding: '10px',
+                  padding: { xs: '8px', sm: '10px' },
+                  mt: 'auto', // Đẩy actions xuống dưới
                 }}
               >
                 <IconButton
@@ -273,24 +286,26 @@ const PrescriptionManagementPage = () => {
                   onClick={() => handleOpen(prescription)}
                   sx={{
                     transition: 'transform 0.3s ease',
+                    p: { xs: 1, sm: 1.5 }, // Padding responsive
                     '&:hover': {
                       transform: 'scale(1.2)', // Phóng to khi hover
                     },
                   }}
                 >
-                  <Edit />
+                  <Edit sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
                 </IconButton>
                 <IconButton
                   color="error"
                   onClick={() => handleDelete(prescription._id)}
                   sx={{
                     transition: 'transform 0.3s ease',
+                    p: { xs: 1, sm: 1.5 }, // Padding responsive
                     '&:hover': {
                       transform: 'scale(1.2)', // Phóng to khi hover
                     },
                   }}
                 >
-                  <Delete />
+                  <Delete sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
                 </IconButton>
               </CardActions>
             </Card>
@@ -298,26 +313,59 @@ const PrescriptionManagementPage = () => {
         ))}
       </Grid>
       {/* Phân trang */}
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: { xs: 2, sm: 3 } }}>
         <Pagination
           count={Math.ceil(filteredPrescriptions.length / itemsPerPage)}
           page={currentPage}
           onChange={(e, page) => setCurrentPage(page)}
           color="primary"
+          size="medium" // Sửa lỗi: không thể truyền object cho size
+          sx={{
+            '& .MuiPaginationItem-root': {
+              fontSize: { xs: '0.75rem', sm: '0.875rem' }, // Font size responsive
+              minWidth: { xs: '28px', sm: '32px' }, // Min width responsive
+              height: { xs: '28px', sm: '32px' }, // Height responsive
+            },
+          }}
         />
       </Box>
 
       {/* Dialog thêm/sửa đơn thuốc */}
-      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+      <Dialog 
+        open={open} 
+        onClose={handleClose} 
+        maxWidth="sm" 
+        fullWidth
+        sx={{
+          '& .MuiDialog-paper': {
+            borderRadius: { xs: 0, sm: '15px' }, // Bo góc cho desktop
+            m: { xs: 0, sm: 2 }, // Margin cho desktop
+          },
+          // Responsive fullScreen behavior
+          '@media (max-width: 600px)': {
+            '& .MuiDialog-container': {
+              alignItems: 'stretch',
+            },
+            '& .MuiDialog-paper': {
+              margin: 0,
+              maxHeight: '100vh',
+              height: '100vh',
+              borderRadius: 0,
+            },
+          },
+        }}
+      >
         <DialogTitle
           sx={{
             fontWeight: 'bold',
             textAlign: 'center',
-            fontSize: '1.8rem',
+            fontSize: { xs: '1.4rem', sm: '1.6rem', md: '1.8rem' },
             background: 'linear-gradient(to right, #2196f3, #2575fc)', // Gradient tiêu đề
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            mb: 2,
+            mb: { xs: 1, sm: 2 },
+            px: { xs: 2, sm: 3 },
+            py: { xs: 2, sm: 2.5 },
           }}
         >
           {editingId ? 'Sửa đơn thuốc' : 'Thêm đơn thuốc'}
@@ -326,8 +374,8 @@ const PrescriptionManagementPage = () => {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            gap: 2, // Khoảng cách giữa các trường
-            padding: '20px',
+            gap: { xs: 1.5, sm: 2 }, // Khoảng cách giữa các trường responsive
+            padding: { xs: '16px', sm: '20px' },
           }}
         >
           <TextField
@@ -340,14 +388,15 @@ const PrescriptionManagementPage = () => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Medication sx={{ color: '#2196f3' }} />
+                  <Medication sx={{ color: '#2196f3', fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
                 </InputAdornment>
               ),
             }}
             sx={{
               background: '#f9f9f9',
-              borderRadius: '10px',
+              borderRadius: { xs: '8px', sm: '10px' },
               '& .MuiOutlinedInput-root': {
+                fontSize: { xs: '0.9rem', sm: '1rem' },
                 '& fieldset': {
                   borderColor: '#ddd',
                 },
@@ -357,6 +406,9 @@ const PrescriptionManagementPage = () => {
                 '&.Mui-focused fieldset': {
                   borderColor: '#2575fc',
                 },
+              },
+              '& .MuiInputLabel-root': {
+                fontSize: { xs: '0.9rem', sm: '1rem' },
               },
             }}
           />
@@ -370,14 +422,15 @@ const PrescriptionManagementPage = () => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <LocalHospital sx={{ color: '#2196f3' }} />
+                  <LocalHospital sx={{ color: '#2196f3', fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
                 </InputAdornment>
               ),
             }}
             sx={{
               background: '#f9f9f9',
-              borderRadius: '10px',
+              borderRadius: { xs: '8px', sm: '10px' },
               '& .MuiOutlinedInput-root': {
+                fontSize: { xs: '0.9rem', sm: '1rem' },
                 '& fieldset': {
                   borderColor: '#ddd',
                 },
@@ -387,6 +440,9 @@ const PrescriptionManagementPage = () => {
                 '&.Mui-focused fieldset': {
                   borderColor: '#2575fc',
                 },
+              },
+              '& .MuiInputLabel-root': {
+                fontSize: { xs: '0.9rem', sm: '1rem' },
               },
             }}
           />
@@ -394,20 +450,23 @@ const PrescriptionManagementPage = () => {
             label="Thuốc (dạng: Tên (Liều lượng), cách nhau bởi dấu phẩy)"
             fullWidth
             margin="normal"
+            multiline
+            rows={{ xs: 3, sm: 2 }} // Nhiều dòng hơn trên mobile
             value={formData.medications}
             onChange={(e) => setFormData({ ...formData, medications: e.target.value })}
             placeholder="Ví dụ: Paracetamol (500mg), Ibuprofen (200mg)"
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">
-                  <Healing sx={{ color: '#2196f3' }} />
+                <InputAdornment position="start" sx={{ alignSelf: 'flex-start', mt: 1 }}>
+                  <Healing sx={{ color: '#2196f3', fontSize: { xs: '1.2rem', sm: '1.5rem' } }} />
                 </InputAdornment>
               ),
             }}
             sx={{
               background: '#f9f9f9',
-              borderRadius: '10px',
+              borderRadius: { xs: '8px', sm: '10px' },
               '& .MuiOutlinedInput-root': {
+                fontSize: { xs: '0.9rem', sm: '1rem' },
                 '& fieldset': {
                   borderColor: '#ddd',
                 },
@@ -418,13 +477,18 @@ const PrescriptionManagementPage = () => {
                   borderColor: '#2575fc',
                 },
               },
+              '& .MuiInputLabel-root': {
+                fontSize: { xs: '0.9rem', sm: '1rem' },
+              },
             }}
           />
         </DialogContent>
         <DialogActions
           sx={{
             justifyContent: 'center',
-            padding: '20px',
+            padding: { xs: '16px', sm: '20px' },
+            gap: { xs: 1, sm: 2 }, // Khoảng cách giữa các nút
+            flexDirection: { xs: 'column', sm: 'row' }, // Column trên mobile
           }}
         >
           <Button
@@ -433,6 +497,9 @@ const PrescriptionManagementPage = () => {
               color: '#FF1100FF',
               fontWeight: 'bold',
               textTransform: 'none',
+              fontSize: { xs: '0.9rem', sm: '1rem' },
+              width: { xs: '100%', sm: 'auto' }, // Full width trên mobile
+              py: { xs: 1.5, sm: 1 },
             }}
           >
             Hủy
@@ -445,8 +512,10 @@ const PrescriptionManagementPage = () => {
               color: '#fff',
               fontWeight: 'bold',
               textTransform: 'none',
-              padding: '10px 20px',
-              borderRadius: '30px',
+              padding: { xs: '12px 20px', sm: '10px 20px' },
+              borderRadius: { xs: '20px', sm: '30px' },
+              fontSize: { xs: '0.9rem', sm: '1rem' },
+              width: { xs: '100%', sm: 'auto' }, // Full width trên mobile
               '&:hover': {
                 background: 'linear-gradient(to right,#21cbf3, #2196f3)',
               },
@@ -462,9 +531,21 @@ const PrescriptionManagementPage = () => {
         open={snackbar.open}
         autoHideDuration={3000}
         onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} // Sửa lỗi: không thể truyền object responsive
+        sx={{
+          '& .MuiSnackbarContent-root': {
+            fontSize: { xs: '0.875rem', sm: '1rem' },
+          },
+        }}
       >
-        <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: '100%' }}>
+        <Alert 
+          onClose={handleSnackbarClose} 
+          severity={snackbar.severity} 
+          sx={{ 
+            width: '100%',
+            fontSize: { xs: '0.875rem', sm: '1rem' },
+          }}
+        >
           {snackbar.message}
         </Alert>
       </Snackbar>
