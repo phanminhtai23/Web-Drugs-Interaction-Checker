@@ -47,6 +47,7 @@ pids
 *.pid
 *.seed
 
+*/.env.example
 # TypeScript build (nếu dùng TypeScript)
 *.tsbuildinfo
 
