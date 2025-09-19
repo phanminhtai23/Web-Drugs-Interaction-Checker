@@ -16,22 +16,45 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 const InteractionPage = () => {
   return (
-    <Box className="container" sx={{ py: 5, px: 3, backgroundColor: '#f4f6f8' }}>
-      <Grid container spacing={4}>
+    <Box className="container" sx={{ 
+      py: { xs: 3, sm: 4, md: 5 }, 
+      px: { xs: 2, sm: 3 }, 
+      backgroundColor: '#f4f6f8' 
+    }}>
+      <Grid container spacing={{ xs: 3, sm: 4 }}>
         {/* Cột chính: Nội dung kiểm tra tương tác thuốc */}
         <Grid item xs={12} md={8}>
           <Box
             sx={{
               backgroundColor: '#fff',
-              borderRadius: 3,
+              borderRadius: { xs: 2, sm: 3 },
               boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-              p: 4,
+              p: { xs: 3, sm: 4 },
             }}
           >
-            <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 2 }}>
+            <Typography 
+              variant="h4" 
+              sx={{ 
+                fontWeight: 'bold', 
+                mb: 2,
+                fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' }, // Responsive font size
+                textAlign: { xs: 'center', sm: 'left' }, // Center on mobile
+                lineHeight: { xs: 1.2, sm: 1.167 }, // Better line height for mobile
+              }}
+            >
               Kiểm tra tương tác thuốc
             </Typography>
-            <Typography variant="body1" color="textSecondary" sx={{ mb: 4 }}>
+            <Typography 
+              variant="body1" 
+              color="textSecondary" 
+              sx={{ 
+                mb: 4,
+                fontSize: { xs: '0.9rem', sm: '1rem' }, // Responsive font size
+                textAlign: { xs: 'center', sm: 'left' }, // Center on mobile
+                lineHeight: 1.6, // Better line height for mobile
+                px: { xs: 1, sm: 0 }, // Padding for mobile
+              }}
+            >
               Sử dụng công cụ kiểm tra tương tác thuốc của chúng tôi để tìm các tương tác thuốc, thực phẩm và rượu có khả năng gây hại.
             </Typography>
             <InteractionSearch />
@@ -41,22 +64,39 @@ const InteractionPage = () => {
               sx={{
                 mt: 4,
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: { xs: 'flex-start', sm: 'center' }, // Align top on mobile
+                flexDirection: { xs: 'column', sm: 'row' }, // Stack on mobile
                 backgroundColor: '#f9f9f9',
-                p: 3,
-                borderRadius: 3,
+                p: { xs: 2.5, sm: 3 }, // Responsive padding
+                borderRadius: { xs: 2, sm: 3 },
                 boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+                gap: { xs: 2, sm: 0 }, // Gap on mobile
               }}
             >
-              <WarningAmberIcon color="primary" sx={{ fontSize: 60, mr: 2 }} />
-              <Typography variant="body2" color="textSecondary">
+              <WarningAmberIcon 
+                color="primary" 
+                sx={{ 
+                  fontSize: { xs: 40, sm: 50, md: 60 }, // Responsive icon size
+                  mr: { xs: 0, sm: 2 }, // No margin right on mobile
+                  alignSelf: { xs: 'center', sm: 'flex-start' }, // Center icon on mobile
+                }} 
+              />
+              <Typography 
+                variant="body2" 
+                color="textSecondary"
+                sx={{
+                  fontSize: { xs: '0.875rem', sm: '0.875rem' }, // Consistent readable size
+                  lineHeight: 1.6, // Better line height
+                  textAlign: { xs: 'center', sm: 'left' }, // Center on mobile
+                }}
+              >
                 Không phải tất cả các loại thuốc đều tương tác và không phải mọi tương tác đều có nghĩa là bạn phải ngừng dùng một trong các loại thuốc của mình.
                 Luôn tham khảo ý kiến ​​bác sĩ chăm sóc sức khỏe của bạn về cách quản lý tương tác thuốc trước khi thực hiện bất kỳ thay đổi nào đối với đơn thuốc hiện tại của bạn.
               </Typography>
             </Box>
 
             {/* Phần câu hỏi thường gặp */}
-           <Box sx={{ mt: 5 }}>
+           <Box sx={{ mt: { xs: 4, sm: 5 } }}>
               <Typography
                 variant="h5"
                 sx={{
@@ -64,6 +104,8 @@ const InteractionPage = () => {
                   mb: 3,
                   textAlign: 'center',
                   color: '#1976d2', // Màu xanh nổi bật
+                  fontSize: { xs: '1.25rem', sm: '1.5rem' }, // Responsive font size
+                  px: { xs: 1, sm: 0 }, // Padding for mobile
                 }}
               >
                 Câu hỏi thường gặp về tương tác thuốc
@@ -72,7 +114,7 @@ const InteractionPage = () => {
                 sx={{
                   backgroundColor: '#ffffff', // Nền trắng đơn giản
                   borderRadius: 2,
-                  p: 2,
+                  p: { xs: 1.5, sm: 2 }, // Responsive padding
                 }}
               >
                 <Accordion
@@ -86,20 +128,35 @@ const InteractionPage = () => {
                   }}
                 >
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem' } }} />}
                     sx={{
                       backgroundColor: '#f5f5f5', // Nền xám nhạt
                       borderRadius: 2,
                       '&:hover': { backgroundColor: '#e0e0e0' }, // Hiệu ứng hover
-                      px: 2,
+                      px: { xs: 1.5, sm: 2 }, // Responsive padding
+                      py: { xs: 1, sm: 1.5 }, // Responsive padding
                     }}
                   >
-                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                    <Typography 
+                      variant="body1" 
+                      sx={{ 
+                        fontWeight: 'bold',
+                        fontSize: { xs: '0.9rem', sm: '1rem' }, // Responsive font size
+                        lineHeight: 1.4, // Better line height
+                      }}
+                    >
                       Tương tác thuốc là gì?
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails sx={{ px: 2 }}>
-                    <Typography variant="body2" color="textSecondary">
+                  <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1.5, sm: 2 } }}>
+                    <Typography 
+                      variant="body2" 
+                      color="textSecondary"
+                      sx={{
+                        fontSize: { xs: '0.85rem', sm: '0.875rem' }, // Responsive font size
+                        lineHeight: 1.6, // Better line height
+                      }}
+                    >
                       Có 3 loại tương tác thuốc chính cần chú ý:
                       <ul>
                         <li>
@@ -127,20 +184,35 @@ const InteractionPage = () => {
                   }}
                 >
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem' } }} />}
                     sx={{
                       backgroundColor: '#f5f5f5',
                       borderRadius: 2,
                       '&:hover': { backgroundColor: '#e0e0e0' },
-                      px: 2,
+                      px: { xs: 1.5, sm: 2 },
+                      py: { xs: 1, sm: 1.5 },
                     }}
                   >
-                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                    <Typography 
+                      variant="body1" 
+                      sx={{ 
+                        fontWeight: 'bold',
+                        fontSize: { xs: '0.9rem', sm: '1rem' },
+                        lineHeight: 1.4,
+                      }}
+                    >
                       Những dấu hiệu và triệu chứng phổ biến của tương tác thuốc là gì?
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails sx={{ px: 2 }}>
-                    <Typography variant="body2" color="textSecondary">
+                  <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1.5, sm: 2 } }}>
+                    <Typography 
+                      variant="body2" 
+                      color="textSecondary"
+                      sx={{
+                        fontSize: { xs: '0.85rem', sm: '0.875rem' },
+                        lineHeight: 1.6,
+                      }}
+                    >
                       Các dấu hiệu và triệu chứng của tương tác thuốc có thể rất khác nhau. Một số triệu chứng có thể nhẹ, trong khi những triệu chứng khác có thể nghiêm trọng hoặc đe dọa tính mạng.
                       <br />
                       <br />
@@ -174,20 +246,35 @@ const InteractionPage = () => {
                   }}
                 >
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon sx={{ fontSize: { xs: '1.25rem', sm: '1.5rem' } }} />}
                     sx={{
                       backgroundColor: '#f5f5f5',
                       borderRadius: 2,
                       '&:hover': { backgroundColor: '#e0e0e0' },
-                      px: 2,
+                      px: { xs: 1.5, sm: 2 },
+                      py: { xs: 1, sm: 1.5 },
                     }}
                   >
-                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                    <Typography 
+                      variant="body1" 
+                      sx={{ 
+                        fontWeight: 'bold',
+                        fontSize: { xs: '0.9rem', sm: '1rem' },
+                        lineHeight: 1.4,
+                      }}
+                    >
                       Làm thế nào để tránh tương tác thuốc?
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails sx={{ px: 2 }}>
-                    <Typography variant="body2" color="textSecondary">
+                  <AccordionDetails sx={{ px: { xs: 1.5, sm: 2 }, py: { xs: 1.5, sm: 2 } }}>
+                    <Typography 
+                      variant="body2" 
+                      color="textSecondary"
+                      sx={{
+                        fontSize: { xs: '0.85rem', sm: '0.875rem' },
+                        lineHeight: 1.6,
+                      }}
+                    >
                       Vì bạn có thể không biết thuốc của mình có tương tác gì không nên điều quan trọng là phải kiểm tra chúng trước khi bắt đầu điều trị.
                       <br />
                       <br />
@@ -222,23 +309,41 @@ const InteractionPage = () => {
         <Grid item xs={12} md={4}>
           <Box
             sx={{
-              p: 3,
+              p: { xs: 2, sm: 3 },
               backgroundColor: '#fff',
               borderRadius: 3,
               boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+              mt: { xs: 3, md: 0 },
             }}
           >
-            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
+            <Typography 
+              variant="h6" 
+              sx={{ 
+                fontWeight: 'bold', 
+                mb: { xs: 1.5, sm: 2 },
+                fontSize: { xs: '1.1rem', sm: '1.25rem' },
+              }}
+            >
               Công cụ & tài nguyên phổ biến
             </Typography>
-            <List>
+            <List sx={{ '& .MuiListItem-root': { px: { xs: 0, sm: 1 }, py: { xs: 0.5, sm: 1 } } }}>
               <ListItem>
-                <Link href="/drugs" underline="hover" color="primary">
+                <Link 
+                  href="/drugs" 
+                  underline="hover" 
+                  color="primary"
+                  sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
+                >
                   Danh sách thuốc hiện có
                 </Link>
               </ListItem>
               <ListItem>
-                <Link href="/interactions" underline="hover" color="primary">
+                <Link 
+                  href="/interactions" 
+                  underline="hover" 
+                  color="primary"
+                  sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
+                >
                   Kiểm tra tương tác thuốc
                 </Link>
               </ListItem>
@@ -247,6 +352,7 @@ const InteractionPage = () => {
                   href="#"
                   underline="hover"
                   color="primary"
+                  sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
                   onClick={(e) => {
                     e.preventDefault();
                     const isLoggedIn = !!localStorage.getItem('token'); // Kiểm tra token trong localStorage
@@ -265,6 +371,7 @@ const InteractionPage = () => {
                   href="#"
                   underline="hover"
                   color="primary"
+                  sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
                   onClick={(e) => {
                     e.preventDefault();
                     const isLoggedIn = !!localStorage.getItem('token'); // Kiểm tra token trong localStorage
@@ -279,13 +386,23 @@ const InteractionPage = () => {
                 </Link>
               </ListItem>
               <ListItem>
-                <Link href="/terms" underline="hover" color="primary">
+                <Link 
+                  href="/terms" 
+                  underline="hover" 
+                  color="primary"
+                  sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
+                >
                   Điều khoản sử dụng
                 </Link>
               </ListItem>
 
               <ListItem>
-                <Link href="/about" underline="hover" color="primary">
+                <Link 
+                  href="/about" 
+                  underline="hover" 
+                  color="primary"
+                  sx={{ fontSize: { xs: '0.9rem', sm: '1rem' } }}
+                >
                   Giới thiệu về chúng tôi
                 </Link>
               </ListItem>

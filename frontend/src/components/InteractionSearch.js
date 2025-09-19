@@ -158,16 +158,22 @@ const InteractionSearch = () => {
     return (
         <Box
             sx={{
-                maxWidth: "800px",
+                maxWidth: { xs: "100%", sm: "900px", md: "1000px" },
                 mx: "auto",
                 mt: 5,
-                p: 3,
+                p: { xs: 2, sm: 3 },
                 backgroundColor: "#fff",
                 borderRadius: 4,
                 border: "1px solid #e0e0e0", // Thêm viền nhẹ
             }}
         >
-            <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+            <Box sx={{ 
+                display: "flex", 
+                flexDirection: { xs: "column", sm: "row" },
+                alignItems: { xs: "stretch", sm: "center" }, 
+                mb: 3,
+                gap: { xs: 2, sm: 0 }
+            }}>
                 <Autocomplete
                     options={suggestions}
                     onInputChange={(event, value) => {
@@ -182,9 +188,11 @@ const InteractionSearch = () => {
                     }}
                     sx={{
                         flex: 1,
-                        mr: 2,
+                        mr: { xs: 0, sm: 2 },
+                        minWidth: { xs: "100%", sm: "300px", md: "400px" },
                         "& .MuiAutocomplete-inputRoot": {
                             paddingRight: "40px !important", // Đặt padding cố định cho clear button
+                            height: { xs: "56px", sm: "60px" }, // Tăng chiều cao khung nhập
                         },
                     }}
                     renderInput={(params) => (
@@ -202,6 +210,13 @@ const InteractionSearch = () => {
                             sx={{
                                 "& .MuiOutlinedInput-root": {
                                     borderRadius: 3,
+                                    fontSize: { xs: "1rem", sm: "1.1rem" }, // Tăng font size
+                                },
+                                "& .MuiInputLabel-root": {
+                                    fontSize: { xs: "1rem", sm: "1.1rem" }, // Tăng font size label
+                                },
+                                "& .MuiOutlinedInput-input": {
+                                    padding: { xs: "16px 14px", sm: "18px 16px" }, // Tăng padding
                                 },
                             }}
                         />
@@ -214,11 +229,15 @@ const InteractionSearch = () => {
                     onClick={handleAddDrug}
                     startIcon={<SearchIcon />}
                     sx={{
-                        ml: 1,
-                        // py: 0.5,
+                        ml: { xs: 0, sm: 1 },
+                        py: { xs: 1.5, sm: 1.8 },
+                        px: { xs: 3, sm: 4 },
+                        height: { xs: "56px", sm: "60px" }, // Đồng bộ chiều cao với TextField
+                        minWidth: { xs: "100%", sm: "140px" },
                         background: "linear-gradient(90deg, #1976d2, #155a9c)",
                         color: "#fff",
                         fontWeight: "bold",
+                        fontSize: { xs: "0.95rem", sm: "1rem" },
                         textTransform: "none",
                         borderRadius: 3,
                         "&:hover": {
@@ -240,11 +259,16 @@ const InteractionSearch = () => {
                             justifyContent: "space-between",
                             alignItems: "center",
                             mb: 1,
+                            flexDirection: { xs: "column", sm: "row" },
+                            gap: { xs: 1, sm: 0 },
                         }}
                     >
                         <Typography
                             variant="subtitle1"
-                            sx={{ fontWeight: "bold" }}
+                            sx={{ 
+                                fontWeight: "bold",
+                                fontSize: { xs: "1rem", sm: "1.1rem" },
+                            }}
                         >
                             Danh sách tương tác chưa lưu
                         </Typography>
@@ -262,6 +286,8 @@ const InteractionSearch = () => {
                             sx={{
                                 textTransform: "none",
                                 fontWeight: "bold",
+                                fontSize: { xs: "0.9rem", sm: "1rem" },
+                                minWidth: { xs: "auto", sm: "120px" },
                             }}
                         >
                             Bắt đầu lại
@@ -273,16 +299,24 @@ const InteractionSearch = () => {
                                 key={index}
                                 sx={{
                                     borderBottom: "1px solid #e0e0e0", // Đường kẻ dưới mỗi thuốc
-                                    py: 1,
-                                    px: 0,
+                                    py: { xs: 1.5, sm: 1 },
+                                    px: { xs: 1, sm: 0 },
                                     display: "flex",
                                     justifyContent: "space-between",
                                     alignItems: "center",
+                                    borderRadius: 1,
+                                    "&:hover": {
+                                        backgroundColor: "#f5f5f5",
+                                    },
                                 }}
                             >
                                 <Typography
                                     variant="body1"
-                                    sx={{ color: "#1976d2" }}
+                                    sx={{ 
+                                        color: "#1976d2",
+                                        fontSize: { xs: "0.95rem", sm: "1rem" },
+                                        fontWeight: 500,
+                                    }}
                                 >
                                     {drug}
                                 </Typography>
@@ -313,50 +347,64 @@ const InteractionSearch = () => {
             )}
 
             {/* Nút kiểm tra tương tác */}
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={handleCheckInteractions}
-                disabled={loading}
-                sx={{
-                    mt: 3,
-                    background: "linear-gradient(90deg, #1976d2, #155a9c)",
-                    color: "#fff",
-                    fontWeight: "bold",
-                    textTransform: "none",
-                    borderRadius: 3,
-                    "&:hover": {
-                        background: "linear-gradient(90deg, #155a9c, #1976d2)",
-                    },
-                }}
-            >
-                {loading ? (
-                    <CircularProgress size={24} color="inherit" />
-                ) : (
-                    "Kiểm tra tương tác"
-                )}
-            </Button>
-            <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleSaveHistory}
-                disabled={loading || interactions.length === 0}
-                sx={{
-                    mt: 3,
-                    ml: 2,
-                    background: "linear-gradient(90deg, #DDEAEBFF, #7E8787FF)",
-                    color: "#fff",
-                    fontWeight: "bold",
-                    textTransform: "none",
-                    borderRadius: 3,
-                    "&:hover": {
-                        background:
-                            "linear-gradient(90deg, #7E8787FF, #DDEAEBFF)",
-                    },
-                }}
-            >
-                Lưu lịch sử
-            </Button>
+            <Box sx={{ 
+                display: "flex", 
+                flexDirection: { xs: "column", sm: "row" },
+                gap: { xs: 2, sm: 1 },
+                mt: 3,
+            }}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleCheckInteractions}
+                    disabled={loading}
+                    sx={{
+                        flex: { xs: "1", sm: "auto" },
+                        py: { xs: 1.5, sm: 1.2 },
+                        px: { xs: 3, sm: 4 },
+                        minWidth: { xs: "100%", sm: "180px" },
+                        fontSize: { xs: "1rem", sm: "1.1rem" },
+                        background: "linear-gradient(90deg, #1976d2, #155a9c)",
+                        color: "#fff",
+                        fontWeight: "bold",
+                        textTransform: "none",
+                        borderRadius: 3,
+                        "&:hover": {
+                            background: "linear-gradient(90deg, #155a9c, #1976d2)",
+                        },
+                    }}
+                >
+                    {loading ? (
+                        <CircularProgress size={24} color="inherit" />
+                    ) : (
+                        "Kiểm tra tương tác"
+                    )}
+                </Button>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleSaveHistory}
+                    disabled={loading || interactions.length === 0}
+                    sx={{
+                        flex: { xs: "1", sm: "auto" },
+                        py: { xs: 1.5, sm: 1.2 },
+                        px: { xs: 3, sm: 4 },
+                        minWidth: { xs: "100%", sm: "140px" },
+                        fontSize: { xs: "1rem", sm: "1.1rem" },
+                        background: "linear-gradient(90deg, #DDEAEBFF, #7E8787FF)",
+                        color: "#fff",
+                        fontWeight: "bold",
+                        textTransform: "none",
+                        borderRadius: 3,
+                        "&:hover": {
+                            background:
+                                "linear-gradient(90deg, #7E8787FF, #DDEAEBFF)",
+                        },
+                    }}
+                >
+                    Lưu lịch sử
+                </Button>
+            </Box>
             {error && (
                 <Alert severity="error" sx={{ mt: 3 }}>
                     {error}
