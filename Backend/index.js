@@ -19,8 +19,7 @@ const app = express();
 // Configure session middleware
 app.use(
     session({
-        secret:
-            process.env.SESSION_SECRET || "wPghRAxwRjSy2hgrue0BM8Ag", // Replace with a secure secret
+        secret: process.env.SESSION_SECRET, // Replace with a secure secret
         resave: false,
         saveUninitialized: false,
         cookie: { secure: false }, // Set `secure: true` if using HTTPS
@@ -37,7 +36,7 @@ app.use(
 );
 
 // Middleware
-app.use(express.json());
+app.use(express.json({ limit: "50mb" })); // Tăng từ mặc định lên 50MB
 app.use(cors());
 app.use(logger); // Log requests
 

@@ -9,4 +9,6 @@ router.post('/', interactionController.checkInteraction);
 
 router.get('/search', interactionController.searchDrugs);
 
+router.post('/detect-drug', interactionController.detectDrug);
+
 module.exports = router;
