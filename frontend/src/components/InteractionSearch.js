@@ -17,6 +17,7 @@ import {
     // CardContent,
     // CardHeader,
     Avatar,
+    Snackbar,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -24,6 +25,7 @@ import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
 import RestartAltIcon from "@mui/icons-material/RestartAlt"; // Import icon cho nút "Bắt đầu lại"
+import PrescriptionUpload from "./PrescriptionUpload"; // Import component upload
 
 const InteractionSearch = () => {
     const [drugName, setDrugName] = useState("");
@@ -35,6 +37,9 @@ const InteractionSearch = () => {
     const [noDrugsFound, setNoDrugsFound] = useState(false);
     const [suggestions, setSuggestions] = useState([]);
     const [, setAllDrugs] = useState([]);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
+    const [prescriptionFiles, setPrescriptionFiles] = useState([]); // State cho files toa thuốc
 
     useEffect(() => {
         const fetchAllDrugs = async () => {
@@ -78,6 +83,53 @@ const InteractionSearch = () => {
 
     const handleRemoveDrug = (drug) => {
         setDrugList(drugList.filter((d) => d !== drug));
+    };
+
+    // Xử lý khi files toa thuốc được chọn hoàn tất
+    const handlePrescriptionFilesUploaded = (files) => {
+        setPrescriptionFiles(files);
+        
+        // Log dữ liệu để dev có thể thấy format cho backend
+        console.log('\n🔥 DỮ LIỆU NHẬN ĐƯỢC TỪ PRESCRIPTION UPLOAD:');
+        console.log('Số lượng files:', files.length);
+        
+        files.forEach((file, index) => {
+            console.log(`\n📄 File ${index + 1}:`);
+            console.log('- Tên:', file.name);
+            console.log('- Loại:', file.mimeType);
+            console.log('- Kích thước:', file.size, 'bytes');
+            console.log('- Base64 prefix:', file.base64.substring(0, 50) + '...');
+            console.log('- Raw Base64 (để gửi Gemini):', file.rawBase64.substring(0, 50) + '...');
+        });
+
+        console.log('\n🚀 FORMAT DỮ LIỆU ĐỂ GỬI BACKEND CHO GEMINI API:');
+        const backendPayload = {
+            files: files.map(file => ({
+                name: file.name,
+                mimeType: file.mimeType,
+                data: file.rawBase64 // Base64 thuần không có prefix
+            }))
+        };
+        console.log('Payload structure:', JSON.stringify(backendPayload, null, 2));
+        console.log('Total files trong state:', prescriptionFiles.length + files.length);
+        
+        // Hiển thị thông báo cho người dùng
+        setSuccessMessage(`✅ Đã chọn ${files.length} file toa thuốc. Dữ liệu đã sẵn sàng để gửi cho Gemini API trích xuất tên thuốc.`);
+        setShowSuccessMessage(true);
+        
+        // TODO: Gửi dữ liệu này đến backend để xử lý với Gemini API
+        // Example API call structure:
+        /*
+        const analyzeWithGemini = async () => {
+            try {
+                const response = await axios.post('/prescriptions/analyze-gemini', backendPayload);
+                const extractedDrugs = response.data.drugs;
+                setDrugList(prev => [...prev, ...extractedDrugs]);
+            } catch (error) {
+                console.error('Lỗi phân tích Gemini:', error);
+            }
+        };
+        */
     };
 
     const handleCheckInteractions = async () => {
@@ -176,78 +228,83 @@ const InteractionSearch = () => {
             }}>
                 <Autocomplete
                     options={suggestions}
-                    onInputChange={(event, value) => {
-                        setDrugName(value); // Cập nhật giá trị nhập
-                        fetchSuggestions(value); // Gọi API để lấy gợi ý
+                    inputValue={drugName}
+                    onInputChange={(event, value, reason) => {
+                        if (reason === "input") {
+                            setDrugName(value);
+                            fetchSuggestions(value);
+                        } else if (reason === "clear") {
+                            setDrugName("");
+                        }
+                        // reason === "reset" (sau khi chọn option) -> bỏ qua, để không ghi đè "".
                     }}
                     onChange={(event, value) => {
                         if (value && !drugList.includes(value)) {
-                            setDrugList([...drugList, value]); // Thêm thuốc vào danh sách
+                            setDrugList([...drugList, value]);
+                            setSuccessMessage(
+                                `Đã thêm thuốc "${value}" vào danh sách`
+                            );
+                            setShowSuccessMessage(true);
                         }
-                        setDrugName(""); // Reset thanh nhập tên thuốc
+                        setDrugName(""); // reset sau chọn
+
+                        // setSuggestions([]); // tùy chọn: đóng dropdown
                     }}
-                    sx={{
-                        flex: 1,
-                        mr: { xs: 0, sm: 2 },
-                        minWidth: { xs: "100%", sm: "300px", md: "400px" },
-                        "& .MuiAutocomplete-inputRoot": {
-                            paddingRight: "40px !important", // Đặt padding cố định cho clear button
-                            height: { xs: "56px", sm: "60px" }, // Tăng chiều cao khung nhập
-                        },
-                    }}
+                    filterOptions={(x) => x} // giữ nguyên danh sách từ server
                     renderInput={(params) => (
                         <TextField
                             {...params}
                             label="Nhập tên thuốc"
                             variant="outlined"
                             fullWidth
-                            value={drugName}
-                            onKeyPress={(event) => {
-                                if (event.key === "Enter") {
-                                    handleAddDrug(); // Thêm thuốc khi nhấn Enter
-                                }
-                            }}
+                            // onKeyPress={(event) => {
+                            //     if (event.key === "Enter") {
+                            //         handleAddDrug();
+                            //     }
+                            // }}
                             sx={{
-                                "& .MuiOutlinedInput-root": {
-                                    borderRadius: 3,
-                                    fontSize: { xs: "1rem", sm: "1.1rem" }, // Tăng font size
-                                },
-                                "& .MuiInputLabel-root": {
-                                    fontSize: { xs: "1rem", sm: "1.1rem" }, // Tăng font size label
-                                },
-                                "& .MuiOutlinedInput-input": {
-                                    padding: { xs: "16px 14px", sm: "18px 16px" }, // Tăng padding
-                                },
+                                "& .MuiOutlinedInput-root": { borderRadius: 3 },
                             }}
                         />
                     )}
-                />
-
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleAddDrug}
-                    startIcon={<SearchIcon />}
                     sx={{
-                        ml: { xs: 0, sm: 1 },
-                        py: { xs: 1.5, sm: 1.8 },
-                        px: { xs: 3, sm: 4 },
-                        height: { xs: "56px", sm: "60px" }, // Đồng bộ chiều cao với TextField
-                        minWidth: { xs: "100%", sm: "140px" },
-                        background: "linear-gradient(90deg, #1976d2, #155a9c)",
-                        color: "#fff",
-                        fontWeight: "bold",
-                        fontSize: { xs: "0.95rem", sm: "1rem" },
-                        textTransform: "none",
-                        borderRadius: 3,
-                        "&:hover": {
-                            background:
-                                "linear-gradient(90deg, #155a9c, #1976d2)",
+                        flex: 1,
+                        mr: 2,
+                        "& .MuiAutocomplete-inputRoot": {
+                            paddingRight: "40px !important",
                         },
                     }}
-                >
-                    Thêm vào
-                </Button>
+                />
+
+                <Box sx={{ display: "flex", gap: 1, flexDirection: { xs: "column", sm: "row" } }}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleAddDrug}
+                        startIcon={<SearchIcon />}
+                        sx={{
+                            py: { xs: 1.5, sm: 1.8 },
+                            px: { xs: 3, sm: 4 },
+                            height: { xs: "56px", sm: "60px" }, // Đồng bộ chiều cao với TextField
+                            minWidth: { xs: "100%", sm: "140px" },
+                            background: "linear-gradient(90deg, #1976d2, #155a9c)",
+                            color: "#fff",
+                            fontWeight: "bold",
+                            fontSize: { xs: "0.95rem", sm: "1rem" },
+                            textTransform: "none",
+                            borderRadius: 3,
+                            "&:hover": {
+                                background:
+                                    "linear-gradient(90deg, #155a9c, #1976d2)",
+                            },
+                        }}
+                    >
+                        Thêm vào
+                    </Button>
+
+                    {/* Component Upload Toa thuốc */}
+                    <PrescriptionUpload onFilesUploaded={handlePrescriptionFilesUploaded} />
+                </Box>
             </Box>
 
             {/* Danh sách thuốc */}
@@ -725,6 +782,21 @@ const InteractionSearch = () => {
                     </Box>
                 </Box>
             )}
+            {/* Snackbar for success message */}
+            <Snackbar
+                open={showSuccessMessage}
+                autoHideDuration={3000}
+                onClose={() => setShowSuccessMessage(false)}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+                <Alert
+                    onClose={() => setShowSuccessMessage(false)}
+                    severity="success"
+                    sx={{ width: "100%" }}
+                >
+                    {successMessage}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };

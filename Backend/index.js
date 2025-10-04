@@ -19,7 +19,7 @@ const app = express();
 // Configure session middleware
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || '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', // Replace with a secure secret
+    secret: process.env.SESSION_SECRET, // Replace with a secure secret
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false }, // Set `secure: true` if using HTTPS
@@ -33,7 +33,7 @@ app.use(passport.session()); // Enable session support for Passport
 app.use('/assets/avatars', express.static(path.join(__dirname, 'assets/avatars')));
 
 // Middleware
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 app.use(cors());
 app.use(logger); // Log requests
 
@@ -46,6 +46,9 @@ cacheDrugs();
 
 // Đặt lịch cập nhật cache mỗi ngày
 setInterval(cacheDrugs, 24 * 60 * 60 * 1000); // 24 giờ
+
+// Serve static files for uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API routes
 app.use('/api', routes);
