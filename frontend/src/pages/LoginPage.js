@@ -24,11 +24,13 @@ const LoginPage = ({ setIsLoggedIn }) => {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
+    const [warning, setWarning] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async () => {
         setError("");
+        setWarning("");
         if (!isValidEmail(email)) {
             setError("Vui lòng nhập địa chỉ email hợp lệ");
             return;
@@ -173,6 +175,21 @@ const LoginPage = ({ setIsLoggedIn }) => {
                     }}
                 >
                     {error}
+                </Alert>
+            )}
+            {warning && (
+                <Alert 
+                    severity="warning" 
+                    sx={{ 
+                        mb: { xs: 2, sm: 2.5 }, 
+                        borderRadius: { xs: 1.5, sm: 2 },
+                        fontSize: { xs: '0.875rem', sm: '1rem' },
+                        '& .MuiAlert-message': {
+                            lineHeight: 1.4,
+                        },
+                    }}
+                >
+                    {warning}
                 </Alert>
             )}
             <TextField
@@ -379,9 +396,10 @@ const LoginPage = ({ setIsLoggedIn }) => {
                 <Button
                     variant="outlined"
                     fullWidth
-                    onClick={() =>
-                        (window.location.href = `${process.env.REACT_APP_API_URL}/auth/facebook`)
-                    }
+                    onClick={() => {
+                        setError("");
+                        setWarning("Chức năng này đang phát triển");
+                    }}
                     sx={{
                         py: { xs: 1, sm: 1.2 },
                         fontSize: { xs: '0.9rem', sm: '1rem' },

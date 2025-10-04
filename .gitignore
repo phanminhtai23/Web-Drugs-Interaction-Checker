@@ -23,6 +23,8 @@ frontend\.env
 yarn.lock
 .backend.env
 .frontend.env
+.backend.env
+.frontend.env
 # Tệp lock (tùy chọn)
 package-lock.json
 yarn.lock

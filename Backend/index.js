@@ -18,12 +18,12 @@ const app = express();
 
 // Configure session middleware
 app.use(
-    session({
-        secret: process.env.SESSION_SECRET, // Replace with a secure secret
-        resave: false,
-        saveUninitialized: false,
-        cookie: { secure: false }, // Set `secure: true` if using HTTPS
-    })
+  session({
+    secret: process.env.SESSION_SECRET, // Replace with a secure secret
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }, // Set `secure: true` if using HTTPS
+  })
 );
 
 app.use(passport.initialize());
@@ -36,7 +36,7 @@ app.use(
 );
 
 // Middleware
-app.use(express.json({ limit: "50mb" })); // Tăng từ mặc định lên 50MB
+app.use(express.json({ limit: "50mb" }));
 app.use(cors());
 app.use(logger); // Log requests
 
@@ -48,6 +48,9 @@ cacheDrugs();
 
 // Đặt lịch cập nhật cache mỗi ngày
 setInterval(cacheDrugs, 24 * 60 * 60 * 1000); // 24 giờ
+
+// Serve static files for uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API routes
 app.use("/api", routes);

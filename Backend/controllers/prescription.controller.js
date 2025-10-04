@@ -1,4 +1,6 @@
 const Prescription = require('../models/prescription.model');
+const fs = require('fs');
+const path = require('path');
 
 // Lấy danh sách đơn thuốc của người dùng
 exports.getPrescriptions = async (req, res) => {
@@ -51,5 +53,57 @@ exports.updatePrescription = async (req, res) => {
     res.status(200).json({ message: 'Prescription updated successfully', prescription: updatedPrescription });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+// Upload files toa thuốc
+exports.uploadPrescriptionFiles = async (req, res) => {
+  try {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: 'Không có file nào được tải lên' });
+    }
+
+    // Xử lý thông tin files
+    const uploadedFiles = req.files.map(file => ({
+      originalName: file.originalname,
+      filename: file.filename,
+      mimetype: file.mimetype,
+      size: file.size,
+      path: file.path,
+      url: `/uploads/prescriptions/${file.filename}` // URL để truy cập file
+    }));
+
+    // Chuyển đổi ảnh thành base64 để gửi cho Gemini API (tùy chọn)
+    const filesWithBase64 = await Promise.all(
+      uploadedFiles.map(async (fileInfo) => {
+        if (fileInfo.mimetype.startsWith('image/')) {
+          try {
+            const fileBuffer = fs.readFileSync(fileInfo.path);
+            const base64 = fileBuffer.toString('base64');
+            return {
+              ...fileInfo,
+              base64: `data:${fileInfo.mimetype};base64,${base64}`
+            };
+          } catch (error) {
+            console.error('Lỗi khi chuyển đổi file sang base64:', error);
+            return fileInfo;
+          }
+        }
+        return fileInfo;
+      })
+    );
+
+    // TODO: Tích hợp với Gemini API để phân tích nội dung toa thuốc
+    // const analyzedResults = await analyzePresriptionWithGemini(filesWithBase64);
+
+    res.status(200).json({
+      message: 'Files uploaded successfully',
+      files: filesWithBase64,
+      count: uploadedFiles.length
+    });
+
+  } catch (error) {
+    console.error('Lỗi upload files:', error);
+    res.status(500).json({ error: 'Lỗi server khi upload files' });
   }
 };
