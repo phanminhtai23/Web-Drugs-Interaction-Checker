@@ -169,44 +169,77 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
             console.log('Success:', result.success);
             console.log('Data:', result.data);
 
-            // Xử lý kết quả thành công
-            if (result.success) {
-                alert(`✅ Phân tích thành công! 
-                
-Đã phát hiện thuốc từ ${requestBody.Base64DocumentUrl.length} ảnh.
-Kiểm tra Console để xem chi tiết kết quả.`);
+            // Xử lý các trường hợp response
+            console.log('🎯 API Response Status:', result.status);
+            console.log('🎯 API Response Message:', result.message);
+            console.log('🎯 API Response Data:', result.data);
 
-                // Trả về dữ liệu cho component cha nếu cần
-                if (onFilesUploaded) {
-                    onFilesUploaded({
-                        originalFiles: filesData,
-                        apiResult: result.data
-                    });
+            if (result.status === 200) {
+                if (result.data && Array.isArray(result.data) && result.data.length > 0) {
+                    // Trường hợp 1: Tìm thấy thuốc
+                    const detectedDrugs = result.data;
+                    
+                    alert(`✅ Phân tích thành công! 
+                    
+📊 Kết quả:
+• Số ảnh xử lý: ${requestBody.Base64DocumentUrl.length}
+• Số thuốc phát hiện: ${detectedDrugs.length}
+• Danh sách thuốc: ${detectedDrugs.join(', ')}
+
+Các thuốc sẽ được tự động thêm vào danh sách kiểm tra tương tác.`);
+
+                    // Đóng dialog trước
+                    handleCloseDialog();
+
+                    // Trả về dữ liệu cho component cha để thêm vào danh sách
+                    if (onFilesUploaded) {
+                        onFilesUploaded({
+                            originalFiles: filesData,
+                            apiResult: result,
+                            detectedDrugs: detectedDrugs,
+                            shouldAddToDrugList: true // Flag để biết cần thêm vào danh sách
+                        });
+                    }
+                } else {
+                    // Trường hợp 2: Không tìm thấy thuốc
+                    alert(`⚠️ ${result.message}
+                    
+📊 Kết quả:
+• Số ảnh xử lý: ${requestBody.Base64DocumentUrl.length}
+• Số thuốc phát hiện: 0
+
+Vui lòng thử với ảnh toa thuốc rõ nét hơn hoặc nhập tên thuốc thủ công.`);
+                    
+                    handleCloseDialog();
                 }
-
-                // Đóng dialog sau khi hoàn tất
-                handleCloseDialog();
             } else {
+                // Trường hợp 3: Lỗi (status 400 hoặc khác)
                 throw new Error(result.message || 'Có lỗi xảy ra từ API');
             }
             
         } catch (error) {
             console.error('❌ Lỗi khi gọi API detect-drug:', error);
             
-            // Hiển thị lỗi cụ thể từ service/API
-            if (error.response) {
-                // Lỗi từ server (có response status code)
-                const status = error.response.status;
-                const message = error.response.data?.message || error.message;
+            // Kiểm tra nếu error có chứa response từ API backend
+            if (error.response && error.response.data) {
+                const errorData = error.response.data;
                 
-                if (status === 401) {
-                    setError('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
-                } else if (status === 404) {
-                    setError('⚠️ API endpoint không tồn tại. Backend team cần tạo route /api/interactions/detect-drug');
-                } else if (status === 413) {
-                    setError('File quá lớn. Vui lòng chọn file nhỏ hơn.');
+                // Trường hợp backend trả về error với format chuẩn
+                if (errorData.status === 400 && errorData.message) {
+                    setError(`❌ ${errorData.message}`);
                 } else {
-                    setError(`Lỗi server (${status}): ${message}`);
+                    const status = error.response.status;
+                    const message = errorData.message || error.message;
+                    
+                    if (status === 401) {
+                        setError('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+                    } else if (status === 404) {
+                        setError('⚠️ API endpoint không tồn tại. Backend team cần tạo route /api/interactions/detect-drug');
+                    } else if (status === 413) {
+                        setError('File quá lớn. Vui lòng chọn file nhỏ hơn.');
+                    } else {
+                        setError(`Lỗi server (${status}): ${message}`);
+                    }
                 }
             } else if (error.request) {
                 // Lỗi network/connection

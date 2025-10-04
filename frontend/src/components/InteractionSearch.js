@@ -85,65 +85,32 @@ const InteractionSearch = () => {
         setDrugList(drugList.filter((d) => d !== drug));
     };
 
-    // Xử lý khi files toa thuốc được chọn hoàn tất
-    const handlePrescriptionFilesUploaded = (files) => {
-        setPrescriptionFiles(files);
+    // Xử lý khi files toa thuốc được phân tích xong
+    const handlePrescriptionFilesUploaded = (result) => {
+        setPrescriptionFiles(result.originalFiles || []);
 
-        // Log dữ liệu để dev có thể thấy format cho backend
         console.log("\n🔥 DỮ LIỆU NHẬN ĐƯỢC TỪ PRESCRIPTION UPLOAD:");
-        console.log("Số lượng files:", files.length);
+        console.log("API Result:", result.apiResult);
+        console.log("Detected Drugs:", result.detectedDrugs);
 
-        files.forEach((file, index) => {
-            console.log(`\n📄 File ${index + 1}:`);
-            console.log("- Tên:", file.name);
-            console.log("- Loại:", file.mimeType);
-            console.log("- Kích thước:", file.size, "bytes");
-            console.log(
-                "- Base64 prefix:",
-                file.base64.substring(0, 50) + "..."
+        // Nếu có thuốc được phát hiện, tự động thêm vào danh sách
+        if (result.shouldAddToDrugList && result.detectedDrugs && result.detectedDrugs.length > 0) {
+            const newDrugs = result.detectedDrugs.filter(drug => 
+                drug && drug.trim() && !drugList.includes(drug.trim())
             );
-            console.log(
-                "- Raw Base64 (để gửi Gemini):",
-                file.rawBase64.substring(0, 50) + "..."
-            );
-        });
+            
+            if (newDrugs.length > 0) {
+                setDrugList(prev => [...prev, ...newDrugs.map(drug => drug.trim())]);
+                
+                // Hiển thị thông báo thành công
+                setSuccessMessage(
+                    `✅ Đã thêm ${newDrugs.length} thuốc vào danh sách: ${newDrugs.join(', ')}`
+                );
+                setShowSuccessMessage(true);
 
-        console.log("\n🚀 FORMAT DỮ LIỆU ĐỂ GỬI BACKEND CHO GEMINI API:");
-        const backendPayload = {
-            files: files.map((file) => ({
-                name: file.name,
-                mimeType: file.mimeType,
-                data: file.rawBase64, // Base64 thuần không có prefix
-            })),
-        };
-        console.log(
-            "Payload structure:",
-            JSON.stringify(backendPayload, null, 2)
-        );
-        console.log(
-            "Total files trong state:",
-            prescriptionFiles.length + files.length
-        );
-
-        // Hiển thị thông báo cho người dùng
-        setSuccessMessage(
-            `✅ Đã chọn ${files.length} file toa thuốc. Dữ liệu đã sẵn sàng để gửi cho Gemini API trích xuất tên thuốc.`
-        );
-        setShowSuccessMessage(true);
-
-        // TODO: Gửi dữ liệu này đến backend để xử lý với Gemini API
-        // Example API call structure:
-        /*
-        const analyzeWithGemini = async () => {
-            try {
-                const response = await axios.post('/prescriptions/analyze-gemini', backendPayload);
-                const extractedDrugs = response.data.drugs;
-                setDrugList(prev => [...prev, ...extractedDrugs]);
-            } catch (error) {
-                console.error('Lỗi phân tích Gemini:', error);
+                console.log("🎯 Đã thêm thuốc vào danh sách:", newDrugs);
             }
-        };
-        */
+        }
     };
 
     const handleCheckInteractions = async () => {
