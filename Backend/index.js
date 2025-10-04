@@ -14,7 +14,7 @@ const helmet = require("helmet");
 const contactRoutes = require("./routes/contact.routes"); // Import contact routes
 require("./config/passport"); // Import Passport configuration
 
-const app = express();
+const app = express();  
 
 // Configure session middleware
 app.use(

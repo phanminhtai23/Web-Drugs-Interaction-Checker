@@ -2,6 +2,96 @@ const { GoogleGenAI, createUserContent, Type } = require("@google/genai");
 const Drug = require("../models/drugs.model");
 const Interaction = require("../models/interaction.model");
 
+
+const drugsList = Drug.find({}).select("tenThuoc").lean();
+
+
+// Dựa trên kinh nghiệm thực tế với tên thuốc (< 30 ký tự)
+function calculateSimilarity(str1, str2) {
+    const s1 = str1.toLowerCase().trim();
+    const s2 = str2.toLowerCase().trim();
+    
+    // Quick checks (nhanh nhất)
+    if (s1 === s2) return 1;
+    
+    // // Levenshtein cho chuỗi ngắn (theo GeeksforGeeks: O(m×n))
+    // if (s1.length > 30 || s2.length > 30) {
+    //     return 0.1; // Skip chuỗi dài để tăng tốc
+    // }
+    
+    const distance = levenshteinDistance(s1, s2);
+    const maxLength = Math.max(s1.length, s2.length);
+    
+    return 1 - (distance / maxLength);
+}
+
+// Hàm mapping danh sách A với danh sách B
+async function mapDrugsListAWithListB(drugsListA) {
+    try {
+        const mappedResults = drugsListA.map(drugFromA => {
+            const searchName = drugFromA.toLowerCase().trim();
+            let bestMatch = null;
+            let bestScore = 0;
+            
+            // Tìm kiếm trong danh sách B
+            for (const drugFromB of drugsDatabaseList) {
+                const drugNameB = drugFromB.tenThuoc.toLowerCase().trim();
+                
+                // Exact match
+                if (drugNameB === searchName) {
+                    return {
+                        fromListA: drugFromA,
+                        mappedToListB: drugFromB.tenThuoc,
+                        confidence: 1.0,
+                        found: true
+                    };
+                }
+                
+                // Contains match
+                if (drugNameB.includes(searchName) || searchName.includes(drugNameB)) {
+                    const score = 0.9;
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMatch = drugFromB;
+                    }
+                }
+                
+                // Similarity match
+                const score = calculateSimilarity(searchName, drugNameB);
+                if (score > bestScore && score >= 0.7) {
+                    bestScore = score;
+                    bestMatch = drugFromB;
+                }
+            }
+            
+            // Trả về kết quả mapping
+            if (bestMatch && bestScore >= 0.7) {
+                return {
+                    fromListA: drugFromA,
+                    mappedToListB: bestMatch.tenThuoc,
+                    confidence: bestScore,
+                    found: true
+                };
+            }
+            
+            // Không tìm thấy
+            return {
+                fromListA: drugFromA,
+                mappedToListB: null,
+                confidence: 0,
+                found: false
+            };
+        });
+        
+        return mappedResults;
+        
+    } catch (error) {
+        console.error('Error in mapDrugsListAWithListB:', error);
+        throw error;
+    }
+}
+
+
 exports.checkInteraction = async (req, res) => {
     const { drugNames } = req.body;
 
@@ -109,17 +199,11 @@ exports.detectDrug = async (req, res) => {
 
         // console.log(inlineDataArray);
 
-        // const response = await fetch(Base64DocumentUrl[0]);
-        // const imageArrayBuffer = await response.arrayBuffer();
-        // const base64ImageData =
-        //     Buffer.from(imageArrayBuffer).toString("base64");
-        // console.log("base64ImageData", base64ImageData);
-
         const result = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: createUserContent([
                 {
-                    text: "Extract the drug names from the prescription image. For each medication item, prioritize the main drug name or the trade name/abbreviation if present in parentheses. For example: from 'Vitamin B1 + B6 + B12 (3BTP)', only extract '3BTP'. From 'Paracetamol (Panactol)', only extract 'Panactol'. Only return the extracted drug names as an array (or an empty array if none are found), without adding any explanatory text or other content.",
+                    text: 'Extract the drug names from the prescription image. For each medication item, prioritize the main drug name or the trade name/abbreviation if present in parentheses. For example: from "Vitamin B1 + B6 + B12 (3BTP)", only extract "3BTP". From "Paracetamol (Panactol)", only extract "Panactol". Only return the extracted drug names as an array (or an empty array if none are found), without adding any explanatory text or other content.',
                 },
                 ...inlineDataArray,
                 // {
@@ -138,12 +222,12 @@ exports.detectDrug = async (req, res) => {
                 },
             },
         });
-        
+
         let detectedDrugs = [];
         const jsonString = result.text
-        .replace(/```json\n?/g, "")
-        .replace(/```\n?/g, "")
-        .trim();
+            .replace(/```json\n?/g, "")
+            .replace(/```\n?/g, "")
+            .trim();
         detectedDrugs = JSON.parse(jsonString);
 
         console.log(result.text);
@@ -162,8 +246,6 @@ exports.detectDrug = async (req, res) => {
                 data: detectedDrugs,
             });
         }
-
-
     } catch (error) {
         console.error("Error detecting drug:", error.message);
         // res.status(500).json({ error: "Lỗi trích xuất tên thuốc" });
