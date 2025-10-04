@@ -61,11 +61,18 @@ let cachedDrugs = []; // Bộ nhớ cache
 exports.cacheDrugs = async () => {
   try {
     const drugs = await Drug.find().select('tenThuoc'); // Lấy danh sách tên thuốc
-    cachedDrugs = drugs.map((drug) => drug.tenThuoc); // Lưu vào bộ nhớ cache
-    console.log('Drug cache updated');
+    cachedDrugs = drugs
+      .map((drug) => drug.tenThuoc) // Lưu vào bộ nhớ cache
+      .sort((a, b) => a.length - b.length); // Sắp xếp theo độ dài tên thuốc tăng dần
+    console.log('Drug cache updated and sorted by name length');
   } catch (error) {
     console.error('Error caching drugs:', error);
   }
+};
+
+// Export getter function để lấy cached drugs
+exports.getCachedDrugs = () => {
+  return cachedDrugs;
 };
 
 // API tìm kiếm thuốc

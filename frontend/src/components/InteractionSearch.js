@@ -19,8 +19,7 @@ import {
     Avatar,
     Snackbar,
 } from "@mui/material";
-import { Delete } from "@mui/icons-material";
-import SearchIcon from "@mui/icons-material/Search";
+import { Delete, Add } from "@mui/icons-material";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
@@ -40,19 +39,6 @@ const InteractionSearch = () => {
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const [prescriptionFiles, setPrescriptionFiles] = useState([]); // State cho files toa thuốc
-
-    useEffect(() => {
-        const fetchAllDrugs = async () => {
-            try {
-                const response = await axios.get("/drugs");
-                setAllDrugs(response.data.map((drug) => drug.tenThuoc));
-            } catch (error) {
-                console.error("Lỗi khi lấy danh sách tất cả các thuốc:", error);
-            }
-        };
-
-        fetchAllDrugs();
-    }, []);
 
     const fetchSuggestions = async (keyword) => {
         if (!keyword) {
@@ -89,26 +75,31 @@ const InteractionSearch = () => {
     const handlePrescriptionFilesUploaded = (result) => {
         setPrescriptionFiles(result.originalFiles || []);
 
-        console.log("\n🔥 DỮ LIỆU NHẬN ĐƯỢC TỪ PRESCRIPTION UPLOAD:");
-        console.log("API Result:", result.apiResult);
-        console.log("Detected Drugs:", result.detectedDrugs);
-
         // Nếu có thuốc được phát hiện, tự động thêm vào danh sách
-        if (result.shouldAddToDrugList && result.detectedDrugs && result.detectedDrugs.length > 0) {
-            const newDrugs = result.detectedDrugs.filter(drug => 
-                drug && drug.trim() && !drugList.includes(drug.trim())
+        if (
+            result.shouldAddToDrugList &&
+            result.detectedDrugs &&
+            result.detectedDrugs.length > 0
+        ) {
+            const newDrugs = result.detectedDrugs.filter(
+                (drug) => drug && drug.trim() && !drugList.includes(drug.trim())
             );
-            
+
             if (newDrugs.length > 0) {
-                setDrugList(prev => [...prev, ...newDrugs.map(drug => drug.trim())]);
-                
+                setDrugList((prev) => [
+                    ...prev,
+                    ...newDrugs.map((drug) => drug.trim()),
+                ]);
+
                 // Hiển thị thông báo thành công
                 setSuccessMessage(
-                    `✅ Đã thêm ${newDrugs.length} thuốc vào danh sách: ${newDrugs.join(', ')}`
+                    `Đã thêm ${
+                        newDrugs.length
+                    } thuốc vào danh sách: ${newDrugs.join(", ")}`
                 );
                 setShowSuccessMessage(true);
 
-                console.log("🎯 Đã thêm thuốc vào danh sách:", newDrugs);
+                // console.log("🎯 Đã thêm thuốc vào danh sách:", newDrugs);
             }
         }
     };
@@ -270,12 +261,12 @@ const InteractionSearch = () => {
                         variant="contained"
                         color="primary"
                         onClick={handleAddDrug}
-                        startIcon={<SearchIcon />}
+                        startIcon={<Add />}
                         sx={{
                             py: { xs: 1.5, sm: 1.8 },
-                            px: { xs: 3, sm: 4 },
-                            height: { xs: "56px", sm: "60px" }, // Đồng bộ chiều cao với TextField
-                            minWidth: { xs: "100%", sm: "140px" },
+                            px: { xs: 3, sm: 3 },
+                            height: { xs: "56px", sm: "56px" }, // Đồng bộ chiều cao với TextField
+                            minWidth: { xs: "100%", sm: "146px" },
                             background:
                                 "linear-gradient(90deg, #1976d2, #155a9c)",
                             color: "#fff",

@@ -1,96 +1,89 @@
 const { GoogleGenAI, createUserContent, Type } = require("@google/genai");
 const Drug = require("../models/drugs.model");
 const Interaction = require("../models/interaction.model");
+const { getCachedDrugs } = require("./drugs.controller"); // Import getter function
 
+// var dbDrugsList = getCachedDrugs();
+// console.log("dbDrugsList", dbDrugsList.length);
 
-const drugsList = Drug.find({}).select("tenThuoc").lean();
+function levenshteinDistance(str1, str2) {
+    const matrix = [];
+    const len1 = str1.length;
+    const len2 = str2.length;
 
+    // Khởi tạo ma trận
+    for (let i = 0; i <= len2; i++) {
+        matrix[i] = [i];
+    }
+    for (let j = 0; j <= len1; j++) {
+        matrix[0][j] = j;
+    }
+
+    // Tính toán khoảng cách
+    for (let i = 1; i <= len2; i++) {
+        for (let j = 1; j <= len1; j++) {
+            if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1, // substitution
+                    matrix[i][j - 1] + 1, // insertion
+                    matrix[i - 1][j] + 1 // deletion
+                );
+            }
+        }
+    }
+
+    return matrix[len2][len1];
+}
 
 // Dựa trên kinh nghiệm thực tế với tên thuốc (< 30 ký tự)
 function calculateSimilarity(str1, str2) {
-    const s1 = str1.toLowerCase().trim();
-    const s2 = str2.toLowerCase().trim();
-    
+    const dbDrug = str1.toLowerCase().trim();
+    const geminiDrug = str2.toLowerCase().trim();
+
     // Quick checks (nhanh nhất)
-    if (s1 === s2) return 1;
-    
-    // // Levenshtein cho chuỗi ngắn (theo GeeksforGeeks: O(m×n))
-    // if (s1.length > 30 || s2.length > 30) {
-    //     return 0.1; // Skip chuỗi dài để tăng tốc
-    // }
-    
-    const distance = levenshteinDistance(s1, s2);
-    const maxLength = Math.max(s1.length, s2.length);
-    
-    return 1 - (distance / maxLength);
+    if (dbDrug === geminiDrug) return 1;
+
+    // if (dbDrug.includes(geminiDrug) || geminiDrug.includes(dbDrug)) return 0.95;
+
+    const distance = levenshteinDistance(dbDrug, geminiDrug);
+    const maxLength = Math.max(dbDrug.length, geminiDrug.length);
+
+    return 1 - distance / maxLength;
 }
 
 // Hàm mapping danh sách A với danh sách B
-async function mapDrugsListAWithListB(drugsListA) {
+async function mapDrugsListAWithListB(geminiDrugsList, threshold) {
     try {
-        const mappedResults = drugsListA.map(drugFromA => {
-            const searchName = drugFromA.toLowerCase().trim();
+        const dbDrugsList = getCachedDrugs();
+        var resultArr = [];
+        for (const geminiDrug of geminiDrugsList) {
             let bestMatch = null;
-            let bestScore = 0;
-            
-            // Tìm kiếm trong danh sách B
-            for (const drugFromB of drugsDatabaseList) {
-                const drugNameB = drugFromB.tenThuoc.toLowerCase().trim();
-                
-                // Exact match
-                if (drugNameB === searchName) {
-                    return {
-                        fromListA: drugFromA,
-                        mappedToListB: drugFromB.tenThuoc,
-                        confidence: 1.0,
-                        found: true
-                    };
-                }
-                
-                // Contains match
-                if (drugNameB.includes(searchName) || searchName.includes(drugNameB)) {
-                    const score = 0.9;
-                    if (score > bestScore) {
-                        bestScore = score;
-                        bestMatch = drugFromB;
-                    }
-                }
-                
-                // Similarity match
-                const score = calculateSimilarity(searchName, drugNameB);
-                if (score > bestScore && score >= 0.7) {
-                    bestScore = score;
-                    bestMatch = drugFromB;
+            let highestScore = 0;
+
+            // Tìm kiếm trong toàn bộ danh sách B để tìm thuốc có score cao nhất
+            for (const dbDrug of dbDrugsList) {
+                const score = calculateSimilarity(dbDrug, geminiDrug);
+
+                // Cập nhật best match nếu score cao hơn
+                if (score > highestScore) {
+                    highestScore = score;
+                    bestMatch = dbDrug;
                 }
             }
-            
-            // Trả về kết quả mapping
-            if (bestMatch && bestScore >= 0.7) {
-                return {
-                    fromListA: drugFromA,
-                    mappedToListB: bestMatch.tenThuoc,
-                    confidence: bestScore,
-                    found: true
-                };
+
+            // Chỉ thêm vào kết quả nếu score >= 0.8
+            if (highestScore >= threshold) {
+                resultArr.push(bestMatch);
             }
-            
-            // Không tìm thấy
-            return {
-                fromListA: drugFromA,
-                mappedToListB: null,
-                confidence: 0,
-                found: false
-            };
-        });
-        
-        return mappedResults;
-        
+        }
+        return resultArr;
     } catch (error) {
-        console.error('Error in mapDrugsListAWithListB:', error);
+        console.error("Error in mapDrugsListAWithListB:", error);
         throw error;
     }
 }
-
 
 exports.checkInteraction = async (req, res) => {
     const { drugNames } = req.body;
@@ -174,7 +167,7 @@ exports.searchDrugs = async (req, res) => {
 const ai = new GoogleGenAI({ api_key: process.env.GEMINI_API_KEY });
 
 exports.detectDrug = async (req, res) => {
-    console.log("Detect Drug");
+    // console.log("Detect Drug");
     // const ai = new GoogleGenAI({ api_key: process.env.GEMINI_API_KEY });
 
     const { Base64DocumentUrl } = req.body;
@@ -230,8 +223,11 @@ exports.detectDrug = async (req, res) => {
             .trim();
         detectedDrugs = JSON.parse(jsonString);
 
+        const mappedDrugs = await mapDrugsListAWithListB(detectedDrugs, 0.8);
+
         console.log(result.text);
-        console.log(detectedDrugs);
+        console.log("Detected Drugs:", detectedDrugs);
+        console.log("Mapped Drugs:", mappedDrugs);
 
         if (detectedDrugs.length === 0) {
             return res.status(200).json({
@@ -243,7 +239,7 @@ exports.detectDrug = async (req, res) => {
             res.status(200).json({
                 status: 200,
                 message: "Trích xuất thành công",
-                data: detectedDrugs,
+                data: mappedDrugs,
             });
         }
     } catch (error) {
