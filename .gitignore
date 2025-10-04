@@ -35,6 +35,8 @@ folder-in-server
 .vscode/
 .idea/
 
+folder-in-server/
+
 # OS-specific files (hệ điều hành tự tạo)
 .DS_Store
 Thumbs.db
@@ -47,6 +49,7 @@ pids
 *.pid
 *.seed
 
+*/.env.example
 # TypeScript build (nếu dùng TypeScript)
 *.tsbuildinfo
 
