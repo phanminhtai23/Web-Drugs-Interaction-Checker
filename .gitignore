@@ -28,6 +28,7 @@ yarn.lock
 # Tệp lock (tùy chọn)
 package-lock.json
 yarn.lock
+lenh_chay_docker.txt
 
 folder-in-server
 
