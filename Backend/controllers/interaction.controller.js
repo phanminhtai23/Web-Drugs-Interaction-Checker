@@ -97,6 +97,8 @@ exports.checkInteraction = async (req, res) => {
                 ),
             },
         });
+        
+        console.log("các tên thuốc", drugs);
 
         if (!drugs.length) {
             return res.status(404).json({
@@ -121,18 +123,43 @@ exports.checkInteraction = async (req, res) => {
         const allInteractions = await Interaction.find();
 
         // Lọc các tương tác dựa trên hoạt chất
-        const interactions = allInteractions.filter((interaction) => {
-            const hoatChat1 = interaction.HoatChat_1.toLowerCase();
-            const hoatChat2 = interaction.HoatChat_2.toLowerCase();
+        const interactions = allInteractions
+            .filter((interaction) => {
+                const hoatChat1 = interaction.HoatChat_1.toLowerCase();
+                const hoatChat2 = interaction.HoatChat_2.toLowerCase();
 
-            // Kiểm tra nếu cả HoatChat_1 và HoatChat_2 đều nằm trong danh sách hoạt chất
-            return (
-                activeIngredients.some(
-                    (ingredient) => hoatChat1 === ingredient
-                ) &&
-                activeIngredients.some((ingredient) => hoatChat2 === ingredient)
-            );
-        });
+                // Kiểm tra nếu cả HoatChat_1 và HoatChat_2 đều nằm trong danh sách hoạt chất
+                return (
+                    activeIngredients.some((ingredient) => hoatChat1 === ingredient) &&
+                    activeIngredients.some((ingredient) => hoatChat2 === ingredient)
+                );
+            })
+            .map((interaction) => {
+                // Tìm thuốc chứa HoatChat_1
+                const drugWithHoatChat1 = drugs.find((drug) =>
+                    drug.hoatChat.some(
+                        (hc) =>
+                            hc.tenHoatChat.toLowerCase() ===
+                            interaction.HoatChat_1.toLowerCase()
+                    )
+                );
+
+                // Tìm thuốc chứa HoatChat_2
+                const drugWithHoatChat2 = drugs.find((drug) =>
+                    drug.hoatChat.some(
+                        (hc) =>
+                            hc.tenHoatChat.toLowerCase() ===
+                            interaction.HoatChat_2.toLowerCase()
+                    )
+                );
+
+                // Trả về interaction với thông tin tên thuốc
+                return {
+                    ...interaction.toObject(), // Convert Mongoose document to plain object
+                    TenThuoc_1: drugWithHoatChat1?.tenThuoc || "Không xác định",
+                    TenThuoc_2: drugWithHoatChat2?.tenThuoc || "Không xác định",
+                };
+            });
 
         if (!interactions.length) {
             return res.status(404).json({
@@ -140,6 +167,7 @@ exports.checkInteraction = async (req, res) => {
             });
         }
 
+        console.log("ds tương tac với tên thuốc", interactions);
         // Trả về danh sách tương tác
         res.status(200).json(interactions);
     } catch (error) {

@@ -19,7 +19,7 @@ import {
     Avatar,
     Snackbar,
 } from "@mui/material";
-import { Delete, Add } from "@mui/icons-material";
+import { Delete, Add, SwapVert } from "@mui/icons-material";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
@@ -124,6 +124,7 @@ const InteractionSearch = () => {
                 drugNames: drugList,
             });
 
+            console.log("interactions", response.data);
             if (response.data.length === 0) {
                 setNoInteractions(true);
             } else {
@@ -474,7 +475,7 @@ const InteractionSearch = () => {
                 <Box sx={{ mt: 3 }}>
                     {/* Danh sách kết quả tương tác */}
                     <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
-                        Tương tác giữa các loại thuốc của bạn
+                        Tương tác giữa các hoạt chất trong toa thuốc của bạn
                     </Typography>
                     <Grid container spacing={2}>
                         {interactions.map((interaction, index) => (
@@ -561,10 +562,28 @@ const InteractionSearch = () => {
                                         </Typography>
                                         <Typography
                                             variant="body1"
-                                            sx={{ fontWeight: "bold", mb: 1 }}
+                                            sx={{
+                                                fontWeight: "bold",
+                                                mb: 1,
+                                                textAlign: "left",
+                                            }}
                                         >
-                                            {interaction.HoatChat_1} ↔{" "}
-                                            {interaction.HoatChat_2}
+                                            <div>
+                                                {interaction.HoatChat_1} (thuộc{" "}
+                                                {interaction.TenThuoc_1})
+                                            </div>
+                                            <div style={{ margin: "8px 0" }}>
+                                                <SwapVert
+                                                    sx={{
+                                                        verticalAlign: "middle",
+                                                        fontSize: "24px",
+                                                    }}
+                                                />
+                                            </div>
+                                            <div>
+                                                {interaction.HoatChat_2} (thuộc{" "}
+                                                {interaction.TenThuoc_2})
+                                            </div>
                                         </Typography>
                                         {/* <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
                 Áp dụng cho: {interaction.TenThuoc}

@@ -13,3 +13,11 @@ docker compose -f docker-compose.yml up -d
 #docker-compose up -d
 docker compose -f docker-compose.yml down
 ##docker-compose down
+
+docker build --build-arg REACT_APP_API_URL=https://ddi.lab.io.vn --build-arg REACT_APP_GOOGLE_CLIENT_ID=384646830367-5spsvdlsk2n5qqhhcfn1kgc77j3ovi00.apps.googleusercontent.com -t minhtai03/drug-interaction-frontend:1.0 .
+
+docker build -t minhtai03/drug-interaction-backend:1.0 .
+
+docker push minhtai03/drug-interaction-frontend:1.0
+
+docker push minhtai03/drug-interaction-backend:1.0
