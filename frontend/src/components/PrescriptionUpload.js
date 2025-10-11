@@ -715,7 +715,7 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
                                 },
                             }}
                         >
-                            {loading ? "Vui lòng đợi..." : "Bắt đầu trích xuất"}
+                            {loading ? "Vui lòng đợi" : "Trích xuất"}
                         </Button>
                     )}
                 </DialogActions>
