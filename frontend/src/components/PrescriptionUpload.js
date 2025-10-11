@@ -177,7 +177,7 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
                 requestBody.Base64DocumentUrl
             );
 
-            console.log("Data:", result.data);
+            console.log("response:", result);
 
             if (result.status === 200) {
                 if (

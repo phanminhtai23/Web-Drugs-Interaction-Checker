@@ -58,6 +58,7 @@ async function mapDrugsListAWithListB(geminiDrugsList, threshold) {
     try {
         const dbDrugsList = getCachedDrugs();
         var resultArr = [];
+        var notMappedDrugs = [];
         for (const geminiDrug of geminiDrugsList) {
             let bestMatch = null;
             let highestScore = 0;
@@ -76,9 +77,11 @@ async function mapDrugsListAWithListB(geminiDrugsList, threshold) {
             // Chỉ thêm vào kết quả nếu score >= 0.8
             if (highestScore >= threshold) {
                 resultArr.push(bestMatch);
+            } else {
+                notMappedDrugs.push(geminiDrug);
             }
         }
-        return resultArr;
+        return {mappedDrugs: resultArr, notMappedDrugs: notMappedDrugs};
     } catch (error) {
         console.error("Error in mapDrugsListAWithListB:", error);
         throw error;
@@ -167,7 +170,7 @@ exports.checkInteraction = async (req, res) => {
             });
         }
 
-        console.log("ds tương tac với tên thuốc", interactions);
+        // console.log("ds tương tac với tên thuốc", interactions);
         // Trả về danh sách tương tác
         res.status(200).json(interactions);
     } catch (error) {
@@ -251,11 +254,12 @@ exports.detectDrug = async (req, res) => {
             .trim();
         detectedDrugs = JSON.parse(jsonString);
 
-        const mappedDrugs = await mapDrugsListAWithListB(detectedDrugs, 0.8);
+        var {mappedDrugs, notMappedDrugs} = await mapDrugsListAWithListB(detectedDrugs, 0.8);
 
-        console.log(result.text);
-        console.log("Detected Drugs:", detectedDrugs);
-        console.log("Mapped Drugs:", mappedDrugs);
+        // console.log(result.text);
+        // console.log("Detected Drugs:", detectedDrugs);
+        // console.log("Mapped Drugs:", mappedDrugs);
+        // console.log("Not Mapped Drugs:", notMappedDrugs);
 
         if (detectedDrugs.length === 0) {
             return res.status(200).json({
@@ -268,6 +272,7 @@ exports.detectDrug = async (req, res) => {
                 status: 200,
                 message: "Trích xuất thành công",
                 data: mappedDrugs,
+                notMappedDrugs: notMappedDrugs,
             });
         }
     } catch (error) {
