@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import InteractionSearch from "../components/InteractionSearch";
+import ActiveIngredientSearch from "../components/ActiveIngredientSearch";
 import {
     Box,
     Typography,
@@ -10,11 +11,21 @@ import {
     List,
     ListItem,
     Link,
+    Tabs,
+    Tab,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import MedicationIcon from "@mui/icons-material/Medication";
+import ScienceIcon from "@mui/icons-material/Science";
 
 const InteractionPage = () => {
+    const [tabValue, setTabValue] = useState(0);
+
+    const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+    };
+
     return (
         <Box
             className="container"
@@ -55,18 +66,73 @@ const InteractionPage = () => {
                             variant="body1"
                             color="textSecondary"
                             sx={{
-                                mb: 4,
+                                mb: 3,
                                 fontSize: { xs: "0.9rem", sm: "1rem" }, // Responsive font size
                                 textAlign: { xs: "center", sm: "left" }, // Center on mobile
                                 lineHeight: 1.6, // Better line height for mobile
                                 px: { xs: 1, sm: 0 }, // Padding for mobile
                             }}
                         >
-                            Nhập thủ công các thuốc muốn kiểm tra tương tác
-                            thuốc hoặc có thể tải ảnh toa thuốc để trích xuất
-                            tên thuốc tự động.
+                            Chọn phương thức kiểm tra tương tác phù hợp với nhu cầu của bạn
                         </Typography>
-                        <InteractionSearch />
+
+                        {/* Tabs cho hai chức năng */}
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+                            <Tabs 
+                                value={tabValue} 
+                                onChange={handleTabChange}
+                                sx={{
+                                    '& .MuiTab-root': {
+                                        textTransform: 'none',
+                                        fontWeight: 600,
+                                        fontSize: { xs: '0.875rem', sm: '1rem' }
+                                    }
+                                }}
+                            >
+                                <Tab 
+                                    icon={<MedicationIcon />} 
+                                    iconPosition="start"
+                                    label="Theo tên thuốc" 
+                                    sx={{ minHeight: 64 }}
+                                />
+                                <Tab 
+                                    icon={<ScienceIcon />} 
+                                    iconPosition="start"
+                                    label="Theo hoạt chất" 
+                                    sx={{ minHeight: 64 }}
+                                />
+                            </Tabs>
+                        </Box>
+
+                        {/* Nội dung tabs */}
+                        {tabValue === 0 && (
+                            <Box>
+                                <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                    sx={{ mb: 3, fontStyle: 'italic' }}
+                                >
+                                    Nhập thủ công các thuốc muốn kiểm tra tương tác
+                                    thuốc hoặc có thể tải ảnh toa thuốc để trích xuất
+                                    tên thuốc tự động.
+                                </Typography>
+                                <InteractionSearch />
+                            </Box>
+                        )}
+
+                        {tabValue === 1 && (
+                            <Box>
+                                <Typography
+                                    variant="body2"
+                                    color="textSecondary"
+                                    sx={{ mb: 3, fontStyle: 'italic' }}
+                                >
+                                    Nhập trực tiếp tên hoạt chất để kiểm tra tương tác.
+                                    Phù hợp khi bạn biết chính xác hoạt chất cần kiểm tra.
+                                </Typography>
+                                <ActiveIngredientSearch />
+                            </Box>
+                        )}
 
                         {/* Phần cảnh báo */}
                         <Box

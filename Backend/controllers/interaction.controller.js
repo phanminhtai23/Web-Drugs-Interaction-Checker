@@ -88,6 +88,121 @@ async function mapDrugsListAWithListB(geminiDrugsList, threshold) {
     }
 }
 
+// Tìm kiếm gợi ý hoạt chất
+exports.searchActiveIngredients = async (req, res) => {
+    try {
+        const { keyword } = req.query;
+        
+        if (!keyword || keyword.trim().length < 1) {
+            return res.json([]);
+        }
+
+        // Tìm kiếm trong collection drug_interaction
+        const interactions = await Interaction.find({
+            $or: [
+                { HoatChat_1: { $regex: keyword.trim(), $options: 'i' } },
+                { HoatChat_2: { $regex: keyword.trim(), $options: 'i' } }
+            ]
+        }).limit(50);
+
+        // Tạo set để loại bỏ duplicate
+        const activeIngredientsSet = new Set();
+        
+        interactions.forEach(interaction => {
+            if (interaction.HoatChat_1.toLowerCase().includes(keyword.toLowerCase())) {
+                activeIngredientsSet.add(interaction.HoatChat_1.trim());
+            }
+            if (interaction.HoatChat_2.toLowerCase().includes(keyword.toLowerCase())) {
+                activeIngredientsSet.add(interaction.HoatChat_2.trim());
+            }
+        });
+
+        // Chuyển set thành array và sort
+        const suggestions = Array.from(activeIngredientsSet)
+            .sort((a, b) => {
+                // Ưu tiên những từ bắt đầu bằng keyword
+                const aStartsWith = a.toLowerCase().startsWith(keyword.toLowerCase());
+                const bStartsWith = b.toLowerCase().startsWith(keyword.toLowerCase());
+                
+                if (aStartsWith && !bStartsWith) return -1;
+                if (!aStartsWith && bStartsWith) return 1;
+                
+                return a.localeCompare(b);
+            })
+            .slice(0, 20); // Giới hạn 20 kết quả
+
+        res.json(suggestions.map(ingredient => ({ activeIngredient: ingredient })));
+    } catch (error) {
+        console.error('Error searching active ingredients:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+// Kiểm tra tương tác bằng hoạt chất
+exports.checkInteractionByActiveIngredients = async (req, res) => {
+    const { activeIngredients } = req.body;
+
+    try {
+        if (!activeIngredients || !Array.isArray(activeIngredients) || activeIngredients.length < 2) {
+            return res.status(400).json({
+                message: "Cần ít nhất 2 hoạt chất để kiểm tra tương tác"
+            });
+        }
+
+        // Chuẩn hóa danh sách hoạt chất
+        const normalizedIngredients = activeIngredients.map(ingredient => 
+            ingredient.trim().toLowerCase()
+        );
+
+        // Tìm tất cả các tương tác có liên quan đến các hoạt chất này
+        const interactions = await Interaction.find({
+            $or: [
+                {
+                    $and: [
+                        { HoatChat_1: { $in: activeIngredients.map(ing => new RegExp(`^${ing.trim()}$`, 'i')) } },
+                        { HoatChat_2: { $in: activeIngredients.map(ing => new RegExp(`^${ing.trim()}$`, 'i')) } }
+                    ]
+                }
+            ]
+        });
+
+        if (interactions.length === 0) {
+            return res.json({
+                message: "Không tìm thấy tương tác nào giữa các hoạt chất này",
+                interactions: [],
+                hasInteractions: false
+            });
+        }
+
+        // Nhóm kết quả theo mức độ nghiêm trọng
+        const groupedInteractions = interactions.reduce((acc, interaction) => {
+            const severity = interaction.MucDoNghiemTrong || 'Không xác định';
+            if (!acc[severity]) {
+                acc[severity] = [];
+            }
+            acc[severity].push({
+                id: interaction.id,
+                hoatChat1: interaction.HoatChat_1,
+                hoatChat2: interaction.HoatChat_2,
+                mucDoNghiemTrong: interaction.MucDoNghiemTrong,
+                canhBao: interaction.CanhBaoTuongTacThuoc
+            });
+            return acc;
+        }, {});
+
+        res.json({
+            message: `Tìm thấy ${interactions.length} tương tác`,
+            interactions: groupedInteractions,
+            hasInteractions: true,
+            totalInteractions: interactions.length
+        });
+
+    } catch (error) {
+        console.error('Error checking interactions by active ingredients:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 exports.checkInteraction = async (req, res) => {
     const { drugNames } = req.body;
 
