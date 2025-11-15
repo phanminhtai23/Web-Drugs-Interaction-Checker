@@ -89,3 +89,42 @@ exports.searchDrugsByName = async (req, res) => {
     res.status(500).json({ error: 'Lỗi server' });
   }
 };
+
+// API tìm kiếm thuốc với thông tin đầy đủ và phân trang
+exports.searchDrugsWithDetails = async (req, res) => {
+  const { q: query, page = 1, limit = 20, sortOrder = 'asc' } = req.query;
+
+  try {
+    let drugs, totalDrugs;
+    const sortOption = sortOrder === 'asc' ? 1 : -1;
+
+    if (!query || query.trim() === '') {
+      // Nếu không có từ khóa tìm kiếm, trả về tất cả thuốc
+      drugs = await Drug.find()
+        .sort({ tenThuoc: sortOption })
+        .skip((page - 1) * limit)
+        .limit(parseInt(limit));
+      totalDrugs = await Drug.countDocuments();
+    } else {
+      // Tìm kiếm thuốc theo tên (không phân biệt hoa thường)
+      const searchRegex = new RegExp(query.trim(), 'i');
+      const searchQuery = { tenThuoc: searchRegex };
+
+      drugs = await Drug.find(searchQuery)
+        .sort({ tenThuoc: sortOption })
+        .skip((page - 1) * limit)
+        .limit(parseInt(limit));
+      totalDrugs = await Drug.countDocuments(searchQuery);
+    }
+
+    res.status(200).json({
+      drugs,
+      totalPages: Math.ceil(totalDrugs / limit),
+      currentPage: parseInt(page),
+      totalDrugs,
+      searchQuery: query || ''
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

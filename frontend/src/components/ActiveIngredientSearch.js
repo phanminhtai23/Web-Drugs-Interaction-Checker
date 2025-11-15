@@ -540,7 +540,7 @@ const ActiveIngredientSearch = () => {
                             {loading ? "Đang kiểm tra..." : "Kiểm tra tương tác"}
                         </Button>
 
-                        <Button
+                        {/* <Button
                             variant="outlined"
                             onClick={handleReset}
                             startIcon={<RestartAltIcon />}
@@ -555,10 +555,10 @@ const ActiveIngredientSearch = () => {
                                     borderColor: "#999",
                                     backgroundColor: "#f5f5f5",
                                 },
-                            }}
+                            }}  
                         >
                             Lưu lịch sử
-                        </Button>
+                        </Button> */}
                     </Box>
 
                     {activeIngredientList.length < 2 && (

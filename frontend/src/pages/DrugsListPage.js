@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { getDrugs } from '../services/drugService';
+import React, { useEffect, useState, useCallback } from 'react';
+import { searchDrugsWithDetails } from '../services/drugService';
 import BlurText from "../components/BlurText";
 import { useNavigate } from 'react-router-dom';
 import {
@@ -26,53 +26,77 @@ import SortIcon from '@mui/icons-material/Sort';
 
 const DrugsListPage = () => {
   const [drugs, setDrugs] = useState([]);
-  const [filteredDrugs, setFilteredDrugs] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [searchTimeout, setSearchTimeout] = useState(null);
+  const [isSearching, setIsSearching] = useState(false);
 
+  // Hàm tìm kiếm với debounce
+  const performSearch = useCallback(async (query, currentPage = 1) => {
+    setLoading(true);
+    setError('');
+    setPage(currentPage);
+    
+    try {
+      const response = await searchDrugsWithDetails(query, currentPage, 20, sortOrder);
+      setDrugs(response.drugs);
+      setTotalPages(response.totalPages);
+    } catch (error) {
+      setError('Không thể tìm kiếm thuốc. Vui lòng thử lại sau.');
+      setDrugs([]);
+      setTotalPages(1);
+    } finally {
+      setLoading(false);
+      setIsSearching(false);
+    }
+  }, [sortOrder]);
+
+  // Load dữ liệu ban đầu khi component mount
   useEffect(() => {
-    const fetchDrugs = async () => {
-      setLoading(true);
-      setError('');
-      try {
-        const response = await getDrugs(page, 20, '', sortOrder);
-        setDrugs(response.drugs);
-        setFilteredDrugs(response.drugs);
-        setTotalPages(response.totalPages);
-      } catch (error) {
-        setError('Không thể tải danh sách thuốc. Vui lòng thử lại sau.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchDrugs();
-  }, [page, sortOrder]);
+    performSearch('', 1);
+  }, [performSearch]);
+
+  // Xử lý khi thay đổi sortOrder
+  useEffect(() => {
+    performSearch(search, page);
+  }, [sortOrder, performSearch, search, page]);
 
   const handleSearch = (e) => {
-    const query = e.target.value.toLowerCase();
+    const query = e.target.value;
     setSearch(query);
-    const filtered = drugs.filter((drug) =>
-      drug.tenThuoc.toLowerCase().includes(query)
-    );
-    setFilteredDrugs(filtered);
+    setIsSearching(true);
+    
+    // Clear timeout cũ
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+    
+    // Tạo timeout mới để debounce
+    const newTimeout = setTimeout(() => {
+      setPage(1); // Reset về trang đầu khi search
+      performSearch(query, 1);
+    }, 500); // Delay 500ms
+    
+    setSearchTimeout(newTimeout);
   };
 
-  const handleSort = () => {
-    const sortedDrugs = [...filteredDrugs].sort((a, b) => {
-      const nameA = a.tenThuoc.trim().toLowerCase();
-      const nameB = b.tenThuoc.trim().toLowerCase();
-      if (sortOrder === 'asc') {
-        return nameA.localeCompare(nameB);
-      } else {
-        return nameB.localeCompare(nameA);
+  // Cleanup timeout khi component unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeout) {
+        clearTimeout(searchTimeout);
       }
-    });
-    setFilteredDrugs(sortedDrugs);
-    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+  }, [searchTimeout]);
+
+  const handleSort = () => {
+    const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    setSortOrder(newSortOrder);
+    setPage(1);
   };
 
   const navigate = useNavigate();
@@ -137,7 +161,11 @@ const DrugsListPage = () => {
           value={search}
           onChange={handleSearch}
           InputProps={{
-            startAdornment: <SearchIcon sx={{ mr: 1, color: 'grey.600' }} />,
+            startAdornment: isSearching ? (
+              <CircularProgress size={20} sx={{ mr: 1 }} />
+            ) : (
+              <SearchIcon sx={{ mr: 1, color: 'grey.600' }} />
+            ),
           }}
           sx={{
             width: '100%',
@@ -164,8 +192,35 @@ const DrugsListPage = () => {
       ) : (
         <>
           {/* Mobile Card View */}
-          <Box sx={{ display: { xs: 'block', md: 'none' } }}>
-            {filteredDrugs.map((drug) => (
+          <Box sx={{ display: { xs: 'block', md: 'none' }, position: 'relative' }}>
+            {isSearching && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                  backdropFilter: 'blur(2px)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  zIndex: 10,
+                  borderRadius: 2,
+                  minHeight: 200
+                }}
+              >
+                <Box sx={{ textAlign: 'center', p: 2 }}>
+                  <CircularProgress />
+                  <Typography variant="body2" sx={{ mt: 1, color: 'primary.main' }}>
+                    Đang tìm kiếm...
+                  </Typography>
+                </Box>
+              </Box>
+            )}
+            <Box sx={{ opacity: isSearching ? 0.6 : 1, transition: 'opacity 0.3s ease' }}>
+            {drugs.map((drug) => (
               <Paper
                 key={drug._id}
                 sx={{
@@ -224,18 +279,46 @@ const DrugsListPage = () => {
                 </Box>
               </Paper>
             ))}
+            </Box>
           </Box>
 
           {/* Desktop Table View */}
-          <TableContainer 
-            component={Paper} 
-            sx={{ 
-              mt: { xs: 2, sm: 3 }, 
-              boxShadow: 3, 
-              borderRadius: 2,
-              display: { xs: 'none', md: 'block' }
-            }}
-          >
+          <Box sx={{ position: 'relative', display: { xs: 'none', md: 'block' } }}>
+            {isSearching && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                  backdropFilter: 'blur(2px)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  zIndex: 10,
+                  borderRadius: 2,
+                }}
+              >
+                <Box sx={{ textAlign: 'center', p: 2 }}>
+                  <CircularProgress />
+                  <Typography variant="body2" sx={{ mt: 1, color: 'primary.main' }}>
+                    Đang tìm kiếm...
+                  </Typography>
+                </Box>
+              </Box>
+            )}
+            <TableContainer 
+              component={Paper} 
+              sx={{ 
+                mt: { xs: 2, sm: 3 }, 
+                boxShadow: 3, 
+                borderRadius: 2,
+                opacity: isSearching ? 0.6 : 1,
+                transition: 'opacity 0.3s ease'
+              }}
+            >
             <Table>
               <TableHead sx={{ bgcolor: 'primary.main' }}>
                 <TableRow>
@@ -255,7 +338,7 @@ const DrugsListPage = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredDrugs.map((drug) => (
+                {drugs.map((drug) => (
                   <TableRow
                     key={drug._id}
                     sx={{
@@ -289,6 +372,7 @@ const DrugsListPage = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          </Box>
 
           <Box sx={{ 
             mt: { xs: 3, sm: 4 }, 
@@ -304,7 +388,10 @@ const DrugsListPage = () => {
             <Pagination
               count={totalPages}
               page={page}
-              onChange={(event, value) => setPage(value)}
+              onChange={(event, value) => {
+                setPage(value);
+                performSearch(search, value);
+              }}
               color="primary"
               showFirstButton={totalPages > 5}
               showLastButton={totalPages > 5}
