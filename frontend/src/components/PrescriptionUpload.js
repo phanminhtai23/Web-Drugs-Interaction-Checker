@@ -16,6 +16,11 @@ import {
     CircularProgress,
     Chip,
     Snackbar,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Divider,
 } from "@mui/material";
 import {
     CloudUpload as CloudUploadIcon,
@@ -24,6 +29,9 @@ import {
     Close as CloseIcon,
     PictureAsPdf as PdfIcon,
     ImageSearch,
+    Warning as WarningIcon,
+    CheckCircle as CheckCircleIcon,
+    Info as InfoIcon,
 } from "@mui/icons-material";
 import { detectDrugsFromImages } from "../services/interactionService";
 
@@ -40,6 +48,14 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
         open: false,
         message: "",
         severity: "success", // success, error, warning, info
+    });
+
+    // States cho dialog thông báo not mapped drugs
+    const [notMappedDialog, setNotMappedDialog] = useState({
+        open: false,
+        detectedDrugs: [],
+        notMappedDrugs: [],
+        totalFiles: 0,
     });
 
     // Mở dialog upload
@@ -76,9 +92,9 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
                 return;
             }
 
-            // Kiểm tra kích thước file (tối đa 5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                setError("Kích thước file không được vượt quá 5MB");
+            // Kiểm tra kích thước file (tối đa 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                setError("Kích thước file không được vượt quá 10MB");
                 hasError = true;
                 return;
             }
@@ -137,6 +153,24 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
         setSnackbar((prev) => ({ ...prev, open: false }));
     };
 
+    // Đóng dialog not mapped drugs
+    const handleCloseNotMappedDialog = () => {
+        setNotMappedDialog({
+            open: false,
+            detectedDrugs: [],
+            notMappedDrugs: [],
+            totalFiles: 0,
+        });
+
+        // Hiển thị thông báo thành công sau khi đóng dialog
+        const { detectedDrugs, totalFiles } = notMappedDialog;
+        setSnackbar({
+            open: true,
+            message: `Trích xuất thành công ${detectedDrugs.length} thuốc từ ${totalFiles} file!`,
+            severity: "success",
+        });
+    };
+
     // Xử lý hoàn tất - gọi API detect-drug
     const handleUploadFiles = async () => {
         if (uploadedFiles.length === 0) {
@@ -187,8 +221,9 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
                 ) {
                     // Trường hợp 1: Tìm thấy thuốc
                     const detectedDrugs = result.data;
+                    const notMappedDrugs = result.notMappedDrugs || [];
 
-                    // Đóng dialog trước
+                    // Đóng dialog upload trước
                     handleCloseDialog();
 
                     // Trả về dữ liệu cho component cha để thêm vào danh sách
@@ -200,12 +235,24 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
                             shouldAddToDrugList: true, // Flag để biết cần thêm vào danh sách
                         });
                     }
-                    // Hiển thị thông báo thành công bằng Snackbar
-                    setSnackbar({
-                        open: true,
-                        message: `Trích xuất thành công!`,
-                        severity: "success",
-                    });
+
+                    // Kiểm tra nếu có thuốc không tìm thấy trong CSDL
+                    if (notMappedDrugs && notMappedDrugs.length > 0) {
+                        // Hiển thị dialog thông báo về not mapped drugs
+                        setNotMappedDialog({
+                            open: true,
+                            detectedDrugs: detectedDrugs,
+                            notMappedDrugs: notMappedDrugs,
+                            totalFiles: filesData.length,
+                        });
+                    } else {
+                        // Hiển thị thông báo thành công bằng Snackbar
+                        setSnackbar({
+                            open: true,
+                            message: `Trích xuất thành công ${detectedDrugs.length} thuốc từ ${filesData.length} file!`,
+                            severity: "success",
+                        });
+                    }
                 } else {
                     // Trường hợp 2: Không tìm thấy thuốc
                     // handleCloseDialog();
@@ -418,7 +465,7 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
                                 textAlign: "center",
                             }}
                         >
-                            Hỗ trợ: JPEG, PNG, WebP (tối đa 5MB mỗi file)
+                            Hỗ trợ: JPEG, PNG, WebP (tối đa 10MB mỗi file)
                         </Typography>
                     </Box>
 
@@ -820,6 +867,291 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
                     {snackbar.message}
                 </Alert>
             </Snackbar>
+
+            {/* Dialog thông báo Not Mapped Drugs */}
+            <Dialog
+                open={notMappedDialog.open}
+                onClose={handleCloseNotMappedDialog}
+                maxWidth="sm"
+                fullWidth
+                PaperProps={{
+                    sx: { 
+                        borderRadius: 3,
+                        overflow: 'hidden'
+                    },
+                }}
+            >
+                <DialogTitle
+                    sx={{
+                        backgroundColor: "#e6ffe0ff",
+                        borderBottom: "1px solid #30ff02ff",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1.5,
+                        p: 3,
+                    }}
+                >
+                    <CheckCircleIcon 
+                        sx={{ 
+                            color: "#2e7d32",
+                            fontSize: 28
+                        }} 
+                    />
+                    <Box>
+                        <Typography
+                            variant="h6"
+                            component="div"
+                            sx={{
+                                fontWeight: 600,
+                                color: "#2e7d32",
+                                fontSize: "1.2rem",
+                                mb: 0.5,
+                            }}
+                        >
+                            Trích xuất hoàn tất
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            sx={{
+                                color: "#000000ff",
+                                fontSize: "0.9rem",
+                            }}
+                        >
+                            Có một số thuốc chưa có trong cơ sở dữ liệu
+                        </Typography>
+                    </Box>
+                </DialogTitle>
+
+                <DialogContent sx={{ p: 0 }}>
+                    {/* Thống kê tổng quan
+                    <Box sx={{ p: 3, backgroundColor: "#f8f9fa" }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <Box sx={{ textAlign: "center" }}>
+                                    <Typography
+                                        variant="h4"
+                                        sx={{
+                                            fontWeight: "bold",
+                                            color: "#2e7d32",
+                                            mb: 0.5,
+                                        }}
+                                    >
+                                        {notMappedDialog.detectedDrugs.length}
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{ color: "#666" }}
+                                    >
+                                        Thuốc tìm thấy trong CSDL
+                                    </Typography>
+                                </Box>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Box sx={{ textAlign: "center" }}>
+                                    <Typography
+                                        variant="h4"
+                                        sx={{
+                                            fontWeight: "bold",
+                                            color: "#f57c00",
+                                            mb: 0.5,
+                                        }}
+                                    >
+                                        {notMappedDialog.notMappedDrugs.length}
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{ color: "#666" }}
+                                    >
+                                        Thuốc chưa có trong CSDL
+                                    </Typography>
+                                </Box>
+                            </Grid>
+                        </Grid>
+                    </Box> */}
+
+                    <Divider />
+
+                    {/* Danh sách thuốc đã tìm thấy */}
+                    {notMappedDialog.detectedDrugs.length > 0 && (
+                        <Box sx={{ p: 2 }}>
+                            <Box 
+                                sx={{ 
+                                    display: "flex", 
+                                    alignItems: "center", 
+                                    gap: 1, 
+                                    mb: 1.5 
+                                }}
+                            >
+                                <CheckCircleIcon 
+                                    sx={{ 
+                                        color: "#2e7d32", 
+                                        fontSize: 20 
+                                    }} 
+                                />
+                                <Typography
+                                    variant="subtitle1"
+                                    sx={{
+                                        fontWeight: 600,
+                                        color: "#2e7d32",
+                                    }}
+                                >
+                                    Thuốc trích xuất có trong dữ liệu hệ thống ({notMappedDialog.detectedDrugs.length} thuốc)
+                                </Typography>
+                            </Box>
+                            
+                            <Box sx={{ maxHeight: 150, overflowY: "auto" }}>
+                                <List dense sx={{ py: 0 }}>
+                                    {notMappedDialog.detectedDrugs.map((drug, index) => (
+                                        <ListItem
+                                            key={index}
+                                            sx={{
+                                                py: 0.5,
+                                                px: 1,
+                                                borderRadius: 1,
+                                                mb: 0.5,
+                                                backgroundColor: "#f1f8e9",
+                                                border: "1px solid #c8e6c9",
+                                            }}
+                                        >
+                                            <ListItemIcon sx={{ minWidth: 32 }}>
+                                                <CheckCircleIcon 
+                                                    sx={{ 
+                                                        color: "#2e7d32", 
+                                                        fontSize: 16 
+                                                    }} 
+                                                />
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={drug.drugName || drug.name || drug}
+                                                primaryTypographyProps={{
+                                                    variant: "body2",
+                                                    sx: {
+                                                        fontWeight: 500,
+                                                        color: "#1b5e20",
+                                                    },
+                                                }}
+                                            />
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </Box>
+                        </Box>
+                    )}
+
+                    <Divider />
+
+                    {/* Danh sách thuốc chưa có trong CSDL */}
+                    <Box sx={{ p: 2 }}>
+                        <Box 
+                            sx={{ 
+                                display: "flex", 
+                                alignItems: "center", 
+                                gap: 1, 
+                                mb: 1.5 
+                            }}
+                        >
+                            <WarningIcon 
+                                sx={{ 
+                                    color: "#f57c00", 
+                                    fontSize: 20 
+                                }} 
+                            />
+                            <Typography
+                                variant="subtitle1"
+                                sx={{
+                                    fontWeight: 600,
+                                    color: "#f57c00",
+                                }}
+                            >
+                                Thuốc trích xuất chưa có trong dữ liệu hệ thống ({notMappedDialog.notMappedDrugs.length} thuốc)
+                            </Typography>
+                        </Box>
+
+                        <Box sx={{ maxHeight: 150, overflowY: "auto" }}>
+                            <List dense sx={{ py: 0 }}>
+                                {notMappedDialog.notMappedDrugs.map((drugName, index) => (
+                                    <ListItem
+                                        key={index}
+                                        sx={{
+                                            py: 0.5,
+                                            px: 1,
+                                            borderRadius: 1,
+                                            mb: 0.5,
+                                            backgroundColor: "#fff8e1",
+                                            border: "1px solid #ffcc02",
+                                        }}
+                                    >
+                                        <ListItemIcon sx={{ minWidth: 32 }}>
+                                            <InfoIcon 
+                                                sx={{ 
+                                                    color: "#f57c00", 
+                                                    fontSize: 16 
+                                                }} 
+                                            />
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={drugName}
+                                            primaryTypographyProps={{
+                                                variant: "body2",
+                                                sx: {
+                                                    fontWeight: 500,
+                                                    color: "#ef6c00",
+                                                },
+                                            }}
+                                        />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Box>
+
+                        <Alert
+                            severity="info"
+                            sx={{
+                                mt: 2,
+                                borderRadius: 2,
+                                backgroundColor: "#e3f2fd",
+                                "& .MuiAlert-message": {
+                                    fontSize: "0.875rem",
+                                },
+                            }}
+                        >
+                            <Typography variant="body2" sx={{ mb: 0.5 }}>
+                                <strong>Lưu ý:</strong> Trong quá trình trích xuất, hệ thống có thể trích xuất sai hoặc thiếu, vui lòng kiểm tra hoặc nhập thêm thuốc vào để đảm bảo kiểm tra đầy đủ!
+                            </Typography>
+                        </Alert>
+                    </Box>
+                </DialogContent>
+
+                <DialogActions
+                    sx={{
+                        p: 3,
+                        backgroundColor: "#f8f9fa",
+                        borderTop: "1px solid #e0e0e0",
+                        justifyContent: "center",
+                    }}
+                >
+                    <Button
+                        variant="contained"
+                        onClick={handleCloseNotMappedDialog}
+                        sx={{
+                            px: 4,
+                            py: 1.2,
+                            borderRadius: 2,
+                            textTransform: "none",
+                            fontWeight: 600,
+                            fontSize: "1rem",
+                            background: "linear-gradient(90deg, #2e7d32, #388e3c)",
+                            boxShadow: "0 2px 8px rgba(46, 125, 50, 0.3)",
+                            "&:hover": {
+                                background: "linear-gradient(90deg, #1b5e20, #2e7d32)",
+                                boxShadow: "0 4px 12px rgba(46, 125, 50, 0.4)",
+                            },
+                        }}
+                    >
+                        Đã hiểu
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 };
