@@ -9,6 +9,10 @@ router.post('/', interactionController.checkInteraction);
 
 router.get('/search', interactionController.searchDrugs);
 
+router.get('/search-active-ingredients', interactionController.searchActiveIngredients);
+
+router.post('/check-by-active-ingredients', interactionController.checkInteractionByActiveIngredients);
+
 router.post('/detect-drug', interactionController.detectDrug);
 
 module.exports = router;
