@@ -750,7 +750,7 @@ const InteractionSearch = () => {
                             },
                         }}
                     >
-                        <MenuItem
+                        {/* <MenuItem
                             onClick={downloadPDF}
                             sx={{
                                 py: 1.5,
@@ -774,7 +774,7 @@ const InteractionSearch = () => {
                                     Báo cáo định dạng PDF
                                 </Typography>
                             </Box>
-                        </MenuItem>
+                        </MenuItem> */}
                         <MenuItem
                             onClick={downloadXML}
                             sx={{

@@ -126,6 +126,15 @@ const ActiveIngredientSearch = () => {
         setShowSuccessMessage(false);
     };
 
+    // Hàm chuyển đổi tiếng Việt có dấu sang không dấu cho PDF
+    const removeVietnameseAccents = (str) => {
+        return str
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '') // Loại bỏ dấu
+            .replace(/đ/g, 'd')
+            .replace(/Đ/g, 'D');
+    };
+
     // Hàm tạo và tải xuống PDF
     const downloadPDF = () => {
         const doc = new jsPDF();
@@ -140,7 +149,8 @@ const ActiveIngredientSearch = () => {
         // Tiêu đề chính
         doc.setFontSize(20);
         doc.setTextColor(255, 255, 255);
-        doc.text('BAO CAO TUONG TAC HOAT CHAT', 105, 32, { align: 'center' });
+        const title = removeVietnameseAccents('BÁO CÁO TƯƠNG TÁC HOẠT CHẤT');
+        doc.text(title, 105, 32, { align: 'center' });
         
         // Khung thông tin chung
         doc.setDrawColor(200, 200, 200);
@@ -151,16 +161,21 @@ const ActiveIngredientSearch = () => {
         doc.setFontSize(12);
         doc.setTextColor(0, 0, 0);
         const currentDate = new Date().toLocaleDateString('vi-VN');
-        doc.text(`Ngay tao: ${currentDate}`, 20, 62);
-        doc.text(`Danh sach hoat chat: ${activeIngredientList.join(', ')}`, 20, 72);
+        const dateText = removeVietnameseAccents(`Ngày tạo: ${currentDate}`);
+        const listText = removeVietnameseAccents(`Danh sách hoạt chất: ${activeIngredientList.join(', ')}`);
         
         const totalInteractions = Object.values(interactions).reduce((sum, arr) => sum + arr.length, 0);
-        doc.text(`So luong tuong tac: ${totalInteractions}`, 20, 82);
+        const countText = removeVietnameseAccents(`Số lượng tương tác: ${totalInteractions}`);
+        
+        doc.text(dateText, 20, 62);
+        doc.text(listText, 20, 72);
+        doc.text(countText, 20, 82);
         
         // Tiêu đề chi tiết
-        doc.setFontSize(16);
+        doc.setFontSize(14);
         doc.setTextColor(70, 130, 180);
-        doc.text('CHI TIET TUONG TAC:', 20, 95);
+        const detailTitle = removeVietnameseAccents('CHI TIẾT TƯƠNG TÁC:');
+        doc.text(detailTitle, 20, 95);
         
         let yPos = 105;
         
@@ -168,23 +183,18 @@ const ActiveIngredientSearch = () => {
             Object.entries(interactions).forEach(([severity, interactionList], severityIndex) => {
                 // Màu sắc theo mức độ
                 let severityColor = [0, 0, 0];
-                let severityText = severity;
                 switch(severity) {
                     case 'Nghiêm trọng':
                         severityColor = [211, 47, 47];
-                        severityText = 'Nghiem trong';
                         break;
                     case 'Trung bình':
                         severityColor = [245, 124, 0];
-                        severityText = 'Trung binh';
                         break;
                     case 'Nhẹ':
                         severityColor = [25, 118, 210];
-                        severityText = 'Nhe';
                         break;
                     default:
                         severityColor = [0, 0, 0];
-                        severityText = severity;
                         break;
                 }
                 
@@ -201,38 +211,26 @@ const ActiveIngredientSearch = () => {
                     doc.rect(15, yPos - 5, 180, 50, 'D');
                     
                     // Số thứ tự và mức độ
-                    doc.setFontSize(14);
+                    doc.setFontSize(12);
                     doc.setTextColor(...severityColor);
                     const interactionNumber = Object.values(interactions)
                         .slice(0, severityIndex)
                         .reduce((sum, arr) => sum + arr.length, 0) + index + 1;
-                    doc.text(`${interactionNumber}. Muc do: ${severityText}`, 20, yPos + 5);
+                    
+                    // Mức độ tương tác
+                    const severityText = removeVietnameseAccents(`${interactionNumber}. Mức độ: ${severity}`);
+                    doc.text(severityText, 20, yPos + 5);
                     
                     // Hoạt chất tương tác
-                    doc.setFontSize(12);
+                    doc.setFontSize(11);
                     doc.setTextColor(0, 0, 0);
-                    doc.text(`Hoat chat: ${interaction.hoatChat1} <-> ${interaction.hoatChat2}`, 20, yPos + 15);
+                    const interactionText = removeVietnameseAccents(`Hoạt chất: ${interaction.hoatChat1} <-> ${interaction.hoatChat2}`);
+                    doc.text(interactionText, 20, yPos + 15);
                     
-                    // Cảnh báo không dấu
-                    const warning = interaction.canhBao || 'Khong co thong tin chi tiet';
-                    // Loại bỏ dấu từ cảnh báo
-                    const warningNoDiacritics = warning
-                        .replace(/[àáạảãâầấậẩẫăằắặẳẵ]/g, 'a')
-                        .replace(/[èéẹẻẽêềếệểễ]/g, 'e')
-                        .replace(/[ìíịỉĩ]/g, 'i')
-                        .replace(/[òóọỏõôồốộổỗơờớợởỡ]/g, 'o')
-                        .replace(/[ùúụủũưừứựửữ]/g, 'u')
-                        .replace(/[ỳýỵỷỹ]/g, 'y')
-                        .replace(/[đ]/g, 'd')
-                        .replace(/[ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴ]/g, 'A')
-                        .replace(/[ÈÉẸẺẼÊỀẾỆỂỄ]/g, 'E')
-                        .replace(/[ÌÍỊỈĨ]/g, 'I')
-                        .replace(/[ÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ]/g, 'O')
-                        .replace(/[ÙÚỤỦŨƯỪỨỰỬỮ]/g, 'U')
-                        .replace(/[ỲÝỴỶỸ]/g, 'Y')
-                        .replace(/[Đ]/g, 'D');
-                    
-                    const warningLines = doc.splitTextToSize(`Canh bao: ${warningNoDiacritics}`, 170);
+                    // Cảnh báo
+                    const warning = interaction.canhBao || 'Không có thông tin chi tiết';
+                    const warningText = removeVietnameseAccents(`Cảnh báo: ${warning}`);
+                    const warningLines = doc.splitTextToSize(warningText, 170);
                     doc.text(warningLines, 20, yPos + 28);
                     
                     yPos += 60;
@@ -242,11 +240,16 @@ const ActiveIngredientSearch = () => {
             // Thông báo không có tương tác
             doc.setFillColor(225, 245, 254);
             doc.rect(15, yPos - 5, 180, 30, 'F');
-            doc.setFontSize(12);
+            doc.setFontSize(11);
             doc.setTextColor(25, 118, 210);
-            doc.text('Khong tim thay tuong tac nao giua cac hoat chat da chon.', 20, yPos + 5);
-            doc.text('Ket qua nay chi dua tren du lieu hien co.', 20, yPos + 15);
-            doc.text('Luon tham khao y kien bac si chuyen khoa truoc khi su dung thuoc.', 20, yPos + 25);
+            
+            const noInteractionText1 = removeVietnameseAccents('Không tìm thấy tương tác nào giữa các hoạt chất đã chọn.');
+            const noInteractionText2 = removeVietnameseAccents('Kết quả này chỉ dựa trên dữ liệu hiện có.');
+            const noInteractionText3 = removeVietnameseAccents('Luôn tham khảo ý kiến bác sĩ chuyên khoa trước khi sử dụng thuốc.');
+            
+            doc.text(noInteractionText1, 20, yPos + 5);
+            doc.text(noInteractionText2, 20, yPos + 15);
+            doc.text(noInteractionText3, 20, yPos + 25);
         }
         
         // Footer
@@ -255,7 +258,8 @@ const ActiveIngredientSearch = () => {
             doc.setPage(i);
             doc.setFontSize(8);
             doc.setTextColor(128, 128, 128);
-            doc.text(`Trang ${i}/${pageCount} - Bao cao duoc tao tu He thong Kiem tra Tuong tac Thuoc`, 105, 285, { align: 'center' });
+            const footerText = removeVietnameseAccents(`Trang ${i}/${pageCount} - Báo cáo được tạo từ Hệ thống Kiểm tra Tương tác Thuốc`);
+            doc.text(footerText, 105, 285, { align: 'center' });
         }
         
         // Lưu file
@@ -295,13 +299,13 @@ const ActiveIngredientSearch = () => {
                     xmlContent += `      <MucDo>${severity}</MucDo>\n`;
                     xmlContent += `      <HoatChat1>${interaction.hoatChat1}</HoatChat1>\n`;
                     xmlContent += `      <HoatChat2>${interaction.hoatChat2}</HoatChat2>\n`;
-                    xmlContent += `      <CanhBao>${interaction.canhBao || 'Khong co thong tin chi tiet'}</CanhBao>\n`;
+                    xmlContent += `      <CanhBao>${interaction.canhBao || 'Không có thông tin chi tiết'}</CanhBao>\n`;
                     xmlContent += `    </TuongTac>\n`;
                     interactionId++;
                 });
             });
         } else {
-            xmlContent += `    <ThongBao>Khong tim thay tuong tac nao giua cac hoat chat da chon</ThongBao>\n`;
+            xmlContent += `    <ThongBao>Không tìm thấy tương tác nào giữa các hoạt chất đã chọn</ThongBao>\n`;
         }
         
         xmlContent += `  </ChiTietTuongTac>\n`;
@@ -907,7 +911,7 @@ const ActiveIngredientSearch = () => {
                                         horizontal: 'right',
                                     }}
                                 >
-                                    <MenuItem
+                                    {/* <MenuItem
                                         onClick={downloadPDF}
                                         sx={{
                                             py: { xs: 1.2, sm: 1.5 },
@@ -946,7 +950,7 @@ const ActiveIngredientSearch = () => {
                                                 Báo cáo định dạng PDF
                                             </Typography>
                                         </Box>
-                                    </MenuItem>
+                                    </MenuItem> */}
                                     <MenuItem
                                         onClick={downloadXML}
                                         sx={{
