@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "../services/api";
 import {
     TextField,
@@ -18,13 +18,22 @@ import {
     // CardHeader,
     Avatar,
     Snackbar,
+    Menu,
+    MenuItem,
 } from "@mui/material";
 import { Delete, Add, SwapVert } from "@mui/icons-material";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
 import RestartAltIcon from "@mui/icons-material/RestartAlt"; // Import icon cho nút "Bắt đầu lại"
+import DownloadIcon from "@mui/icons-material/Download";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import CodeIcon from "@mui/icons-material/Code";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PrescriptionUpload from "./PrescriptionUpload"; // Import component upload
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { saveAs } from "file-saver";
 
 const InteractionSearch = () => {
     const [drugName, setDrugName] = useState("");
@@ -35,10 +44,11 @@ const InteractionSearch = () => {
     const [noInteractions, setNoInteractions] = useState(false);
     const [noDrugsFound, setNoDrugsFound] = useState(false);
     const [suggestions, setSuggestions] = useState([]);
-    const [, setAllDrugs] = useState([]);
+    // const [, setAllDrugs] = useState([]);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
-    const [prescriptionFiles, setPrescriptionFiles] = useState([]); // State cho files toa thuốc
+    // const [prescriptionFiles, setPrescriptionFiles] = useState([]); // State cho files toa thuốc
+    const [downloadMenuAnchor, setDownloadMenuAnchor] = useState(null);
 
     const fetchSuggestions = async (keyword) => {
         if (!keyword) {
@@ -73,7 +83,7 @@ const InteractionSearch = () => {
 
     // Xử lý khi files toa thuốc được phân tích xong
     const handlePrescriptionFilesUploaded = (result) => {
-        setPrescriptionFiles(result.originalFiles || []);
+        // setPrescriptionFiles(result.originalFiles || []); // Commented out since not used
 
         // Nếu có thuốc được phát hiện, tự động thêm vào danh sách
         if (
@@ -178,6 +188,258 @@ const InteractionSearch = () => {
             console.error("Error saving interaction history:", error);
             alert("Không thể lưu lịch sử kiểm tra. Vui lòng thử lại.");
         }
+    };
+
+    // Hàm tạo và tải xuống PDF
+    const downloadPDF = () => {
+        const doc = new jsPDF('p', 'mm', 'a4');
+        
+        // Sử dụng font Times New Roman để hỗ trợ tiếng Việt tốt hơn
+        doc.setFont("times");
+        
+        // Header với background màu xanh
+        doc.setDrawColor(41, 128, 185);
+        doc.setFillColor(41, 128, 185);
+        doc.rect(10, 10, 190, 30, 'F');
+        
+        // Tiêu đề chính
+        doc.setFontSize(18);
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("helvetica", "bold");
+        doc.text("BAO CAO TUONG TAC THUOC", 105, 28, { align: "center" });
+        
+        // Reset màu chữ về đen
+        doc.setTextColor(0, 0, 0);
+        
+        // Vẽ khung thông tin tổng quan
+        doc.setDrawColor(200, 200, 200);
+        doc.setFillColor(248, 249, 250);
+        doc.rect(15, 50, 180, 40, 'FD');
+        
+        // Thông tin tổng quan
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "normal");
+        const currentDate = new Date().toLocaleDateString('vi-VN');
+        doc.text(`Ngay tao: ${currentDate}`, 20, 62);
+        
+        // Function để chuyển đổi tiếng Việt sang không dấu
+        const convertVietnamese = (text) => {
+            return text.replace(/[àáạảãâầấậẩẫăằắặẳẵ]/g, 'a')
+                       .replace(/[èéẹẻẽêềếệểễ]/g, 'e')
+                       .replace(/[ìíịỉĩ]/g, 'i')
+                       .replace(/[òóọỏõôồốộổỗơờớợởỡ]/g, 'o')
+                       .replace(/[ùúụủũưừứựửữ]/g, 'u')
+                       .replace(/[ỳýỵỷỹ]/g, 'y')
+                       .replace(/[đ]/g, 'd')
+                       .replace(/[ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴ]/g, 'A')
+                       .replace(/[ÈÉẸẺẼÊỀẾỆỂỄ]/g, 'E')
+                       .replace(/[ÌÍỊỈĨ]/g, 'I')
+                       .replace(/[ÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ]/g, 'O')
+                       .replace(/[ÙÚỤỦŨƯỪỨỰỬỮ]/g, 'U')
+                       .replace(/[ỲÝỴỶỸ]/g, 'Y')
+                       .replace(/[Đ]/g, 'D');
+        };
+        
+        // Xử lý danh sách thuốc
+        const drugNames = drugList.map(drug => convertVietnamese(drug.name || drug));
+        const drugListText = drugNames.join(", ");
+        const drugLines = doc.splitTextToSize(`Danh sach thuoc: ${drugListText}`, 170);
+        let currentY = 70;
+        doc.text(drugLines, 20, currentY);
+        currentY += drugLines.length * 6;
+        
+        doc.text(`So luong tuong tac: ${interactions.length}`, 20, currentY + 5);
+
+        // Tiêu đề chi tiết
+        let yPos = currentY + 25;
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(41, 128, 185);
+        doc.text("CHI TIET TUONG TAC:", 20, yPos);
+        doc.setTextColor(0, 0, 0);
+        yPos += 15;
+        
+        if (interactions.length > 0) {
+            interactions.forEach((interaction, index) => {
+                // Kiểm tra nếu cần trang mới
+                if (yPos > 240) {
+                    doc.addPage();
+                    yPos = 30;
+                }
+                
+                // Khung cho từng tương tác
+                const boxHeight = 50;
+                doc.setDrawColor(220, 220, 220);
+                doc.setFillColor(254, 254, 254);
+                doc.rect(15, yPos - 5, 180, boxHeight, 'FD');
+                
+                // Số thứ tự và mức độ nghiêm trọng
+                doc.setFontSize(12);
+                doc.setFont("times", "bold");
+                
+                // Màu sắc theo mức độ
+                let severity = interaction.MucDoNghiemTrong || interaction.severity_level || 'Khong xac dinh';
+                const originalSeverity = severity; // Giữ bản gốc để kiểm tra màu
+                severity = convertVietnamese(severity);
+                
+                if (originalSeverity.includes('Nghiêm trọng') || originalSeverity.includes('Severe')) {
+                    doc.setTextColor(220, 53, 69); // Đỏ
+                } else if (originalSeverity.includes('Trung bình') || originalSeverity.includes('Moderate')) {
+                    doc.setTextColor(255, 193, 7); // Cam
+                } else if (originalSeverity.includes('Nhẹ') || originalSeverity.includes('Minor')) {
+                    doc.setTextColor(40, 167, 69); // Xanh lá
+                } else {
+                    doc.setTextColor(108, 117, 125); // Xám
+                }
+                
+                doc.text(`${index + 1}. Muc do: ${severity}`, 20, yPos + 8);
+                
+                // Reset màu và thông tin thuốc
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "normal");
+                
+                let drug1 = interaction.HoatChat_1 || interaction.drug1_name || 'N/A';
+                let drug2 = interaction.HoatChat_2 || interaction.drug2_name || 'N/A';
+                let drugName1 = interaction.TenThuoc_1 || '';
+                let drugName2 = interaction.TenThuoc_2 || '';
+                
+                
+                drug1 = convertVietnamese(drug1);
+                drug2 = convertVietnamese(drug2);
+                drugName1 = convertVietnamese(drugName1);
+                drugName2 = convertVietnamese(drugName2);
+                
+                let drugText = `Hoat chat: ${drug1}`;
+                if (drugName1) drugText += ` (${drugName1})`;
+                drugText += ` <-> ${drug2}`;
+                if (drugName2) drugText += ` (${drugName2})`;
+                
+                const splitDrugText = doc.splitTextToSize(drugText, 170);
+                doc.text(splitDrugText, 20, yPos + 18);
+                
+                // Cảnh báo
+                let warning = interaction.CanhBaoTuongTacThuoc || interaction.description || 'Khong co thong tin chi tiet';
+                warning = convertVietnamese(warning);
+                
+                doc.setFont("helvetica", "italic");
+                doc.setFontSize(9);
+                const warningLines = doc.splitTextToSize(`Canh bao: ${warning}`, 170);
+                doc.text(warningLines, 20, yPos + 28);
+                
+                yPos += boxHeight + 10;
+            });
+        } else {
+            doc.setFontSize(12);
+            doc.setTextColor(40, 167, 69);
+            doc.text("Khong tim thay tuong tac thuoc nao.", 20, yPos + 20);
+            doc.setTextColor(0, 0, 0);
+        }
+        
+        // Footer với thông tin trang
+        const pageCount = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(8);
+            doc.setFont("helvetica", "italic");
+            doc.setTextColor(128, 128, 128);
+            doc.text(`Trang ${i}/${pageCount} | Duoc tao boi Drug Interaction Checker | ${currentDate}`, 105, 285, { align: "center" });
+        }
+        
+        // Lưu file với tên tiếng Việt
+        const fileName = `bao-cao-tuong-tac-thuoc-${currentDate.replace(/\//g, '-')}.pdf`;
+        doc.save(fileName);
+        
+        setDownloadMenuAnchor(null);
+        setSuccessMessage("🎉 Da tai xuong file PDF thanh cong!");
+        setShowSuccessMessage(true);
+    };
+
+    // Hàm tạo và tải xuống XML
+    const downloadXML = () => {
+        const currentDate = new Date().toLocaleDateString('vi-VN');
+        const currentDateTime = new Date().toLocaleString('vi-VN');
+        
+        // Xử lý danh sách thuốc
+        const drugNames = drugList.map(drug => drug.name || drug);
+        
+        // Tạo XML với format đẹp và đầy đủ thông tin
+        let xmlString = '<?xml version="1.0" encoding="UTF-8"?>\n';
+        xmlString += '<!-- Bao cao tuong tac thuoc duoc tao boi Drug Interaction Checker -->\n';
+        xmlString += '<BaoCaoTuongTacThuoc>\n';
+        xmlString += '  <ThongTinBaoCao>\n';
+        xmlString += `    <TieuDe>Bao Cao Tuong Tac Thuoc</TieuDe>\n`;
+        xmlString += `    <NgayTao>${currentDateTime}</NgayTao>\n`;
+        xmlString += `    <PhienBan>1.0</PhienBan>\n`;
+        xmlString += `    <NguoiTao>Drug Interaction Checker System</NguoiTao>\n`;
+        xmlString += '  </ThongTinBaoCao>\n\n';
+        
+        xmlString += '  <DanhSachThuoc>\n';
+        xmlString += `    <SoLuongThuoc>${drugNames.length}</SoLuongThuoc>\n`;
+        drugNames.forEach((drug, index) => {
+            xmlString += `    <Thuoc stt="${index + 1}">\n`;
+            xmlString += `      <TenThuoc><![CDATA[${drug}]]></TenThuoc>\n`;
+            xmlString += '    </Thuoc>\n';
+        });
+        xmlString += '  </DanhSachThuoc>\n\n';
+        
+        xmlString += '  <KetQuaTuongTac>\n';
+        xmlString += `    <SoLuongTuongTac>${interactions.length}</SoLuongTuongTac>\n`;
+        
+        if (interactions.length > 0) {
+            xmlString += '    <ChiTietTuongTac>\n';
+            interactions.forEach((interaction, index) => {
+                const severity = interaction.MucDoNghiemTrong || interaction.severity_level || 'Khong xac dinh';
+                const drug1 = interaction.HoatChat_1 || interaction.drug1_name || 'N/A';
+                const drug2 = interaction.HoatChat_2 || interaction.drug2_name || 'N/A';
+                const drugName1 = interaction.TenThuoc_1 || '';
+                const drugName2 = interaction.TenThuoc_2 || '';
+                const warning = interaction.CanhBaoTuongTacThuoc || interaction.description || 'Khong co thong tin chi tiet';
+                
+                xmlString += `      <TuongTac id="${index + 1}">\n`;
+                xmlString += `        <MucDoNghiemTrong>${severity}</MucDoNghiemTrong>\n`;
+                xmlString += '        <Thuoc1>\n';
+                xmlString += `          <HoatChat><![CDATA[${drug1}]]></HoatChat>\n`;
+                if (drugName1) {
+                    xmlString += `          <TenThuoc><![CDATA[${drugName1}]]></TenThuoc>\n`;
+                }
+                xmlString += '        </Thuoc1>\n';
+                xmlString += '        <Thuoc2>\n';
+                xmlString += `          <HoatChat><![CDATA[${drug2}]]></HoatChat>\n`;
+                if (drugName2) {
+                    xmlString += `          <TenThuoc><![CDATA[${drugName2}]]></TenThuoc>\n`;
+                }
+                xmlString += '        </Thuoc2>\n';
+                xmlString += `        <CanhBao><![CDATA[${warning}]]></CanhBao>\n`;
+                xmlString += `        <NgayPhatHien>${currentDateTime}</NgayPhatHien>\n`;
+                xmlString += '      </TuongTac>\n';
+            });
+            xmlString += '    </ChiTietTuongTac>\n';
+        } else {
+            xmlString += '    <ThongBao>Khong tim thay tuong tac thuoc nao</ThongBao>\n';
+        }
+        
+        xmlString += '  </KetQuaTuongTac>\n';
+        xmlString += '</BaoCaoTuongTacThuoc>';
+        
+        // Tạo và tải xuống file với tên tiếng Việt
+        const blob = new Blob([xmlString], { type: 'application/xml;charset=utf-8' });
+        const fileName = `bao-cao-tuong-tac-thuoc-${currentDate.replace(/\//g, '-')}.xml`;
+        saveAs(blob, fileName);
+        
+        setDownloadMenuAnchor(null);
+        setSuccessMessage("🎉 Da tai xuong file XML thanh cong!");
+        setShowSuccessMessage(true);
+    };
+
+    // Hàm xử lý mở menu tải xuống
+    const handleDownloadClick = (event) => {
+        setDownloadMenuAnchor(event.currentTarget);
+    };
+
+    // Hàm đóng menu tải xuống
+    const handleDownloadMenuClose = () => {
+        setDownloadMenuAnchor(null);
     };
 
     return (
@@ -449,7 +711,97 @@ const InteractionSearch = () => {
                 >
                     Lưu lịch sử
                 </Button>
+
             </Box>
+            
+            {/* Nút tải xuống - chỉ hiển thị khi có kết quả tương tác */}
+            {(interactions.length > 0 || noInteractions) && (
+                <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
+                    <Button
+                        variant="outlined"
+                        onClick={handleDownloadClick}
+                        startIcon={<DownloadIcon />}
+                        endIcon={<ExpandMoreIcon />}
+                        sx={{
+                            py: 1.5,
+                            px: 3,
+                            textTransform: "none",
+                            borderRadius: 3,
+                            color: "#1976d2",
+                            borderColor: "#1976d2",
+                            "&:hover": {
+                                borderColor: "#155a9c",
+                                backgroundColor: "#f3f8ff",
+                            },
+                        }}
+                    >
+                        Tải xuống
+                    </Button>
+
+                    <Menu
+                        anchorEl={downloadMenuAnchor}
+                        open={Boolean(downloadMenuAnchor)}
+                        onClose={handleDownloadMenuClose}
+                        PaperProps={{
+                            sx: {
+                                borderRadius: 2,
+                                boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                                minWidth: 180,
+                            },
+                        }}
+                    >
+                        <MenuItem
+                            onClick={downloadPDF}
+                            sx={{
+                                py: 1.5,
+                                px: 2,
+                                "&:hover": {
+                                    backgroundColor: "#f3f8ff",
+                                },
+                            }}
+                        >
+                            <PictureAsPdfIcon
+                                sx={{ mr: 2, color: "#d32f2f" }}
+                            />
+                            <Box>
+                                <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                                    Tải PDF
+                                </Typography>
+                                <Typography
+                                    variant="caption"
+                                    sx={{ color: "#666", display: "block" }}
+                                >
+                                    Báo cáo định dạng PDF
+                                </Typography>
+                            </Box>
+                        </MenuItem>
+                        <MenuItem
+                            onClick={downloadXML}
+                            sx={{
+                                py: 1.5,
+                                px: 2,
+                                "&:hover": {
+                                    backgroundColor: "#f3f8ff",
+                                },
+                            }}
+                        >
+                            <CodeIcon sx={{ mr: 2, color: "#1976d2" }} />
+                            <Box>
+                                <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                                    Tải XML
+                                </Typography>
+                                <Typography
+                                    variant="caption"
+                                    sx={{ color: "#666", display: "block" }}
+                                >
+                                    Dữ liệu định dạng XML
+                                </Typography>
+                            </Box>
+                        </MenuItem>
+                    </Menu>
+                </Box>
+            )}
+            
             {error && (
                 <Alert severity="error" sx={{ mt: 3 }}>
                     {error}

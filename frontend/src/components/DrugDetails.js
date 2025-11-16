@@ -114,61 +114,203 @@ const DrugDetails = () => {
       mt: { xs: 2, sm: 3, md: 5 }, 
       p: { xs: 2, sm: 3 } 
     }}>
-      {/* Tiêu đề */}
-      <Box
-        sx={{
-          textAlign: 'center',
-          mb: { xs: 3, sm: 4 },
-          p: { xs: 3, sm: 4 },
-          borderRadius: 4,
-          background: 'linear-gradient(to right, #6a11cb, #2575fc)',
-          color: '#fff',
-          boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.2)',
-        }}
-      >
-        {/* Tên thuốc */}
-        <Typography
-          variant="h3"
+      {/* Header thiết kế mới */}
+      <Box sx={{ mb: { xs: 3, sm: 4 } }}>
+        {/* Tên thuốc - Card chính */}
+        <Card
+          elevation={0}
           sx={{
-            fontWeight: 'bold',
-            mb: { xs: 1.5, sm: 2 },
-            color: '#ffffff',
-            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-            fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3rem' },
-            lineHeight: { xs: 1.2, sm: 1.3 },
+            mb: 3,
+            borderRadius: { xs: 2, sm: 3 },
+            background: '#fff',
+            border: '1px solid #e0e0e0',
+            position: 'relative',
+            overflow: 'hidden',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '4px',
+              background: 'linear-gradient(90deg, #1976d2, #42a5f5, #1976d2)',
+            }
           }}
         >
-          {drug.tenThuoc}
-        </Typography>
+          <CardContent sx={{ p: { xs: 3, sm: 4 }, pt: { xs: 4, sm: 5 } }}>
+            <Box sx={{ textAlign: 'center' }}>
+              {/* Icon thuốc */}
+              <Avatar
+                sx={{
+                  width: { xs: 60, sm: 80 },
+                  height: { xs: 60, sm: 80 },
+                  mx: 'auto',
+                  mb: 2,
+                  bgcolor: '#1976d2',
+                  boxShadow: '0 4px 12px rgba(25, 118, 210, 0.3)',
+                }}
+              >
+                <Medication sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }} />
+              </Avatar>
 
-        {/* Thông tin phụ */}
-        <Typography 
-          variant="subtitle1" 
-          sx={{ 
-            fontStyle: 'italic', 
-            mb: 1,
-            fontSize: { xs: '0.9rem', sm: '1rem' },
-          }}
-        >
-          Số đăng ký: {drug.soDangKy || 'Không có'}
-        </Typography>
-        <Typography 
-          variant="subtitle2" 
-          sx={{ 
-            fontSize: { xs: '0.8rem', sm: '0.9rem' }, 
-            mb: 1 
-          }}
-        >
-          Ngày phê duyệt: {drug.pheDuyet || 'Không có'}
-        </Typography>
-        <Typography 
-          variant="subtitle2" 
-          sx={{ 
-            fontSize: { xs: '0.8rem', sm: '0.9rem' } 
-          }}
-        >
-          Đợt phê duyệt: {drug.dotPheDuyet || 'Không có'}
-        </Typography>
+              {/* Tên thuốc */}
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: 700,
+                  color: '#1a1a1a',
+                  mb: 2,
+                  fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.75rem' },
+                  lineHeight: 1.2,
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                {drug.tenThuoc}
+              </Typography>
+
+              {/* Divider */}
+              <Box
+                sx={{
+                  width: { xs: 60, sm: 80 },
+                  height: 2,
+                  bgcolor: '#1976d2',
+                  mx: 'auto',
+                  mb: 3,
+                  borderRadius: 1,
+                }}
+              />
+            </Box>
+          </CardContent>
+        </Card>
+
+        {/* Thông tin đăng ký - Cards nhỏ */}
+        <Grid container spacing={{ xs: 2, sm: 3 }}>
+          <Grid item xs={12} sm={4}>
+            <Card
+              elevation={0}
+              sx={{
+                borderRadius: 2,
+                border: '1px solid #e8f4fd',
+                bgcolor: '#f8fcff',
+                transition: 'all 0.2s',
+                '&:hover': {
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  transform: 'translateY(-2px)',
+                }
+              }}
+            >
+              <CardContent sx={{ p: { xs: 2, sm: 2.5 }, textAlign: 'center' }}>
+                <Typography 
+                  variant="caption" 
+                  sx={{ 
+                    color: '#666',
+                    fontWeight: 500,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                  }}
+                >
+                  Số đăng ký
+                </Typography>
+                <Typography 
+                  variant="h6" 
+                  sx={{ 
+                    color: '#1976d2',
+                    fontWeight: 600,
+                    mt: 0.5,
+                    fontSize: { xs: '0.9rem', sm: '1rem' }
+                  }}
+                >
+                  {drug.soDangKy || 'Không có'}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <Card
+              elevation={0}
+              sx={{
+                borderRadius: 2,
+                border: '1px solid #e8f5e8',
+                bgcolor: '#f8fff8',
+                transition: 'all 0.2s',
+                '&:hover': {
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  transform: 'translateY(-2px)',
+                }
+              }}
+            >
+              <CardContent sx={{ p: { xs: 2, sm: 2.5 }, textAlign: 'center' }}>
+                <Typography 
+                  variant="caption" 
+                  sx={{ 
+                    color: '#666',
+                    fontWeight: 500,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                  }}
+                >
+                  Ngày phê duyệt
+                </Typography>
+                <Typography 
+                  variant="h6" 
+                  sx={{ 
+                    color: '#2e7d32',
+                    fontWeight: 600,
+                    mt: 0.5,
+                    fontSize: { xs: '0.9rem', sm: '1rem' }
+                  }}
+                >
+                  {drug.pheDuyet || 'Không có'}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <Card
+              elevation={0}
+              sx={{
+                borderRadius: 2,
+                border: '1px solid #fff3e0',
+                bgcolor: '#fffbf5',
+                transition: 'all 0.2s',
+                '&:hover': {
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  transform: 'translateY(-2px)',
+                }
+              }}
+            >
+              <CardContent sx={{ p: { xs: 2, sm: 2.5 }, textAlign: 'center' }}>
+                <Typography 
+                  variant="caption" 
+                  sx={{ 
+                    color: '#666',
+                    fontWeight: 500,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    fontSize: { xs: '0.7rem', sm: '0.75rem' }
+                  }}
+                >
+                  Đợt phê duyệt
+                </Typography>
+                <Typography 
+                  variant="h6" 
+                  sx={{ 
+                    color: '#f57c00',
+                    fontWeight: 600,
+                    mt: 0.5,
+                    fontSize: { xs: '0.9rem', sm: '1rem' }
+                  }}
+                >
+                  {drug.dotPheDuyet || 'Không có'}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </Box>
 
       {/* Thông tin cơ bản */}
@@ -205,7 +347,7 @@ const DrugDetails = () => {
               }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                   <Avatar sx={{ 
-                    bgcolor: '#6a11cb',
+                    bgcolor: '#4CAF50',
                     width: { xs: 32, sm: 40 },
                     height: { xs: 32, sm: 40 },
                   }}>
@@ -229,7 +371,7 @@ const DrugDetails = () => {
               }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                   <Avatar sx={{ 
-                    bgcolor: '#2575fc',
+                    bgcolor: '#2196F3',
                     width: { xs: 32, sm: 40 },
                     height: { xs: 32, sm: 40 },
                   }}>
@@ -252,7 +394,7 @@ const DrugDetails = () => {
               }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                   <Avatar sx={{ 
-                    bgcolor: '#ff9800',
+                    bgcolor: '#FF9800',
                     width: { xs: 32, sm: 40 },
                     height: { xs: 32, sm: 40 },
                   }}>
@@ -277,7 +419,7 @@ const DrugDetails = () => {
               }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                   <Avatar sx={{ 
-                    bgcolor: '#4caf50',
+                    bgcolor: '#009688',
                     width: { xs: 32, sm: 40 },
                     height: { xs: 32, sm: 40 },
                   }}>
@@ -300,7 +442,7 @@ const DrugDetails = () => {
               }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                   <Avatar sx={{ 
-                    bgcolor: '#1976d2',
+                    bgcolor: '#3F51B5',
                     width: { xs: 32, sm: 40 },
                     height: { xs: 32, sm: 40 },
                   }}>
