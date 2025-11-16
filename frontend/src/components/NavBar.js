@@ -13,6 +13,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import MedicationIcon from "@mui/icons-material/Medication";
 import ListIcon from "@mui/icons-material/List";
+import ScienceIcon from "@mui/icons-material/Science";
 import PersonIcon from "@mui/icons-material/Person";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -80,7 +81,13 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
                 </Box>
 
                 {/* Desktop Navigation */}
-                <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
+                <Box
+                    sx={{
+                        display: { xs: "none", md: "flex" },
+                        gap: 1,
+                        flexWrap: "nowrap",
+                    }}
+                >
                     <Button
                         color="inherit"
                         component={Link}
@@ -89,13 +96,19 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
                             color: "#333",
                             fontWeight: "bold",
                             textTransform: "none",
+                            fontSize: "0.875rem",
+                            padding: "6px 12px",
+                            minWidth: "auto",
+                            whiteSpace: "nowrap",
                             "&:hover": {
                                 color: "#0073e6",
                                 backgroundColor: "transparent",
                             },
                         }}
                     >
-                        <HomeIcon sx={{ marginRight: "8px" }} />
+                        <HomeIcon
+                            sx={{ marginRight: "6px", fontSize: "1.1rem" }}
+                        />
                         Trang chủ
                     </Button>
                     <Button
@@ -106,14 +119,43 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
                             color: "#333",
                             fontWeight: "bold",
                             textTransform: "none",
+                            fontSize: "0.875rem",
+                            padding: "6px 12px",
+                            minWidth: "auto",
+                            whiteSpace: "nowrap",
                             "&:hover": {
                                 color: "#0073e6",
                                 backgroundColor: "transparent",
                             },
                         }}
                     >
-                        <ListIcon sx={{ marginRight: "8px" }} />
-                        Danh sách thuốc
+                        <ListIcon
+                            sx={{ marginRight: "6px", fontSize: "1.1rem" }}
+                        />
+                        Thuốc
+                    </Button>
+                    <Button
+                        color="inherit"
+                        component={Link}
+                        to="/active-ingredients"
+                        sx={{
+                            color: "#333",
+                            fontWeight: "bold",
+                            textTransform: "none",
+                            fontSize: "0.875rem",
+                            padding: "6px 12px",
+                            minWidth: "auto",
+                            whiteSpace: "nowrap",
+                            "&:hover": {
+                                color: "#0073e6",
+                                backgroundColor: "transparent",
+                            },
+                        }}
+                    >
+                        <ScienceIcon
+                            sx={{ marginRight: "6px", fontSize: "1.1rem" }}
+                        />
+                        Hoạt chất
                     </Button>
                     <Button
                         color="inherit"
@@ -123,13 +165,19 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
                             color: "#333",
                             fontWeight: "bold",
                             textTransform: "none",
+                            fontSize: "0.875rem",
+                            padding: "6px 12px",
+                            minWidth: "auto",
+                            whiteSpace: "nowrap",
                             "&:hover": {
                                 color: "#0073e6",
                                 backgroundColor: "transparent",
                             },
                         }}
                     >
-                        <MedicationIcon sx={{ marginRight: "8px" }} />
+                        <MedicationIcon
+                            sx={{ marginRight: "6px", fontSize: "1.1rem" }}
+                        />
                         Kiểm tra tương tác
                     </Button>
 
@@ -141,13 +189,19 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
                             color: "#333",
                             fontWeight: "bold",
                             textTransform: "none",
+                            fontSize: "0.875rem",
+                            padding: "6px 12px",
+                            minWidth: "auto",
+                            whiteSpace: "nowrap",
                             "&:hover": {
                                 color: "#0073e6",
                                 backgroundColor: "transparent",
                             },
                         }}
                     >
-                        <InfoIcon sx={{ marginRight: "8px" }} />
+                        <InfoIcon
+                            sx={{ marginRight: "6px", fontSize: "1.1rem" }}
+                        />
                         Giới thiệu
                     </Button>
                 </Box>
@@ -340,11 +394,19 @@ const NavBar = ({ isLoggedIn, onLogout }) => {
                         </MenuItem>
                         <MenuItem
                             component={Link}
+                            to="/active-ingredients"
+                            onClick={handleMenuClose}
+                        >
+                            <ScienceIcon sx={{ marginRight: "8px" }} />
+                            Hoạt chất
+                        </MenuItem>
+                        <MenuItem
+                            component={Link}
                             to="/interactions"
                             onClick={handleMenuClose}
                         >
                             <MedicationIcon sx={{ marginRight: "8px" }} />
-                            Kiểm tra tương tác
+                            Tương tác
                         </MenuItem>
                         <MenuItem
                             component={Link}

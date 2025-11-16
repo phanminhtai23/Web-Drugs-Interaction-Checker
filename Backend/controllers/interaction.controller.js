@@ -203,6 +203,69 @@ exports.checkInteractionByActiveIngredients = async (req, res) => {
     }
 };
 
+// Tìm tất cả tương tác có chứa một hoạt chất cụ thể
+exports.getInteractionsByActiveIngredient = async (req, res) => {
+    try {
+        const { ingredientName } = req.query;
+        
+        if (!ingredientName || ingredientName.trim().length < 1) {
+            return res.status(400).json({
+                message: "Tên hoạt chất không được để trống",
+                interactions: [],
+                hasInteractions: false
+            });
+        }
+
+        const keyword = ingredientName.trim();
+        
+        // Tìm tất cả các tương tác có chứa hoạt chất này ở cả HoatChat_1 hoặc HoatChat_2
+        const interactions = await Interaction.find({
+            $or: [
+                { HoatChat_1: { $regex: keyword, $options: 'i' } },
+                { HoatChat_2: { $regex: keyword, $options: 'i' } }
+            ]
+        });
+
+        if (interactions.length === 0) {
+            return res.json({
+                message: `Không tìm thấy tương tác nào cho hoạt chất "${keyword}"`,
+                interactions: [],
+                hasInteractions: false,
+                ingredientName: keyword,
+                totalInteractions: 0
+            });
+        }
+
+        // Nhóm kết quả theo mức độ nghiêm trọng
+        const groupedInteractions = interactions.reduce((acc, interaction) => {
+            const severity = interaction.MucDoNghiemTrong || 'Không xác định';
+            if (!acc[severity]) {
+                acc[severity] = [];
+            }
+            acc[severity].push({
+                id: interaction._id,
+                hoatChat1: interaction.HoatChat_1,
+                hoatChat2: interaction.HoatChat_2,
+                mucDoNghiemTrong: interaction.MucDoNghiemTrong || 'Không xác định',
+                canhBao: interaction.CanhBaoTuongTacThuoc || 'Không có cảnh báo'
+            });
+            return acc;
+        }, {});
+
+        res.json({
+            message: `Tìm thấy ${interactions.length} tương tác cho hoạt chất "${keyword}"`,
+            interactions: groupedInteractions,
+            hasInteractions: true,
+            ingredientName: keyword,
+            totalInteractions: interactions.length
+        });
+
+    } catch (error) {
+        console.error('Error getting interactions by active ingredient:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 exports.checkInteraction = async (req, res) => {
     const { drugNames } = req.body;
 

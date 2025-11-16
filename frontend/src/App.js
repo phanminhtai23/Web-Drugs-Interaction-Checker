@@ -14,6 +14,8 @@ import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
 import InteractionPage from "./pages/InteractionPage";
 import DrugsListPage from "./pages/DrugsListPage";
+import ActiveIngredientsListPage from "./pages/ActiveIngredientsListPage";
+import ActiveIngredientInteractionsPage from "./pages/ActiveIngredientInteractionsPage";
 import AdminPage from "./pages/AdminPage"; // Trang admin
 import InteractionHistoryPage from "./pages/InteractionHistoryPage";
 import PrescriptionManagementPage from "./pages/PrescriptionManagementPage";
@@ -78,6 +80,14 @@ const App = () => {
                     />
                     <Route path="/interactions" element={<InteractionPage />} />
                     <Route path="/drugs" element={<DrugsListPage />} />
+                    <Route
+                        path="/active-ingredients"
+                        element={<ActiveIngredientsListPage />}
+                    />
+                    <Route
+                        path="/active-ingredients/:ingredientName/interactions"
+                        element={<ActiveIngredientInteractionsPage />}
+                    />
                     <Route path="/drugs/:tenThuoc" element={<DrugDetails />} />
                     <Route path="/admin" element={<AdminPage />} />
                     <Route

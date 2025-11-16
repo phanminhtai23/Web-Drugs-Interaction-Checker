@@ -1,6 +1,6 @@
 # Node modules (thư viện cài bằng npm hoặc yarn)
 node_modules/
-
+get-data/
 # Log files
 logs
 *.log

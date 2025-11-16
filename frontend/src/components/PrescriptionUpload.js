@@ -875,9 +875,9 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
                 maxWidth="sm"
                 fullWidth
                 PaperProps={{
-                    sx: { 
+                    sx: {
                         borderRadius: 3,
-                        overflow: 'hidden'
+                        overflow: "hidden",
                     },
                 }}
             >
@@ -891,11 +891,11 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
                         p: 3,
                     }}
                 >
-                    <CheckCircleIcon 
-                        sx={{ 
+                    <CheckCircleIcon
+                        sx={{
                             color: "#2e7d32",
-                            fontSize: 28
-                        }} 
+                            fontSize: 28,
+                        }}
                     />
                     <Box>
                         <Typography
@@ -974,19 +974,19 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
                     {/* Danh sách thuốc đã tìm thấy */}
                     {notMappedDialog.detectedDrugs.length > 0 && (
                         <Box sx={{ p: 2 }}>
-                            <Box 
-                                sx={{ 
-                                    display: "flex", 
-                                    alignItems: "center", 
-                                    gap: 1, 
-                                    mb: 1.5 
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 1,
+                                    mb: 1.5,
                                 }}
                             >
-                                <CheckCircleIcon 
-                                    sx={{ 
-                                        color: "#2e7d32", 
-                                        fontSize: 20 
-                                    }} 
+                                <CheckCircleIcon
+                                    sx={{
+                                        color: "#2e7d32",
+                                        fontSize: 20,
+                                    }}
                                 />
                                 <Typography
                                     variant="subtitle1"
@@ -995,44 +995,54 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
                                         color: "#2e7d32",
                                     }}
                                 >
-                                    Thuốc trích xuất có trong dữ liệu hệ thống ({notMappedDialog.detectedDrugs.length} thuốc)
+                                    Thuốc trích xuất có trong dữ liệu hệ thống (
+                                    {notMappedDialog.detectedDrugs.length}{" "}
+                                    thuốc)
                                 </Typography>
                             </Box>
-                            
+
                             <Box sx={{ maxHeight: 150, overflowY: "auto" }}>
                                 <List dense sx={{ py: 0 }}>
-                                    {notMappedDialog.detectedDrugs.map((drug, index) => (
-                                        <ListItem
-                                            key={index}
-                                            sx={{
-                                                py: 0.5,
-                                                px: 1,
-                                                borderRadius: 1,
-                                                mb: 0.5,
-                                                backgroundColor: "#f1f8e9",
-                                                border: "1px solid #c8e6c9",
-                                            }}
-                                        >
-                                            <ListItemIcon sx={{ minWidth: 32 }}>
-                                                <CheckCircleIcon 
-                                                    sx={{ 
-                                                        color: "#2e7d32", 
-                                                        fontSize: 16 
-                                                    }} 
-                                                />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary={drug.drugName || drug.name || drug}
-                                                primaryTypographyProps={{
-                                                    variant: "body2",
-                                                    sx: {
-                                                        fontWeight: 500,
-                                                        color: "#1b5e20",
-                                                    },
+                                    {notMappedDialog.detectedDrugs.map(
+                                        (drug, index) => (
+                                            <ListItem
+                                                key={index}
+                                                sx={{
+                                                    py: 0.5,
+                                                    px: 1,
+                                                    borderRadius: 1,
+                                                    mb: 0.5,
+                                                    backgroundColor: "#f1f8e9",
+                                                    border: "1px solid #c8e6c9",
                                                 }}
-                                            />
-                                        </ListItem>
-                                    ))}
+                                            >
+                                                <ListItemIcon
+                                                    sx={{ minWidth: 32 }}
+                                                >
+                                                    <CheckCircleIcon
+                                                        sx={{
+                                                            color: "#2e7d32",
+                                                            fontSize: 16,
+                                                        }}
+                                                    />
+                                                </ListItemIcon>
+                                                <ListItemText
+                                                    primary={
+                                                        drug.drugName ||
+                                                        drug.name ||
+                                                        drug
+                                                    }
+                                                    primaryTypographyProps={{
+                                                        variant: "body2",
+                                                        sx: {
+                                                            fontWeight: 500,
+                                                            color: "#1b5e20",
+                                                        },
+                                                    }}
+                                                />
+                                            </ListItem>
+                                        )
+                                    )}
                                 </List>
                             </Box>
                         </Box>
@@ -1042,19 +1052,19 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
 
                     {/* Danh sách thuốc chưa có trong CSDL */}
                     <Box sx={{ p: 2 }}>
-                        <Box 
-                            sx={{ 
-                                display: "flex", 
-                                alignItems: "center", 
-                                gap: 1, 
-                                mb: 1.5 
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1,
+                                mb: 1.5,
                             }}
                         >
-                            <WarningIcon 
-                                sx={{ 
-                                    color: "#f57c00", 
-                                    fontSize: 20 
-                                }} 
+                            <WarningIcon
+                                sx={{
+                                    color: "#f57c00",
+                                    fontSize: 20,
+                                }}
                             />
                             <Typography
                                 variant="subtitle1"
@@ -1063,44 +1073,47 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
                                     color: "#f57c00",
                                 }}
                             >
-                                Thuốc trích xuất chưa có trong dữ liệu hệ thống ({notMappedDialog.notMappedDrugs.length} thuốc)
+                                Thuốc trích xuất chưa có trong dữ liệu hệ thống
+                                ({notMappedDialog.notMappedDrugs.length} thuốc)
                             </Typography>
                         </Box>
 
                         <Box sx={{ maxHeight: 150, overflowY: "auto" }}>
                             <List dense sx={{ py: 0 }}>
-                                {notMappedDialog.notMappedDrugs.map((drugName, index) => (
-                                    <ListItem
-                                        key={index}
-                                        sx={{
-                                            py: 0.5,
-                                            px: 1,
-                                            borderRadius: 1,
-                                            mb: 0.5,
-                                            backgroundColor: "#fff8e1",
-                                            border: "1px solid #ffcc02",
-                                        }}
-                                    >
-                                        <ListItemIcon sx={{ minWidth: 32 }}>
-                                            <InfoIcon 
-                                                sx={{ 
-                                                    color: "#f57c00", 
-                                                    fontSize: 16 
-                                                }} 
-                                            />
-                                        </ListItemIcon>
-                                        <ListItemText
-                                            primary={drugName}
-                                            primaryTypographyProps={{
-                                                variant: "body2",
-                                                sx: {
-                                                    fontWeight: 500,
-                                                    color: "#ef6c00",
-                                                },
+                                {notMappedDialog.notMappedDrugs.map(
+                                    (drugName, index) => (
+                                        <ListItem
+                                            key={index}
+                                            sx={{
+                                                py: 0.5,
+                                                px: 1,
+                                                borderRadius: 1,
+                                                mb: 0.5,
+                                                backgroundColor: "#fff8e1",
+                                                border: "1px solid #ffcc02",
                                             }}
-                                        />
-                                    </ListItem>
-                                ))}
+                                        >
+                                            <ListItemIcon sx={{ minWidth: 32 }}>
+                                                <InfoIcon
+                                                    sx={{
+                                                        color: "#f57c00",
+                                                        fontSize: 16,
+                                                    }}
+                                                />
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={drugName}
+                                                primaryTypographyProps={{
+                                                    variant: "body2",
+                                                    sx: {
+                                                        fontWeight: 500,
+                                                        color: "#ef6c00",
+                                                    },
+                                                }}
+                                            />
+                                        </ListItem>
+                                    )
+                                )}
                             </List>
                         </Box>
 
@@ -1116,7 +1129,10 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
                             }}
                         >
                             <Typography variant="body2" sx={{ mb: 0.5 }}>
-                                <strong>Lưu ý:</strong> Trong quá trình trích xuất, hệ thống có thể trích xuất sai hoặc thiếu, vui lòng kiểm tra hoặc nhập thêm thuốc vào để đảm bảo kiểm tra đầy đủ!
+                                <strong>Lưu ý:</strong> Trong quá trình trích
+                                xuất, hệ thống có thể trích xuất sai hoặc thiếu,
+                                vui lòng kiểm tra hoặc nhập thêm thuốc vào để
+                                đảm bảo kiểm tra đầy đủ!
                             </Typography>
                         </Alert>
                     </Box>
@@ -1140,10 +1156,12 @@ const PrescriptionUpload = ({ onFilesUploaded }) => {
                             textTransform: "none",
                             fontWeight: 600,
                             fontSize: "1rem",
-                            background: "linear-gradient(90deg, #2e7d32, #388e3c)",
+                            background:
+                                "linear-gradient(90deg, #2e7d32, #388e3c)",
                             boxShadow: "0 2px 8px rgba(46, 125, 50, 0.3)",
                             "&:hover": {
-                                background: "linear-gradient(90deg, #1b5e20, #2e7d32)",
+                                background:
+                                    "linear-gradient(90deg, #1b5e20, #2e7d32)",
                                 boxShadow: "0 4px 12px rgba(46, 125, 50, 0.4)",
                             },
                         }}
