@@ -37,7 +37,31 @@ app.use(
 
 // Middleware
 app.use(express.json({ limit: "50mb" }));
-app.use(cors());
+
+// Cấu hình CORS - đặt trước routes
+const allowedOrigins = [
+    process.env.FRONTEND_URL || "http://localhost:3000",
+    "http://localhost:3000",
+    "http://localhost:3002",
+    "http://localhost:3001"
+];
+
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            // Cho phép requests không có origin (như mobile apps hoặc Postman)
+            if (!origin) return callback(null, true);
+            if (allowedOrigins.indexOf(origin) !== -1) {
+                callback(null, true);
+            } else {
+                callback(null, true); // Tạm thời cho phép tất cả để debug
+            }
+        },
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+        credentials: true,
+    })
+);
+
 app.use(logger); // Log requests
 
 // Connect to the database
@@ -57,14 +81,6 @@ app.use("/api", routes);
 app.use("/api/drugs", drugRoutes);
 app.use("/auth", authRoutes);
 app.use("/contact", contactRoutes);
-
-app.use(
-    cors({
-        origin: process.env.FRONTEND_URL, // URL của frontend
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        credentials: true, // Cho phép gửi cookie và thông tin xác thực
-    })
-);
 
 // // Tắt hoàn toàn helmet để tránh conflict với OAuth
 // app.use(helmet({
